@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>سیستم ویتو</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #181820;
+            --neon: #00ccff;
+            --neon-dim: #006688;
+            --gold: #d4af37;
+            --danger: #ff3355;
+            --success: #00e676;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --radius: 12px;
+            --glow: 0 0 15px rgba(0, 204, 255, 0.3);
+            --glow-gold: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: var(--bg);
+            background-image: radial-gradient(ellipse at center, #111118 0%, #0a0a0f 100%);
+            color: var(--text);
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+        }
+        .panel {
+            background: var(--surface);
+            border: 1px solid rgba(0, 204, 255, 0.25);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: var(--glow);
+            position: relative;
+            transition: border-color 0.3s;
+        }
+        .panel.gold {
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: var(--glow-gold);
+        }
+        .panel-header {
+            font-size: 13px;
+            color: var(--neon);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .panel-header::before {
+            content: '▸';
+            font-size: 10px;
+        }
+        #entry-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 30px 0;
+        }
+        .logo-text {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            color: var(--neon);
+            text-shadow: 0 0 30px rgba(0, 204, 255, 0.8), 0 0 60px rgba(0, 204, 255, 0.4);
+            animation: logoPulse 2s infinite;
+        }
+        @keyframes logoPulse {
+            0%,
+            100% {
+                text-shadow: 0 0 30px rgba(0, 204, 255, 0.8), 0 0 60px rgba(0, 204, 255, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 50px rgba(0, 204, 255, 1), 0 0 100px rgba(0, 204, 255, 0.7);
+            }
+        }
+        .btn {
+            background: var(--surface2);
+            border: 1px solid rgba(0, 204, 255, 0.4);
+            color: var(--neon);
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:hover,
+        .btn:active {
+            background: var(--neon-dim);
+            border-color: var(--neon);
+            box-shadow: 0 0 25px rgba(0, 204, 255, 0.5);
+            color: #fff;
+        }
+        .btn.gold-btn {
+            border-color: rgba(212, 175, 55, 0.6);
+            color: var(--gold);
+        }
+        .btn.gold-btn:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+        }
+        .xp-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--surface2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 6px 0;
+        }
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-dim), var(--neon));
+            border-radius: 10px;
+            transition: width 0.5s;
+            box-shadow: 0 0 8px var(--neon);
+        }
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .stat-chip {
+            background: var(--surface2);
+            border: 1px solid rgba(0, 204, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .stat-val {
+            color: var(--neon);
+            font-weight: bold;
+            margin: 0 4px;
+        }
+        .vito-axis {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+        .vito-axis .label {
+            width: 80px;
+            text-align: left;
+        }
+        .vito-axis .bar {
+            flex: 1;
+            height: 6px;
+            background: var(--surface2);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .vito-axis .fill {
+            height: 100%;
+            background: var(--gold);
+            border-radius: 6px;
+            transition: width 0.5s;
+        }
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 0;
+            border-top: 1px solid rgba(0, 204, 255, 0.15);
+            margin-top: 6px;
+            user-select: none;
+        }
+        .collapsible-header .arrow {
+            transition: transform 0.3s;
+            color: var(--neon);
+        }
+        .collapsible-header.open .arrow {
+            transform: rotate(90deg);
+        }
+        .collapsible-body {
+            display: none;
+            padding: 6px 0 12px;
+        }
+        .collapsible-body.open {
+            display: block;
+        }
+        .quest-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .quest-check {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--neon);
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .quest-done {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+        .quest-xp {
+            background: var(--neon-dim);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+        }
+        .quest-time {
+            font-size: 10px;
+            color: var(--text-dim);
+            background: var(--surface2);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        .small-btn {
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 15px;
+            background: var(--surface2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            cursor: pointer;
+        }
+        .skill-card {
+            background: var(--surface2);
+            border-radius: var(--radius);
+            padding: 12px;
+            margin: 8px 0;
+        }
+        .skill-bar {
+            height: 6px;
+            background: #222;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 4px 0;
+        }
+        .skill-fill {
+            height: 100%;
+            background: var(--neon);
+            border-radius: 6px;
+        }
+        #awakening-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            animation: fadeInOverlay 0.5s;
+        }
+        #awakening-overlay .gold-text {
+            font-size: 32px;
+            color: var(--gold);
+            text-shadow: 0 0 40px var(--gold);
+            animation: goldPulse 1.5s infinite;
+            text-align: center;
+        }
+        #awakening-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10001;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: particleFloat 3s ease-out forwards;
+        }
+        @keyframes particleFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) translateX(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-400px) translateX(var(--dx)) scale(0);
+            }
+        }
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes goldPulse {
+            0%,
+            100% {
+                text-shadow: 0 0 40px var(--gold);
+            }
+            50% {
+                text-shadow: 0 0 80px var(--gold), 0 0 120px #fff;
+            }
+        }
+        .level-up-flash {
+            animation: levelFlash 0.8s ease;
+        }
+        @keyframes levelFlash {
+            0%,
+            100% {
+                box-shadow: var(--glow);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(0, 204, 255, 0.9), 0 0 100px rgba(0, 204, 255, 0.5);
+            }
+        }
+        .penalty-shake {
+            animation: penaltyShake 0.5s ease;
+        }
+        @keyframes penaltyShake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-5px);
+            }
+        }
+        .xp-float {
+            position: fixed;
+            color: var(--neon);
+            font-weight: bold;
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 9998;
+            animation: xpFloatUp 1.5s ease-out forwards;
+        }
+        @keyframes xpFloatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-80px);
+            }
+        }
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--surface);
+            border: 2px solid var(--gold);
+            border-radius: var(--radius);
+            padding: 20px;
+            z-index: 10002;
+            text-align: center;
+            box-shadow: var(--glow-gold);
+            animation: popIn 0.5s ease;
+        }
+        .achievement-popup h3 {
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .achievement-popup .ach-name {
+            font-size: 18px;
+            color: #fff;
+        }
+        @keyframes popIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        .toast-container {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--surface);
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            box-shadow: var(--glow);
+            animation: toastIn 0.4s ease, toastOut 0.4s ease 3s forwards;
+            pointer-events: auto;
+        }
+        .toast.danger {
+            border-color: var(--danger);
+            color: var(--danger);
+            box-shadow: 0 0 15px rgba(255, 50, 80, 0.4);
+        }
+        .toast.gold {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: var(--glow-gold);
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes toastOut {
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" id="app"></div>
+    <div class="toast-container" id="toasts"></div>
+    <div id="awakening-overlay" style="display:none;"><div class="gold-text" id="awakening-text"></div></div>
+    <div id="awakening-particles"></div>
+
+    <script>
+        // ======================== AUDIO ENGINE ========================
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioCtx();
+        }
+
+        function playSound(freq, type, duration, vol = 0.1) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function sfxQuestComplete() { playSound(880, 'sine', 0.15);
+            playSound(1320, 'sine', 0.1); }
+
+        function sfxLevelUp() { playSound(523, 'triangle', 0.2);
+            setTimeout(() => playSound(659, 'triangle', 0.2), 150);
+            setTimeout(() => playSound(784, 'triangle', 0.25), 300); }
+
+        function sfxPenalty() { playSound(80, 'sawtooth', 0.4, 0.08); }
+
+        function sfxAchievement() { playSound(1047, 'sine', 0.3);
+            setTimeout(() => playSound(1319, 'sine', 0.3), 200);
+            setTimeout(() => playSound(1568, 'sine', 0.4), 400); }
+
+        function sfxAwakening() {
+            playSound(40, 'sine', 3, 0.15);
+            setTimeout(() => playSound(60, 'sine', 2, 0.1), 500);
+        }
+
+        // ======================== CONFIG ========================
+        const DEFAULT_QUESTS = [
+            { id: 'cold_shower', name: 'دوش آب سرد', xp: 20, stat: 'spirit', vito: ['mentalHealth', 'mindset'], days: 'all',
+                notifyTime: '06:00', completed: false, streak: 0, keywords: ['دوش', 'آب سرد'] },
+            { id: 'sunlight', name: 'آفتاب ۱۰+ دقیقه', xp: 10, stat: 'spirit', vito: ['mentalHealth'], days: 'all',
+                notifyTime: '07:00', completed: false, streak: 0, keywords: ['آفتاب', 'خورشید'] },
+            { id: 'study', name: 'مطالعه (ساعتی)', xp: 25, stat: 'knowledge', vito: ['science'], days: 'all',
+                notifyTime: '09:00', completed: false, streak: 0, hoursTarget: 5, hoursDone: 0, maxHours: 10,
+                keywords: ['مطالعه', 'درس', 'کتاب', 'خواندن'] },
+            { id: 'warmup', name: 'گرم کردن', xp: 10, stat: 'endurance', vito: ['physicalHealth'], days: 'even',
+                notifyTime: '', completed: false, streak: 0, keywords: ['گرم کردن', 'کشش'] },
+            { id: 'jump_rope', name: 'طناب زدن', xp: 20, stat: 'speed', vito: ['physicalHealth'], days: 'even',
+                notifyTime: '', completed: false, streak: 0, keywords: ['طناب', 'پرش'] },
+            { id: 'footwork', name: 'رقص پا', xp: 15, stat: 'speed', vito: ['physicalHealth'], days: 'even',
+                notifyTime: '', completed: false, streak: 0, keywords: ['رقص پا', 'فوت ورک'] },
+            { id: 'slip', name: 'جاخالی و اسلیپ', xp: 15, stat: 'speed', vito: ['physicalHealth'], days: 'even',
+                notifyTime: '', completed: false, streak: 0, keywords: ['جاخالی', 'اسلیپ'] },
+            { id: 'shadow_box', name: 'شادو بوکس', xp: 25, stat: 'speed', vito: ['physicalHealth'], days: 'even',
+                notifyTime: '', completed: false, streak: 0, keywords: ['شادو', 'بوکس'] },
+            { id: 'pullup', name: 'بارفیکس', xp: 25, stat: 'power', vito: ['physicalHealth'], days: 'odd', notifyTime: '',
+                completed: false, streak: 0, keywords: ['بارفیکس'] },
+            { id: 'pushup', name: 'شنا', xp: 20, stat: 'power', vito: ['physicalHealth'], days: 'odd', notifyTime: '',
+                completed: false, streak: 0, keywords: ['شنا'] },
+            { id: 'neck', name: 'تمرین گردن', xp: 15, stat: 'endurance', vito: ['physicalHealth'], days: 'odd',
+                notifyTime: '', completed: false, streak: 0, keywords: ['گردن'] },
+            { id: 'abs', name: 'تمرین شکم', xp: 20, stat: 'endurance', vito: ['physicalHealth'], days: 'odd',
+                notifyTime: '', completed: false, streak: 0, keywords: ['شکم'] },
+            { id: 'explosive_pushup', name: 'شنای انفجاری', xp: 30, stat: 'power', vito: ['physicalHealth'],
+                days: 'odd', notifyTime: '', completed: false, streak: 0, keywords: ['انفجاری', 'مچ', 'پنجه'] },
+        ];
+
+        const PROFESSION_DB = [
+            { name: 'بوکسور', keywords: ['بوکس', 'شادو', 'کیسه', 'مبارزه', 'مشت', 'رینگ'], stats: ['speed', 'power',
+                    'endurance'
+                ], vito: ['physicalHealth'], weight: 0 },
+            { name: 'بدنساز', keywords: ['عضله', 'وزنه', 'دمبل', 'پرس', 'جلو بازو', 'پشت بازو', 'اسکات', 'لگ',
+                    'ساق', 'سینه', 'سرشانه', 'کول'
+                ], stats: ['power', 'endurance'], vito: ['physicalHealth'], weight: 0 },
+            { name: 'کشتی‌گیر', keywords: ['کشتی', 'زیرگیری', 'خاک', 'پل', 'تاتامی', 'فن'], stats: ['power',
+                    'endurance'], vito: ['physicalHealth'], weight: 0 },
+            { name: 'دونده', keywords: ['دو', 'ماراتن', 'سرعت', 'پا', 'دویدن', 'اینتروال'], stats: ['speed',
+                    'endurance'], vito: ['physicalHealth'], weight: 0 },
+            { name: 'شناگر', keywords: ['شنا', 'استخر', 'آب', 'کرال', 'قورباغه', 'غواصی'], stats: ['endurance',
+                    'speed'], vito: ['physicalHealth'], weight: 0 },
+            { name: 'فوتبالیست', keywords: ['فوتبال', 'توپ', 'گل', 'پاس', 'دریبل', 'شوت'], stats: ['speed',
+                    'endurance'], vito: ['physicalHealth'], weight: 0 },
+            { name: 'بسکتبالیست', keywords: ['بسکتبال', 'اسلم دانک', 'سه امتیازی', 'پرش'], stats: ['power', 'speed'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'والیبالیست', keywords: ['والیبال', 'اسپک', 'ساعد', 'دفاع', 'پاس'], stats: ['power', 'speed'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'تکواندوکار', keywords: ['تکواندو', 'کیوروگی', 'پومسه', 'لگد', 'ضربه'], stats: ['speed', 'power'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'جودوکار', keywords: ['جودو', 'پرتاب', 'اوچیکومی', 'تاتامی'], stats: ['power', 'endurance'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'ژیمناست', keywords: ['ژیمناستیک', 'انعطاف', 'حرکات زمینی', 'حلقه', 'پارالل'], stats: ['speed',
+                    'power', 'endurance'
+                ], vito: ['physicalHealth'], weight: 0 },
+            { name: 'صخره‌نورد', keywords: ['صخره', 'دیواره', 'گیره', 'طناب'], stats: ['endurance', 'power'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'دوچرخه‌سوار', keywords: ['دوچرخه', 'جاده', 'پا زدن', 'سرعت'], stats: ['endurance', 'speed'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'یوگی', keywords: ['یوگا', 'مراقبه', 'آسانا', 'پرانایاما', 'مدیتیشن', 'تنفس'], stats: ['spirit',
+                    'endurance'
+                ], vito: ['mentalHealth', 'mindset'], weight: 0 },
+            { name: 'محقق', keywords: ['مطالعه', 'تحقیق', 'مقاله', 'پژوهش', 'کتاب'], stats: ['knowledge'],
+                vito: ['science', 'mindset'], weight: 0 },
+            { name: 'برنامه‌نویس', keywords: ['کد', 'برنامه', 'گیت', 'الگوریتم', 'جاوا', 'پایتون', 'ری‌اکت',
+                    'HTML', 'CSS', 'JS', 'تایپ‌اسکریپت', 'بک‌اند', 'فرانت'
+                ], stats: ['knowledge'], vito: ['science', 'mindset'], weight: 0 },
+            { name: 'مترجم', keywords: ['ترجمه', 'زبان', 'واژه', 'انگلیسی', 'فارسی', 'آلمانی', 'فرانسه'],
+                stats: ['knowledge'], vito: ['science'], weight: 0 },
+            { name: 'نویسنده', keywords: ['نوشتن', 'داستان', 'رمان', 'قلم', 'کتاب', 'تایپ'], stats: ['knowledge',
+                    'spirit'
+                ], vito: ['mindset'], weight: 0 },
+            { name: 'فروشنده', keywords: ['فروش', 'مشتری', 'تخفیف', 'قرارداد', 'تماس'], stats: ['knowledge'],
+                vito: ['finance', 'mindset'], weight: 0 },
+            { name: 'کارآفرین', keywords: ['استارتاپ', 'بیزینس', 'سرمایه', 'طرح'], stats: ['knowledge', 'spirit'],
+                vito: ['finance', 'mindset'], weight: 0 },
+            { name: 'موسیقی‌دان', keywords: ['موسیقی', 'گیتار', 'پیانو', 'ساز', 'نت', 'آهنگ'], stats: ['spirit'],
+                vito: ['mindset'], weight: 0 },
+            { name: 'عکاس', keywords: ['عکاسی', 'دوربین', 'لنز', 'کادر', 'نور'], stats: ['spirit'], vito: ['mindset'],
+                weight: 0 },
+            { name: 'طراح گرافیک', keywords: ['طراحی', 'گرافیک', 'فتوشاپ', 'لوگو', 'برند'], stats: ['knowledge',
+                    'spirit'
+                ], vito: ['mindset'], weight: 0 },
+            { name: 'آشپز', keywords: ['آشپزی', 'غذا', 'رسپی', 'قابلمه', 'پخت'], stats: ['spirit', 'knowledge'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'معلم', keywords: ['تدریس', 'کلاس', 'درس', 'دانش‌آموز'], stats: ['knowledge', 'spirit'],
+                vito: ['science', 'mindset'], weight: 0 },
+            { name: 'پزشک', keywords: ['پزشکی', 'درمان', 'بیمار', 'دارو', 'جراحی'], stats: ['knowledge'],
+                vito: ['physicalHealth', 'science'], weight: 0 },
+            { name: 'نظامی', keywords: ['نظامی', 'سرباز', 'اسلحه', 'انضباط'], stats: ['power', 'endurance',
+                    'spirit'
+                ], vito: ['physicalHealth'], weight: 0 },
+            { name: 'کوهنورد', keywords: ['کوه', 'قله', 'ارتفاع', 'صعود'], stats: ['endurance', 'power'],
+                vito: ['physicalHealth'], weight: 0 },
+            { name: 'بازیگر', keywords: ['بازیگری', 'صحنه', 'نمایش', 'نقش', 'دیالوگ'], stats: ['spirit'],
+                vito: ['mindset'], weight: 0 },
+            { name: 'سخنران', keywords: ['سخنرانی', 'پرزنتیشن', 'اسلاید'], stats: ['spirit', 'knowledge'],
+                vito: ['mindset'], weight: 0 },
+        ];
+
+        const MYTH_TITLES = [
+            { combo: 'power+spirit', titles: ['اژدهافکن', 'شیردل', 'رستم دستان', 'آرس', 'گیلگمش', 'خشم اسپارتا'] },
+            { combo: 'power+knowledge', titles: ['ارتشتار خردمند', 'جنگجوی خردمند', 'ابوالهول', 'آتنا', 'فنریر دربند'] },
+            { combo: 'speed+spirit', titles: ['سروش بیدار', 'بادپا', 'نیکه', 'شاهین‌نشین', 'سایه نینجا', 'کمان آرتمیس',
+                    'سایه هادس', 'آنوبیس'
+                ] },
+            { combo: 'speed+knowledge', titles: ['چشم ساتوری', 'هایمدال', 'لوکی', 'استاد زمان'] },
+            { combo: 'endurance+spirit', titles: ['کوه مراقبه', 'آیرون‌مایند', 'اشک ققنوس', 'آیین مهر', 'دل الماس',
+                    'بلک‌سان', 'اوزیریس'
+                ] },
+            { combo: 'power+endurance', titles: ['پیلتن', 'ببر بیان', 'گلادیاتور', 'اسپارتی', 'تافته‌رگ', 'هرکول',
+                    'شانه‌های اطلس', 'گردن کوه'
+                ] },
+            { combo: 'knowledge+spirit', titles: ['جمشیدجام', 'فره کیانی', 'موبد راز', 'کیمیاگر', 'حلقه افلاطون',
+                    'ندای اعماق', 'چشم میمیر', 'چشم رع', 'تحوت', 'ایزیس جادو', 'پرومته‌آتش', 'اودین', 'چشم اوراکل',
+                    'آپولون', 'سفید ابری', 'یوگی رویا', 'مولانا', 'حافظ'
+                ] },
+            { combo: 'speed+endurance', titles: ['آشیل پایدار', 'رانده گرگ', 'گردباد', 'آوای بروسلی'] },
+            { combo: 'speed+power', titles: ['تیغ سام', 'آخیلیس', 'باد شمشیر', 'مشت شمال', 'هوروس', 'سخمت',
+                    'تکواندوکار افسانه‌ای'
+                ] },
+            { combo: 'endurance+knowledge', titles: ['اودیسئوس', 'انکیدو'] },
+            { combo: 'power+spirit+endurance', titles: ['گُرزه گاو', 'برزرکر', 'سپیده‌دَم راگناروک', 'دژ ثور',
+                'هفت‌خوانی'] },
+            { combo: 'all_high', titles: ['مونارک', 'سیستم‌شکن', 'آخرین لول', 'رستم دستان', 'جمشید'] },
+            { combo: 'all_max', titles: ['ویتوی کامل', 'پوچی', 'خالق', 'ابدی'] },
+        ];
+
+        const ACHIEVEMENTS = [
+            { id: 'ice_man', name: 'یخ‌مرد 🧊', check: () => getConsecutiveQuestStreak('cold_shower') >= 3,
+                reward: { xp: 100, stats: { spirit: 5 } } },
+            { id: 'steel_alive', name: 'فولاد زنده ❄️', check: () => getConsecutiveQuestStreak('cold_shower') >= 7,
+                reward: { xp: 250, stats: { spirit: 10, endurance: 5 } } },
+            { id: 'winter_heart', name: 'قلب زمستان 🧊', check: () => getConsecutiveQuestStreak('cold_shower') >= 30,
+                reward: { xp: 800, stats: { spirit: 20, endurance: 10 } } },
+            { id: 'sun_child', name: 'شاگرد خورشید ☀️', check: () => getConsecutiveQuestStreak('sunlight') >= 7,
+                reward: { xp: 150, stats: { spirit: 5 } } },
+            { id: 'sun_helio', name: 'فرزند هلیوس 🔆', check: () => getConsecutiveQuestStreak('sunlight') >= 30,
+                reward: { xp: 400, stats: { spirit: 15 } } },
+            { id: 'no_penalty_30', name: 'مشت آهنین 👊', check: () => state.streak >= 30, reward: { xp: 300,
+                    stats: { power: 10 } } },
+            { id: 'no_penalty_90', name: 'اراده فولاد ⛓️', check: () => state.streak >= 90, reward: { xp: 1000,
+                    stats: { spirit: 20 } } },
+            { id: 'no_penalty_365', name: 'جاودان 🔥', check: () => state.streak >= 365, reward: { xp: 10000,
+                    stats: { spirit: 50 } } },
+            { id: 'owl', name: 'جغد شب 🦉', check: () => getTotalStudyHours() >= 100, reward: { xp: 500,
+                    stats: { knowledge: 15 } } },
+            { id: 'alexandria', name: 'کتابخانه اسکندریه 📖', check: () => getTotalStudyHours() >= 500, reward: { xp: 2000,
+                    stats: { knowledge: 25 } } },
+            { id: 'babylon', name: 'دانشگاه بابل 🏛️', check: () => getTotalStudyHours() >= 1000, reward: { xp: 5000,
+                    stats: { knowledge: 40 } } },
+            { id: 'monster_day', name: 'هیولا 🦍', check: () => isMonsterDay(), reward: { xp: 500,
+                    stats: { power: 5, speed: 5, endurance: 5, knowledge: 5, spirit: 5 } } },
+            { id: 'monster_week', name: 'هیولا برای یک هفته 👹', check: () => getConsecutiveMonsterDays() >= 7,
+                reward: { xp: 2000, stats: { power: 10, speed: 10, endurance: 10, knowledge: 10, spirit: 10 } } },
+            { id: 'monster_month', name: 'هیولا برای یک ماه 🐉', check: () => getConsecutiveMonsterDays() >= 30,
+                reward: { xp: 10000, stats: { power: 20, speed: 20, endurance: 20, knowledge: 20, spirit: 20 } } },
+            { id: 'cold_sunrise', name: 'طلوع سرد 🌅', check: () => isQuestDoneToday('cold_shower') && isQuestDoneToday(
+                    'sunlight'), reward: { xp: 50, stats: { spirit: 3 } } },
+            { id: 'cold_sunrise_30', name: 'استاد صبح 🌄', check: () => getConsecutiveColdSunriseDays() >= 30,
+                reward: { xp: 800, stats: { spirit: 15, endurance: 10 } } },
+            { id: 'dawn_warrior', name: 'جنگجوی سحرگاه ⚔️', check: () => allQuestsDoneToday(),
+                reward: { xp: 300, stats: { spirit: 10 } } },
+            { id: 'pullup_king', name: 'پادشاه بارفیکس 👑', check: () => getQuestTotalCompletions('pullup') >= 50,
+                reward: { xp: 1000, stats: { power: 25 } } },
+            { id: 'pushup_master', name: 'استاد شنا 🤸', check: () => getQuestTotalCompletions('pushup') >= 30,
+                reward: { xp: 600, stats: { power: 15, endurance: 10 } } },
+            { id: 'shadow_master', name: 'استاد سایه 🌑', check: () => getQuestTotalCompletions('shadow_box') >= 50,
+                reward: { xp: 1500, stats: { speed: 25, spirit: 15 } } },
+            { id: 'explosion', name: 'انفجار 💥', check: () => getQuestTotalCompletions('explosive_pushup') >= 20,
+                reward: { xp: 500, stats: { power: 10, speed: 5 } } },
+            { id: 'skill_master', name: 'استاد مهارت 🎓', check: () => state.skills.some(s => s.level >= 20),
+                reward: { xp: 500, stats: { knowledge: 15 } } },
+            { id: 'polymath', name: 'چندپیشه 🎭', check: () => state.skills.filter(s => s.level >= 10).length >= 3,
+                reward: { xp: 1000, stats: { power: 10, speed: 10, endurance: 10, knowledge: 10, spirit: 10 } } },
+            { id: 'finance_first', name: 'گنج پنهان 💰', check: () => state.vito.finance >= 10, reward: { xp: 100,
+                    stats: { knowledge: 5 } } },
+            { id: 'balance', name: 'تعادل ☯️', check: () => Object.values(state.vito).every(v => v >= 30),
+                reward: { xp: 500, stats: { power: 5, speed: 5, endurance: 5, knowledge: 5, spirit: 5 } } },
+            { id: 'vito_balanced', name: 'ویتوی متعادل ⚖️', check: () => Object.values(state.vito).every(v => v >= 50),
+                reward: { xp: 1500 } },
+            { id: 'harmony', name: 'هارمونی 🕉️', check: () => Object.values(state.vito).every(v => v >= 70),
+                reward: { xp: 5000 } },
+            { id: 'vito_perfect', name: 'ویتوی کامل ✨', check: () => Object.values(state.vito).every(v => v >= 90),
+                reward: { xp: 20000 } },
+            { id: 'level_10', name: 'بیدارشده ⚡', check: () => state.user.level >= 10, reward: { xp: 100 } },
+            { id: 'level_50', name: 'نیمه‌راه 🛤️', check: () => state.user.level >= 50, reward: { xp: 1500 } },
+            { id: 'level_100', name: 'قله‌نشین 🏔️', check: () => state.user.level >= 100, reward: { xp: 5000 } },
+            { id: 'streak_7', name: 'هفته طلایی ✨', check: () => state.streak >= 7, reward: { xp: 200,
+                stats: { spirit: 5 } } },
+            { id: 'streak_30', name: 'ماه نقره‌ای 🌙', check: () => state.streak >= 30, reward: { xp: 800,
+                    stats: { spirit: 10 } } },
+            { id: 'streak_90', name: 'فصل برنز 🍂', check: () => state.streak >= 90, reward: { xp: 2000,
+                    stats: { spirit: 20 } } },
+            { id: 'streak_365', name: 'سال الماس 💎', check: () => state.streak >= 365, reward: { xp: 15000,
+                    stats: { spirit: 50 } } },
+            { id: 'phoenix', name: 'ققنوس 🔥', check: () => state.streak >= 7 && getTotalPenaltyDays() >= 7,
+                reward: { xp: 1000, stats: { spirit: 20 } } },
+            { id: 'collector_10', name: 'کلکسیونر 🏅', check: () => state.achievements.length >= 10, reward: { xp: 500 } },
+            { id: 'collector_50', name: 'شکارچی افسانه 🎯', check: () => state.achievements.length >= 50,
+            reward: { xp: 5000 } },
+            { id: 'collector_100', name: 'افسانه 👑', check: () => state.achievements.length >= 100,
+                reward: { xp: 20000 } },
+            { id: 'all_stats_50', name: 'همه‌فن‌حریف 🃏', check: () => Object.values(state.stats).every(s => s >= 50),
+                reward: { xp: 3000 } },
+            { id: 'all_stats_100', name: 'کمال مطلق 💯', check: () => Object.values(state.stats).every(s => s >= 100),
+                reward: { xp: 100000 } },
+        ];
+
+        // ======================== STATE ========================
+        const STORAGE_KEY = 'vito_system';
+        let state = {
+            user: { name: '', confirmedProfession: '', detectedProfession: '', level: 1, xp: 0, awakeningLevel: 0,
+                professionLevel: 0, title: '' },
+            stats: { power: 0, speed: 0, endurance: 0, knowledge: 0, spirit: 0 },
+            vito: { finance: 0, mentalHealth: 0, physicalHealth: 0, mindset: 0, science: 0 },
+            quests: [],
+            skills: [],
+            history: [],
+            lastOpened: '',
+            streak: 0,
+            achievements: [],
+            titlesUnlocked: [],
+            prevLevel: 1,
+            totalQuestCompletions: {}
+        };
+
+        function loadState() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                try { const parsed = JSON.parse(raw);
+                    state = deepMerge(state, parsed); } catch (e) {}
+            }
+            if (!state.quests.length) state.quests = JSON.parse(JSON.stringify(DEFAULT_QUESTS));
+            if (!state.totalQuestCompletions) state.totalQuestCompletions = {};
+            state.prevLevel = state.user.level;
+        }
+
+        function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+        function deepMerge(target, source) {
+            const out = { ...target };
+            for (const key in source) {
+                if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) out[key] = deepMerge(
+                    target[key] || {}, source[key]);
+                else out[key] = source[key];
+            }
+            return out;
+        }
+
+        // ======================== HELPERS ========================
+        function getTodayJalali() {
+            const d = new Date();
+            const formatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: '2-digit',
+                day: '2-digit', timeZone: 'Asia/Tehran' });
+            return formatter.format(d).replace(/[\/]/g, '-');
+        }
+
+        function getDayType(dateStr) {
+            const parts = dateStr.split('-');
+            const jd = jalaliToGregorian(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
+            const dow = jd.getDay();
+            const persianDow = (dow + 1) % 7;
+            if (persianDow === 6) return 'friday';
+            return (persianDow % 2 === 0) ? 'even' : 'odd';
+        }
+
+        function jalaliToGregorian(jy, jm, jd) {
+            const jy2 = jy - 979;
+            const days = jd + (jm <= 7 ? (jm - 1) * 31 : (jm - 1) * 30 + 6) + Math.floor((jy2 * 365.25)) - 79;
+            const g = new Date(2000, 0, 1);
+            g.setDate(g.getDate() + days);
+            return g;
+        }
+
+        function getRank(level) {
+            if (level >= 70) return 'S';
+            if (level >= 50) return 'A';
+            if (level >= 35) return 'B';
+            if (level >= 20) return 'C';
+            if (level >= 10) return 'D';
+            return 'E';
+        }
+
+        function xpForLevel(lvl) { return Math.floor(100 * Math.pow(lvl, 1.3)); }
+
+        function xpForNextLevel() { return xpForLevel(state.user.level + 1); }
+
+        function professionLevelName(lvl) {
+            if (lvl >= 100) return 'قهرمان بلامنازع';
+            if (lvl >= 80) return 'ملی';
+            if (lvl >= 60) return 'حرفه‌ای';
+            if (lvl >= 40) return 'آماتور';
+            if (lvl >= 20) return 'مبتدی';
+            return 'نوآموز';
+        }
+
+        function getTopStats(count = 2) {
+            return Object.entries(state.stats).sort((a, b) => b[1] - a[1]).slice(0, count).map(e => e[0]);
+        }
+
+        function getConsecutiveQuestStreak(questId) {
+            const q = state.quests.find(q => q.id === questId);
+            return q ? q.streak || 0 : 0;
+        }
+
+        function getQuestTotalCompletions(questId) {
+            return state.totalQuestCompletions[questId] || 0;
+        }
+
+        function getTotalStudyHours() {
+            let total = 0;
+            state.history.forEach(h => {
+                const q = state.quests.find(q => q.id === 'study');
+                if (q && h.completedAll) total += q.hoursDone || 0;
+            });
+            return total;
+        }
+
+        function getTotalPenaltyDays() {
+            return state.history.filter(h => h.penalty > 0).length;
+        }
+
+        function isMonsterDay() {
+            const today = getDayType(getTodayJalali());
+            const required = state.quests.filter(q => q.days === 'all' || q.days === today);
+            return required.length > 0 && required.every(q => q.completed || (q.hoursTarget && q.hoursDone >= q
+                .hoursTarget));
+        }
+
+        function getConsecutiveMonsterDays() {
+            let count = 0;
+            for (let i = state.history.length - 1; i >= 0; i--) {
+                if (state.history[i].completedAll) count++;
+                else break;
+            }
+            return count;
+        }
+
+        function getConsecutiveColdSunriseDays() {
+            let count = 0;
+            for (let i = state.history.length - 1; i >= 0; i--) {
+                if (state.history[i].coldSunrise) count++;
+                else break;
+            }
+            return count;
+        }
+
+        function isQuestDoneToday(questId) {
+            const q = state.quests.find(q => q.id === questId);
+            return q ? q.completed : false;
+        }
+
+        function allQuestsDoneToday() {
+            const today = getDayType(getTodayJalali());
+            const required = state.quests.filter(q => q.days === 'all' || q.days === today);
+            return required.length > 0 && required.every(q => q.completed || (q.hoursTarget && q.hoursDone >= q
+                .hoursTarget));
+        }
+
+        // ======================== DAILY ROLLOVER ========================
+        function checkDailyRollover() {
+            const today = getTodayJalali();
+            if (state.lastOpened === today) return;
+            if (state.lastOpened) {
+                const missedDays = getMissedDays(state.lastOpened, today);
+                missedDays.forEach(day => evaluateDay(day));
+            }
+            state.lastOpened = today;
+            resetTodayQuests();
+            saveState();
+            render();
+        }
+
+        function getMissedDays(from, to) {
+            const days = [];
+            const start = parseJalali(from);
+            const end = parseJalali(to);
+            let current = new Date(start);
+            while (current < end) {
+                current.setDate(current.getDate() + 1);
+                days.push(gregorianToJalali(current));
+            }
+            return days;
+        }
+
+        function parseJalali(dateStr) {
+            const p = dateStr.split('-');
+            return jalaliToGregorian(parseInt(p[0]), parseInt(p[1]), parseInt(p[2]));
+        }
+
+        function gregorianToJalali(gdate) {
+            const f = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: '2-digit', day: '2-digit',
+                timeZone: 'Asia/Tehran' });
+            return f.format(gdate).replace(/[\/]/g, '-');
+        }
+
+        function evaluateDay(dateStr) {
+            const dayType = getDayType(dateStr);
+            if (dayType === 'friday') return;
+            const required = state.quests.filter(q => q.days === 'all' || q.days === dayType);
+            const allDone = required.length > 0 && required.every(q => q.completed || (q.hoursTarget && q.hoursDone >= q
+                .hoursTarget));
+            if (allDone) {
+                state.streak++;
+                const xpGained = required.reduce((s, q) => s + (q.hoursTarget ? q.xp * (q.hoursDone || 0) : q.xp), 0);
+                state.history.push({ date: dateStr, completedAll: true, xpGained, penalty: 0, streak: state.streak,
+                    coldSunrise: isQuestDoneToday('cold_shower') && isQuestDoneToday('sunlight') });
+            } else if (required.length > 0) {
+                const penaltyXP = Math.max(20, Math.floor(required.reduce((s, q) => s + q.xp, 0) * 0.4));
+                state.user.xp -= penaltyXP;
+                while (state.user.xp < 0 && state.user.level > 1) { state.user.level--;
+                    state.user.xp += xpForLevel(state.user.level + 1); }
+                if (state.user.xp < 0) state.user.xp = 0;
+                if (state.user.level < 1) state.user.level = 1;
+                state.streak = 0;
+                state.history.push({ date: dateStr, completedAll: false, xpGained: 0, penalty: penaltyXP,
+                    streak: 0 });
+                showToast(`⚠️ پنالتی! ${penaltyXP} XP کم شد.`, 'danger');
+                sfxPenalty();
+                document.getElementById('status-panel')?.classList.add('penalty-shake');
+                setTimeout(() => document.getElementById('status-panel')?.classList.remove('penalty-shake'),
+                500);
+            }
+            saveState();
+        }
+
+        function resetTodayQuests() {
+            state.quests.forEach(q => { q.completed = false; if (q.hoursDone !== undefined) q.hoursDone = 0; });
+        }
+
+        // ======================== GAMEPLAY ========================
+        function completeQuest(questId) {
+            initAudio();
+            const q = state.quests.find(q => q.id === questId);
+            if (!q) return;
+            q.completed = !q.completed;
+            if (q.hoursTarget !== undefined && q.completed) {
+                q.completed = (q.hoursDone || 0) >= q.hoursTarget;
+                if (!q.completed) return;
+            }
+            const xp = q.hoursTarget ? q.xp * (q.hoursDone || 0) : q.xp;
+            if (q.completed) {
+                addXP(xp);
+                if (q.stat) state.stats[q.stat] += 1;
+                if (q.vito) q.vito.forEach(v => state.vito[v] = Math.min(100, state.vito[v] + Math.ceil(xp / 150)));
+                q.streak = (q.streak || 0) + 1;
+                state.totalQuestCompletions[q.id] = (state.totalQuestCompletions[q.id] || 0) + 1;
+                sfxQuestComplete();
+                showToast(`✅ ${q.name} — +${xp} XP`, '');
+            } else {
+                addXP(-xp);
+                if (q.stat) state.stats[q.stat] = Math.max(0, state.stats[q.stat] - 1);
+                q.streak = 0;
+            }
+            checkAchievements();
+            saveState();
+            detectProfession();
+            updateTitle();
+            render();
+        }
+
+        function addStudyHour(questId, delta) {
+            initAudio();
+            const q = state.quests.find(q => q.id === questId);
+            if (!q || q.hoursTarget === undefined) return;
+            q.hoursDone = Math.max(0, Math.min(q.maxHours || 10, (q.hoursDone || 0) + delta));
+            q.completed = q.hoursDone >= q.hoursTarget;
+            if (q.completed && delta > 0) {
+                const xp = q.xp * q.hoursDone;
+                addXP(xp);
+                if (q.stat) state.stats[q.stat] += Math.floor(q.hoursDone / 2);
+                if (q.vito) q.vito.forEach(v => state.vito[v] = Math.min(100, state.vito[v] + Math.ceil(xp / 150)));
+                q.streak = (q.streak || 0) + 1;
+                state.totalQuestCompletions[q.id] = (state.totalQuestCompletions[q.id] || 0) + 1;
+                sfxQuestComplete();
+            }
+            checkAchievements();
+            saveState();
+            detectProfession();
+            updateTitle();
+            render();
+        }
+
+        function addXP(amount) {
+            if (amount > 0) {
+                const awakeningBonus = state.user.awakeningLevel * 0.05;
+                if (awakeningBonus > 0) amount += Math.floor(amount * awakeningBonus);
+            }
+            state.user.xp += amount;
+            let leveledUp = false;
+            while (state.user.xp >= xpForNextLevel() && state.user.level < 10000) {
+                state.user.xp -= xpForNextLevel();
+                state.user.level++;
+                state.user.professionLevel = Math.floor(state.user.level / 20);
+                leveledUp = true;
+            }
+            while (state.user.xp < 0 && state.user.level > 1) { state.user.level--;
+                state.user.xp += xpForLevel(state.user.level + 1); }
+            if (state.user.xp < 0) state.user.xp = 0;
+            if (state.user.level < 1) state.user.level = 1;
+            if (leveledUp) {
+                checkAwakening();
+                sfxLevelUp();
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+                const panel = document.getElementById('status-panel');
+                if (panel) { panel.classList.add('level-up-flash');
+                    setTimeout(() => panel.classList.remove('level-up-flash'), 800); }
+                showToast(`🎉 سطح ${state.user.level}! لِوِل آپ!`, 'gold');
+            }
+            if (amount > 0 && !leveledUp) spawnXPFloats(amount);
+        }
+
+        function checkAwakening() {
+            const milestones = [10, 25, 50, 75, 100];
+            const idx = milestones.indexOf(state.user.level);
+            if (idx >= 0 && state.user.awakeningLevel < idx + 1) {
+                state.user.awakeningLevel = idx + 1;
+                sfxAwakening();
+                spawnAwakeningParticles();
+                const overlay = document.getElementById('awakening-overlay');
+                const text = document.getElementById('awakening-text');
+                text.textContent = '⚡ بیدار شدی...';
+                overlay.style.display = 'flex';
+                setTimeout(() => { overlay.style.display = 'none'; }, 3500);
+                showToast(`⚡ بیداری! بونوس XP دائمی: ${state.user.awakeningLevel * 5}%`, 'gold');
+            }
+        }
+
+        function detectProfession() {
+            const allKeywords = [];
+            state.quests.forEach(q => { if (q.keywords) allKeywords.push(...q.keywords); });
+            state.skills.forEach(s => { if (s.name) allKeywords.push(s.name); });
+            const topStats = getTopStats();
+            const topVito = Object.entries(state.vito).sort((a, b) => b[1] - a[1]).slice(0, 2).map(e => e[0]);
+            PROFESSION_DB.forEach(p => p.weight = 0);
+            PROFESSION_DB.forEach(p => {
+                p.keywords.forEach(kw => { if (allKeywords.some(ak => ak.includes(kw) || kw.includes(ak))) p
+                        .weight += 3; });
+                p.stats.forEach(s => { if (topStats.includes(s)) p.weight += 2; });
+                p.vito.forEach(v => { if (topVito.includes(v)) p.weight += 1; });
+            });
+            PROFESSION_DB.sort((a, b) => b.weight - a.weight);
+            const best = PROFESSION_DB[0];
+            if (best && best.weight >= 3) {
+                state.user.detectedProfession = best.name;
+                if (!state.user.confirmedProfession) state.user.confirmedProfession = best.name;
+            }
+        }
+
+        function updateTitle() {
+            const topTwo = getTopStats();
+            const maxStat = state.stats[topTwo[0]] || 0;
+            const minStat = Math.min(...Object.values(state.stats));
+            if (minStat >= 60) { state.user.title = 'مونارک'; return; }
+            if (maxStat < 30) { state.user.title = 'بی‌عنوان — تازه‌کار'; return; }
+            const comboKey = [...topTwo].sort().join('+');
+            const candidates = MYTH_TITLES.filter(t => t.combo === comboKey || t.combo.includes(comboKey) || t.combo ===
+                'all_high');
+            if (candidates.length > 0) {
+                const allTitles = candidates.flatMap(c => c.titles);
+                const dayIndex = new Date().getDate() % allTitles.length;
+                state.user.title = allTitles[dayIndex];
+            }
+        }
+
+        // ======================== ACHIEVEMENTS ========================
+        function checkAchievements() {
+            ACHIEVEMENTS.forEach(ach => {
+                if (!state.achievements.includes(ach.id) && ach.check()) {
+                    state.achievements.push(ach.id);
+                    if (ach.reward.xp) addXP(ach.reward.xp);
+                    if (ach.reward.stats) Object.entries(ach.reward.stats).forEach(([s, v]) => state.stats[
+                        s] += v);
+                    sfxAchievement();
+                    showAchievementPopup(ach.name);
+                    showToast(`🏆 Achievement مخفی: ${ach.name}!`, 'gold');
+                    saveState();
+                }
+            });
+        }
+
+        function showAchievementPopup(name) {
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup';
+            popup.innerHTML = `<h3>🏆 Achievement مخفی کشف شد!</h3><div class="ach-name">${name}</div>`;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 3000);
+        }
+
+        // ======================== SKILLS ========================
+        function addSkill() {
+            const name = prompt('نام مهارت جدید:');
+            if (!name) return;
+            const unit = prompt('واحد پیشرفت (مثلاً واژه، ساعت، جلسه):') || 'جلسه';
+            const xpPerUnit = parseInt(prompt('XP هر واحد:')) || 10;
+            state.skills.push({ id: 'sk_' + Date.now(), name, unit, xpPerUnit, level: 1, xp: 0, tasks: [],
+                streak: 0 });
+            saveState();
+            render();
+        }
+
+        function logSkillProgress(skillId) {
+            const sk = state.skills.find(s => s.id === skillId);
+            if (!sk) return;
+            const amount = parseInt(prompt(`چقدر ${sk.unit} انجام دادی؟`)) || 0;
+            if (amount <= 0) return;
+            const earnedXP = amount * sk.xpPerUnit;
+            sk.xp += earnedXP;
+            while (sk.xp >= xpForLevel(sk.level)) { sk.xp -= xpForLevel(sk.level);
+                sk.level++; }
+            addXP(Math.floor(earnedXP * 0.3));
+            saveState();
+            detectProfession();
+            updateTitle();
+            render();
+            showToast(`🎓 ${sk.name}: +${earnedXP} XP (سطح ${sk.level})`, '');
+        }
+
+        // ======================== VISUAL EFFECTS ========================
+        function spawnXPFloats(amount) {
+            const container = document.body;
+            for (let i = 0; i < 3; i++) {
+                const el = document.createElement('div');
+                el.className = 'xp-float';
+                el.textContent = `+${amount}`;
+                el.style.left = (30 + Math.random() * 60) + '%';
+                el.style.top = (40 + Math.random() * 10) + '%';
+                el.style.animationDuration = (1 + Math.random()) + 's';
+                container.appendChild(el);
+                setTimeout(() => el.remove(), 2000);
+            }
+        }
+
+        function spawnAwakeningParticles() {
+            const container = document.getElementById('awakening-particles');
+            for (let i = 0; i < 80; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.top = (60 + Math.random() * 40) + '%';
+                p.style.setProperty('--dx', (Math.random() - 0.5) * 200 + 'px');
+                p.style.animationDuration = (2 + Math.random() * 3) + 's';
+                p.style.animationDelay = Math.random() * 1.5 + 's';
+                container.appendChild(p);
+                setTimeout(() => p.remove(), 5000);
+            }
+        }
+
+        // ======================== NOTIFICATIONS ========================
+        function checkNotifications() {
+            const now = new Date();
+            const tehranTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' }));
+            const hours = String(tehranTime.getHours()).padStart(2, '0');
+            const minutes = String(tehranTime.getMinutes()).padStart(2, '0');
+            const currentTime = `${hours}:${minutes}`;
+            const today = getDayType(getTodayJalali());
+            state.quests.forEach(q => {
+                if (q.notifyTime && q.notifyTime === currentTime && !q.completed && (q.days === 'all' || q
+                        .days === today) && q._notified !== currentTime) {
+                    q._notified = currentTime;
+                    showToast(`🔔 ${q.name} — همین الان!`, '');
+                    if (Notification.permission === 'granted') new Notification('سیستم ویتو', { body: `⏰ ${q.name}`,
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🗡️</text></svg>' });
+                }
+            });
+            const dayOfWeek = tehranTime.getDay();
+            if (hours === '08' && minutes === '00') showToast('✨ صبح بخیر قهرمان! امروز رو بساز.', '');
+            if (hours === '22' && minutes === '00' && state.streak > 0) showToast(
+                `🔥 استریک ${state.streak} روزه‌ات رو حفظ کن!`, '');
+            if (dayOfWeek === 5 && hours === '12' && minutes === '00') showToast('🎉 آخر هفته‌ست — مرور کن ببین کجایی!',
+                '');
+            if (state.streak > 0 && state.streak % 10 === 0 && hours === '09' && minutes === '00' && state._streakNotified !==
+                state.streak) {
+                state._streakNotified = state.streak;
+                showToast(`🏆 ${state.streak} روز استریک! ادامه بده...`, 'gold');
+            }
+        }
+
+        function showToast(msg, type) {
+            const container = document.getElementById('toasts');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = msg;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+
+        // ======================== RENDER ========================
+        function render() {
+            const app = document.getElementById('app');
+            const today = getTodayJalali();
+            const dayType = getDayType(today);
+            const dayLabel = dayType === 'friday' ? 'جمعه (استراحت)' : dayType === 'even' ? 'روز زوج (بوکس)' :
+                'روز فرد (قدرتی)';
+            const nextXP = xpForNextLevel();
+            const xpProgress = nextXP > 0 ? Math.floor((state.user.xp / nextXP) * 100) : 100;
+            const rank = getRank(state.user.level);
+            const vitoOverall = Math.floor(Object.values(state.vito).reduce((s, v) => s + v, 0) / 5);
+
+            app.innerHTML = `
+            <div id="entry-screen" ${state.user.name ? 'style="display:none"' : ''}>
+              <div class="logo-text">[SYSTEM]</div>
+              <div style="color:var(--text-dim);margin-bottom:10px;">به سیستم خوش آمدی، قهرمان</div>
+              <input type="text" id="name-input" placeholder="نام خود را وارد کن..." style="width:100%;max-width:300px;padding:12px;border-radius:25px;border:1px solid var(--neon-dim);background:var(--surface2);color:#fff;text-align:center;font-family:Vazirmatn;font-size:16px;">
+              <button class="btn" onclick="saveName()">ورود به سیستم</button>
+              <button class="btn gold-btn" onclick="showCreator()">🧬 سازنده</button>
+            </div>
+
+            <div id="main-screen" style="display:${state.user.name ? 'block' : 'none'}">
+              <div class="panel" id="status-panel">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div>
+                    <span style="color:var(--neon);font-weight:bold;">${state.user.name || 'قهرمان'}</span>
+                    <span style="font-size:10px;color:var(--text-dim);margin-right:8px;">${professionLevelName(state.user.professionLevel || 0)} ${state.user.confirmedProfession || ''}</span>
+                  </div>
+                  <span style="color:var(--gold);font-size:12px;">رتبه ${rank}</span>
+                </div>
+                <div style="font-size:10px;color:var(--gold);margin:2px 0;">${state.user.title || ''}</div>
+                <div style="font-size:24px;font-weight:900;color:var(--neon);margin:6px 0;">سطح ${state.user.level}</div>
+                <div class="xp-bar"><div class="xp-fill" style="width:${xpProgress}%"></div></div>
+                <div style="font-size:10px;color:var(--text-dim);">${state.user.xp} / ${nextXP} XP ${state.user.awakeningLevel>0?`(+${state.user.awakeningLevel*5}% بونوس)` : ''}</div>
+                <div class="stats-row">
+                  <span class="stat-chip">💪 قدرت <span class="stat-val">${state.stats.power}</span></span>
+                  <span class="stat-chip">⚡ سرعت <span class="stat-val">${state.stats.speed}</span></span>
+                  <span class="stat-chip">🛡️ استقامت <span class="stat-val">${state.stats.endurance}</span></span>
+                  <span class="stat-chip">📖 دانش <span class="stat-val">${state.stats.knowledge}</span></span>
+                  <span class="stat-chip">✨ روحیه <span class="stat-val">${state.stats.spirit}</span></span>
+                </div>
+              </div>
+
+              <div class="panel gold">
+                <div class="panel-header">نسخه ویتو</div>
+                ${['💰 مالی','🧘 سلامت ذهن','🏋️ سلامت فیزیکی','🧠 ذهنیت','🔬 علم'].map((label,i)=>{
+                  const keys=['finance','mentalHealth','physicalHealth','mindset','science'];
+                  const val=state.vito[keys[i]];
+                  return `<div class="vito-axis"><span class="label">${label}</span><div class="bar"><div class="fill" style="width:${val}%"></div></div><span style="width:35px;text-align:right;font-size:10px;">${val}%</span></div>`;
+                }).join('')}
+                <div style="text-align:center;margin-top:6px;font-size:14px;color:var(--gold);">نزدیکی به نسخه ویتو: ${vitoOverall}%</div>
+              </div>
+
+              <div class="panel">
+                <div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div>
+                <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
+                  <span style="color:var(--text-dim);font-size:11px;">🔥 استریک: ${state.streak} روز</span>
+                  <span style="color:var(--text-dim);font-size:11px;">🏆 Achievements: ${state.achievements.length}</span>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="collapsible-header open" onclick="toggleCollapse(this)">
+                  <span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body open">
+                  ${state.quests.filter(q=>q.days==='all'||q.days===dayType||dayType==='friday').map(q=>{
+                    let xpDisplay = q.hoursTarget!==undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`;
+                    return `<div class="quest-item">
+                      <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                        <input type="checkbox" class="quest-check" ${q.completed?'checked':''} onchange="completeQuest('${q.id}')" ${dayType==='friday'?'disabled':''}>
+                        <span class="${q.completed?'quest-done':''}">${q.name}</span>
+                        <span class="quest-xp">${xpDisplay}</span>
+                      </div>
+                      ${q.hoursTarget!==undefined ? `
+                        <div style="display:flex;align-items:center;gap:4px;">
+                          <button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button>
+                          <span style="font-size:11px;">${q.hoursDone||0}h</span>
+                          <button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button>
+                        </div>
+                      ` : ''}
+                      ${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}
+                      ${q.streak>0?`<span style="font-size:9px;color:var(--gold);">🔥${q.streak}</span>`:''}
+                    </div>`;
+                  }).join('')}
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="collapsible-header" onclick="toggleCollapse(this)">
+                  <span>🎓 مهارت‌ها</span><span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                  ${state.skills.map(sk=>`
+                    <div class="skill-card">
+                      <div style="display:flex;justify-content:space-between;">
+                        <span>${sk.name}</span><span style="color:var(--neon);">سطح ${sk.level}</span>
+                      </div>
+                      <div class="skill-bar"><div class="skill-fill" style="width:${Math.min(100,sk.xp/xpForLevel(sk.level)*100)}%"></div></div>
+                      <div style="font-size:10px;color:var(--text-dim);">${sk.xp} / ${xpForLevel(sk.level)} XP (${sk.xpPerUnit} XP/${sk.unit})</div>
+                      <button class="small-btn" onclick="logSkillProgress('${sk.id}')" style="margin-top:6px;">➕ ثبت ${sk.unit}</button>
+                    </div>
+                  `).join('') || '<div style="color:var(--text-dim);">هنوز مهارتی ثبت نشده.</div>'}
+                  <button class="small-btn" onclick="addSkill()" style="margin-top:8px;">➕ مهارت جدید</button>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="collapsible-header" onclick="toggleCollapse(this)">
+                  <span>🏆 Achievements (${state.achievements.length})</span><span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                  ${state.achievements.length===0 ? '<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>' :
+                    state.achievements.slice(-30).map(id=>{
+                      const ach = ACHIEVEMENTS.find(a=>a.id===id);
+                      return ach ? `<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>` : '';
+                    }).join('')
+                  }
+                  ${state.achievements.length>30?`<div style="color:var(--text-dim);font-size:10px;">... و ${state.achievements.length-30} تای دیگر</div>`:''}
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;margin-top:10px;">
+                <button class="btn" onclick="showReport()" style="flex:1;">📝 گزارش</button>
+                <button class="btn" onclick="showCreator()" style="flex:1;">🧬 سازنده</button>
+              </div>
+              <div style="margin-top:10px;text-align:center;">
+                <button class="small-btn" onclick="exportData()">📥 پشتیبان‌گیری</button>
+              </div>
+            </div>
+
+            <div id="creator-screen" style="display:none;">
+              <div class="panel">
+                <div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div>
+                <p style="line-height:1.8;font-size:13px;color:var(--text-dim);">
+                  سازندگان: اسطوره سیزیف و اشکر<br>
+                  این برنامه با الهام از مانهوا Solo Leveling و ژانرهای غالب در رمان‌های شرق آسیا (کره جنوبی) نوشته شده است.<br>
+                  هدف: برنامه‌ریزی منسجم‌تر و هدف‌گرایی بهتر برای رسیدن به قله و نسخه‌ای بهتر از دیروز خود.<br>
+                  به امید زندگی خوشحال‌تر!<br>
+                  استفاده از این برنامه برای همه رایگان و بدون محدودیت است.<br><br>
+                  این برنامه تماماً توسط Claude AI ساخته شده است.
+                </p>
+                <button class="btn" onclick="goBack()" style="margin-top:15px;">🔙 بازگشت</button>
+              </div>
+            </div>
+
+            <div id="report-screen" style="display:none;">
+              <div class="panel">
+                <div style="color:var(--neon);font-size:16px;margin-bottom:12px;">📝 گزارش کلی</div>
+                ${state.history.length===0 ? '<p style="color:var(--text-dim);">هنوز گزارشی ثبت نشده.</p>' :
+                  state.history.slice(-20).reverse().map(h=>`
+                    <div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;">
+                      <span>📅 ${h.date}</span>
+                      <span style="color:${h.completedAll?'var(--success)':'var(--danger)'};margin-right:10px;">${h.completedAll?'✅ کامل':'⚠️ پنالتی'}</span>
+                      ${h.xpGained>0?`<span style="color:var(--neon);">+${h.xpGained} XP</span>`:''}
+                      ${h.penalty>0?`<span style="color:var(--danger);">-${h.penalty} XP</span>`:''}
+                    </div>
+                  `).join('')
+                }
+                <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+                  📊 مجموع روزها: ${state.history.length} | 🏆 Achievements: ${state.achievements.length}
+                </div>
+                <button class="btn" onclick="goBack()" style="margin-top:15px;">🔙 بازگشت</button>
+              </div>
+            </div>
+          `;
+        }
+
+        function toggleCollapse(header) {
+            header.classList.toggle('open');
+            header.nextElementSibling.classList.toggle('open');
+        }
+
+        function saveName() {
+            const input = document.getElementById('name-input');
+            if (input && input.value.trim()) {
+                state.user.name = input.value.trim();
+                detectProfession();
+                updateTitle();
+                saveState();
+                render();
+                showToast('خوش آمدی، ' + state.user.name + '! 🗡️', '');
+            }
+        }
+
+        function showCreator() {
+            document.getElementById('entry-screen').style.display = 'none';
+            document.getElementById('main-screen').style.display = 'none';
+            document.getElementById('report-screen').style.display = 'none';
+            document.getElementById('creator-screen').style.display = 'block';
+        }
+
+        function showReport() {
+            document.getElementById('entry-screen').style.display = 'none';
+            document.getElementById('main-screen').style.display = 'none';
+            document.getElementById('report-screen').style.display = 'block';
+            document.getElementById('creator-screen').style.display = 'none';
+            render();
+        }
+
+        function goBack() {
+            document.getElementById('entry-screen').style.display = 'none';
+            document.getElementById('main-screen').style.display = 'block';
+            document.getElementById('report-screen').style.display = 'none';
+            document.getElementById('creator-screen').style.display = 'none';
+            render();
+        }
+
+        function exportData() {
+            const json = JSON.stringify(state, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vito-backup-' + getTodayJalali() + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📥 پشتیبان‌گیری ذخیره شد!', '');
+        }
+
+        // ======================== INIT ========================
+        function init() {
+            loadState();
+            checkDailyRollover();
+            updateTitle();
+            render();
+            setInterval(checkNotifications, 30000);
+            checkNotifications();
+            if (Notification && Notification.permission === 'default') Notification.requestPermission();
+        }
+
+        init();
+    </script>
+</body>
+</html>
