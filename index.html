@@ -366,12 +366,12 @@ function resetAllData(){
 
             app.innerHTML=`
             <div id="entry-screen" ${state.user.name?'style="display:none"':''}>
-              <div class="logo-text">[SYSTEM]</div>
-              <div style="color:var(--text-dim);margin-bottom:10px;">به سیستم خوش آمدی، قهرمان</div>
-              <input type="text" id="name-input" placeholder="نام خود را وارد کن..." style="width:100%;max-width:300px;padding:12px;border-radius:25px;border:1px solid var(--neon-dim);background:var(--surface2);color:#fff;text-align:center;font-family:Vazirmatn;font-size:16px;">
-              <button class="btn" onclick="saveName()">ورود به سیستم</button>
-              <button class="btn gold-btn" onclick="showCreator()">🧬 سازنده</button>
-            </div>
+  <div class="logo-text">[SYSTEM]</div>
+  <div style="color:var(--text-dim);margin-bottom:10px;">به سیستم خوش آمدی، قهرمان</div>
+  <input type="text" id="name-input" placeholder="نام خود را وارد کن..." style="width:100%;max-width:300px;padding:12px;border-radius:25px;border:1px solid var(--neon-dim);background:var(--surface2);color:#fff;text-align:center;font-family:Vazirmatn;font-size:16px;">
+  <button class="btn" onclick="saveName()">ورود به سیستم</button>
+  <button class="btn gold-btn" onclick="showCreator()">🧬 سازنده</button>
+</div>
             <div id="main-screen" style="display:${state.user.name?'block':'none'}">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                 <div class="logo-text" style="font-size:20px;">[SYSTEM] ${state.badge==='systemBreaker'?'⭐':''}</div>
