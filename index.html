@@ -364,9 +364,9 @@ function applyTheme() {
     else if (settings.theme === 'green') { root.style.setProperty('--neon', '#00e676'); root.style.setProperty('--neon-dim', '#006633'); }
     else if (settings.theme === 'purple') { root.style.setProperty('--neon', '#b388ff'); root.style.setProperty('--neon-dim', '#5c3d99'); }
     else { root.style.setProperty('--neon', '#00ccff'); root.style.setProperty('--neon-dim', '#006688'); }
-    if (settings.nightMode) { document.body.classList.add('night-mode'); }
-    else { document.body.classList.remove('night-mode'); }
-        }        function render(){
+    if (settings.nightMode) { document.body.classList.add('night-mode'); document.body.style.background = '#f0f0f0'; }
+    else { document.body.classList.remove('night-mode'); document.body.style.background = ''; }
+}        function render(){
             const app=document.getElementById('app');
             const today=getTodayJalali(); const dayType=getDayType(today);
             const dayLabel=dayType==='friday'?'جمعه (استراحت)':dayType==='even'?'روز زوج (بوکس)':'روز فرد (قدرتی)';
