@@ -494,8 +494,7 @@ body.night-mode .toggle-slider { background-color: #999; }
     }
 }
 
-        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); applyTheme(); render(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
-
+        function init(){ loadState(); loadSettings(); if (window.location.href.includes('?reset=1')) { localStorage.removeItem('vito_settings'); settings = { theme:'blue', nightMode:false, sound:true, vibration:true, difficulty:'normal', fridayRest:true, keepBadge:true, morningNotification:true, eveningNotification:true }; saveSettings(); } checkDailyRollover(); updateTitle(); applyTheme(); render(); ...
         const origRender = render;
         render = function() {
             origRender();
