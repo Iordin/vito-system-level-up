@@ -8,8 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>سیستم ویتو</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-code@v1.1.2/dist/font-face.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <style>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">    <style>
         :root {
             --bg: #0a0a0f; --surface: rgba(10,15,30,0.7); --surface2: #181820;
             --neon: #00ccff; --neon-dim: #006688; --gold: #d4af37; --danger: #ff3355;
@@ -355,7 +354,7 @@ function resetAllData(){
             location.reload();
         }
     }
-                  function render(){
+    }        function render(){
             const app=document.getElementById('app');
             const today=getTodayJalali(); const dayType=getDayType(today);
             const dayLabel=dayType==='friday'?'جمعه (استراحت)':dayType==='even'?'روز زوج (بوکس)':'روز فرد (قدرتی)';
@@ -418,4 +417,4 @@ function resetAllData(){
         init();
     </script>
 </body>
-</html>                                                                                                                                                     }
+</html>
