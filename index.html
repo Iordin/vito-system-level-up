@@ -28,9 +28,8 @@
             display: flex; justify-content: center; align-items: center;
             padding: 10px; user-select: none; -webkit-user-select: none; overflow-x: hidden;
         }
-        .app-container { width: 100%; max-width: 480px; position: relative; display: flex; flex-direction: column; align-items: center; }
+        .app-container { width: 100%; max-width: 480px; position: relative; }
         .panel {
-            width: 100%;
             background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(0,200,255,0.4); border-radius: var(--radius);
             padding: 18px; margin-bottom: 12px;
@@ -66,12 +65,12 @@
         .btn.gold-btn { border-color: rgba(212,175,55,0.6); color: var(--gold); }
         .btn.gold-btn:hover { border-color: var(--gold); box-shadow: 0 0 25px rgba(212,175,55,0.5); }
         .small-btn { font-size: 10px; padding: 6px 14px; border-radius: 15px; background: var(--surface2); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-family: var(--font-text); }
-        .back-btn { background: transparent; border-color: rgba(255,255,255,0.2); color: var(--text-dim); max-width: 200px; padding: 10px 20px; font-size: 13px; margin: 10px auto 0; }
+        .back-btn { background: transparent; border-color: rgba(255,255,255,0.2); color: var(--text-dim); max-width: 200px; padding: 10px 20px; font-size: 13px; }
         .logo-text {
             font-family: var(--font-headings); font-weight: 900; font-size: 28px;
-            letter-spacing: 8px; color: var(--neon); text-align: center;
+            letter-spacing: 8px; color: var(--neon);
             text-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(0,204,255,0.4);
-            animation: logoPulse 2s infinite; margin-bottom: 20px; width: 100%;
+            animation: logoPulse 2s infinite;
         }
         @keyframes logoPulse { 0%,100% { text-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(0,204,255,0.4); } 50% { text-shadow: 0 0 50px rgba(0,204,255,1), 0 0 100px rgba(0,204,255,0.7); } }
         .stat-val, .xp-val, .level-num, .quest-xp, .vito-axis span { font-family: var(--font-numbers); font-weight: 400; letter-spacing: 2px; }
@@ -115,12 +114,7 @@
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
         .creator-text { line-height: 2.2; font-size: 14px; color: var(--text-dim); text-align: justify; padding: 5px 0; }
         .main-menu-buttons { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-
-        #system-break-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 100000; display: none;
-            flex-direction: column; justify-content: center; align-items: center; pointer-events: none;
-        }
+        #system-break-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100000; display: none; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; }
         #system-break-overlay .glitch-text { font-family: var(--font-numbers); font-size: 18px; color: var(--neon); text-align: center; line-height: 2; letter-spacing: 3px; animation: glitchSkew 0.3s infinite; }
         @keyframes glitchSkew { 0% { transform: skew(0deg); } 25% { transform: skew(2deg); } 50% { transform: skew(-2deg); } 75% { transform: skew(1deg); } 100% { transform: skew(0deg); } }
         #system-break-overlay .gold-final { font-family: var(--font-headings); font-weight: 900; font-size: 26px; color: var(--gold); text-shadow: 0 0 40px var(--gold); text-align: center; animation: goldPulse 2s infinite; display: none; }
@@ -153,12 +147,11 @@
             { id:'abs', name:'تمرین شکم', xp:20, stat:'endurance', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['شکم'] },
             { id:'explosive_pushup', name:'شنای انفجاری', xp:30, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['انفجاری'] }
         ];
-
         const PROFESSION_DB = [
             { name:'بوکسور', keywords:['بوکس','شادو','کیسه بوکس','مشت','رینگ','اسپارینگ'], stats:['speed','power','endurance'], vito:['physicalHealth'], weight:0 },
             { name:'کشتی‌گیر', keywords:['کشتی','زیرگیری','خاک','فن','تاتامی','پل'], stats:['power','endurance'], vito:['physicalHealth'], weight:0 },
             { name:'بدنساز', keywords:['بدنسازی','عضله','وزنه','دمبل','پرس سینه','اسکات','مکمل','پروتئین'], stats:['power','endurance'], vito:['physicalHealth'], weight:0 },
-            { name:'دونده', keywords:['دو','ماراتن','سرعت','دویدن','اینتروال','نیمه ماراتن'], stats:['speed','endurance'], vito:['physicalHealth'], weight:0 },
+            { name:'دونده', keywords:['دو','ماراتن','سرعت','دویدن','اینتروال'], stats:['speed','endurance'], vito:['physicalHealth'], weight:0 },
             { name:'شناگر', keywords:['شنا','استخر','آب','کرال','قورباغه','غواصی'], stats:['endurance','speed'], vito:['physicalHealth'], weight:0 },
             { name:'فوتبالیست', keywords:['فوتبال','توپ','گل','پاس','دریبل','شوت'], stats:['speed','endurance'], vito:['physicalHealth'], weight:0 },
             { name:'یوگی', keywords:['یوگا','مراقبه','آسانا','مدیتیشن','تنفس'], stats:['spirit','endurance'], vito:['mentalHealth','mindset'], weight:0 },
@@ -176,7 +169,6 @@
             { name:'طراح گرافیک', keywords:['طراحی','گرافیک','فتوشاپ','لوگو','برند','UI','UX'], stats:['knowledge','spirit'], vito:['mindset'], weight:0 },
             { name:'مهندس', keywords:['مهندسی','ساختمان','نقشه','محاسبات','طراحی فنی'], stats:['knowledge'], vito:['science'], weight:0 }
         ];
-
         const MYTH_TITLES = [
             { combo:'power+spirit', titles:['اژدهافکن','شیردل','رستم دستان','آرس','گیلگمش'] },
             { combo:'power+knowledge', titles:['ارتشتار خردمند','جنگجوی خردمند','ابوالهول','آتنا'] },
@@ -190,10 +182,8 @@
             { combo:'all_high', titles:['مونارک','سیستم‌شکن','آخرین لول','رستم دستان','جمشید'] },
             { combo:'all_max', titles:['ویتوی کامل','پوچی','خالق','ابدی'] }
         ];
-
         let ACHIEVEMENTS = [];
         if (typeof FULL_ACHIEVEMENTS !== 'undefined') { ACHIEVEMENTS = FULL_ACHIEVEMENTS; }
-
         const STORAGE_KEY = 'vito_system';
         const SETTINGS_KEY = 'vito_settings';
         let state = {
@@ -212,13 +202,11 @@
             morningNotification:true, eveningNotification:true, penaltyWarning:true, achievementPopup:true,
             simpleMode:false, devMode:false
         };
-
         function loadState(){ const raw=localStorage.getItem(STORAGE_KEY); if(raw){ try{ const p=JSON.parse(raw); state=deepMerge(state,p); }catch(e){} } if(!state.quests.length) state.quests=JSON.parse(JSON.stringify(DEFAULT_QUESTS)); if(!state.totalQuestCompletions) state.totalQuestCompletions={}; if(!state.restDaysUsed) state.restDaysUsed=[]; if(!state.sickLeaveUsage) state.sickLeaveUsage=[]; }
         function loadSettings(){ const raw=localStorage.getItem(SETTINGS_KEY); if(raw){ try{ const p=JSON.parse(raw); settings=deepMerge(settings,p); }catch(e){} } }
         function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
         function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
         function deepMerge(target, source){ const o={...target}; for(const k in source){ if(source[k]&&typeof source[k]==='object'&&!Array.isArray(source[k])) o[k]=deepMerge(target[k]||{},source[k]); else o[k]=source[k]; } return o; }
-
         function getTodayJalali(){ return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Asia/Tehran'}).format(new Date()).replace(/[\/]/g,'-'); }
         function getDayType(d){ const p=d.split('-'); const j=jalaliToGregorian(+p[0],+p[1],+p[2]); const pd=(j.getDay()+1)%7; if(pd===6) return'friday'; return pd%2===0?'even':'odd'; }
         function jalaliToGregorian(jy,jm,jd){ const jy2=jy-979; const days=jd+(jm<=7?(jm-1)*31:(jm-1)*30+6)+Math.floor(jy2*365.25)-79; const g=new Date(2000,0,1); g.setDate(g.getDate()+days); return g; }
@@ -240,7 +228,6 @@
         function canUseSickLeave(){ return getSickLeaveUsedThisYear()<3 && !state.sickLeaveActive; }
         function activateSickLeave(days){ if(!canUseSickLeave()) return false; state.sickLeaveActive=true; state.sickLeaveRemaining=Math.min(14,Math.max(1,days)); state.sickLeaveUsage.push({year:getCurrentJalaliYear(), days:state.sickLeaveRemaining}); saveState(); return true; }
         function deactivateSickLeave(){ state.sickLeaveActive=false; state.sickLeaveRemaining=0; saveState(); }
-
         function checkSystemBreak(){
             if (state.systemBroken) return;
             if (state.achievements.length >= 1000 && state.user.level >= 1000 &&
@@ -266,3 +253,5 @@
                     setTimeout(() => {
                         glitchEl.style.display = 'none'; goldEl.style.display = 'block';
                         goldEl.innerHTML = 'تو سیستم رو شکستی.<br>از اعداد فراتر رفتی.<br>دیگه هیچ لِوِلی برای تو نیست —<br>چون تو خودِ لِوِلی.<br><br>سیستم رفت... اما تو ماندی.<br>حالا تو سیستم خودت باش.';
+                        particlesEl.style.display = 'block';
+                        for (let j=0;j<120;j++){ const p=document.createElement('div'); p.className='gold-particle'; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*3+'
