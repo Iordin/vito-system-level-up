@@ -54,23 +54,23 @@
         }
         .panel-header::before { content: '▸'; font-size: 10px; }
         .btn {
-            background: var(--surface2); border: 1px solid rgba(0,204,255,0.4);
-            color: var(--neon); padding: 14px 30px; border-radius: 30px;
-            font-size: 16px; font-family: var(--font-text); cursor: pointer;
-            width: 100%; max-width: 300px; transition: all 0.3s;
-            letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--surface2); border: 1px solid rgba(0,204,255,0.4);
+    color: var(--neon); padding: 14px 30px; border-radius: 30px;
+    font-size: 16px; font-family: var(--font-text); cursor: pointer;
+    width: 100%; max-width: 300px; transition: all 0.3s; margin-bottom: 12px;
+    letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .btn:hover, .btn:active { background: var(--neon-dim); border-color: var(--neon); box-shadow: 0 0 25px rgba(0,204,255,0.5); color: #fff; }
-        .btn.gold-btn { border-color: rgba(212,175,55,0.6); color: var(--gold); }
-        .btn.gold-btn:hover { border-color: var(--gold); box-shadow: 0 0 25px rgba(212,175,55,0.5); }
-        .small-btn { font-size: 10px; padding: 6px 14px; border-radius: 15px; background: var(--surface2); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-family: var(--font-text); }
-        .back-btn { background: transparent; border-color: rgba(255,255,255,0.2); color: var(--text-dim); max-width: 200px; padding: 10px 20px; font-size: 13px; }
-        .logo-text {
-            font-family: var(--font-headings); font-weight: 900; font-size: 28px;
-            letter-spacing: 8px; color: var(--neon);
-            text-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(0,204,255,0.4);
-            animation: logoPulse 2s infinite;
-        }
+.btn:hover, .btn:active { background: var(--neon-dim); border-color: var(--neon); box-shadow: 0 0 25px rgba(0,204,255,0.5); color: #fff; }
+.btn.gold-btn { border-color: rgba(212,175,55,0.6); color: var(--gold); }
+.btn.gold-btn:hover { border-color: var(--gold); box-shadow: 0 0 25px rgba(212,175,55,0.5); }
+.small-btn { font-size: 10px; padding: 6px 14px; border-radius: 15px; background: var(--surface2); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-family: var(--font-text); }
+.back-btn { background: transparent; border-color: rgba(255,255,255,0.2); color: var(--text-dim); max-width: 200px; padding: 10px 20px; font-size: 13px; }
+.logo-text {
+    font-family: var(--font-headings); font-weight: 900; font-size: 28px;
+    letter-spacing: 8px; color: var(--neon); text-align: center; width: 100%;
+    text-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(0,204,255,0.4);
+    animation: logoPulse 2s infinite; margin-bottom: 20px;
+}
         @keyframes logoPulse { 0%,100% { text-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(0,204,255,0.4); } 50% { text-shadow: 0 0 50px rgba(0,204,255,1), 0 0 100px rgba(0,204,255,0.7); } }
         .stat-val, .xp-val, .level-num, .quest-xp, .vito-axis span { font-family: var(--font-numbers); font-weight: 400; letter-spacing: 2px; }
         .xp-bar { width:100%; height:8px; background:var(--surface2); border-radius:10px; overflow:hidden; margin:6px 0; }
@@ -401,7 +401,7 @@ function resetAllData(){
               <div class="panel"><div class="collapsible-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');"><span>🏆 Achievements (${state.achievements.length})</span><span class="arrow">▼</span></div><div class="collapsible-body">${state.achievements.length===0?'<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>':state.achievements.slice(-20).map(id=>{const ach=ACHIEVEMENTS.find(a=>a.id===id);return ach?`<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>`:'';}).join('')}</div></div>
               <div style="display:flex;gap:10px;margin-top:10px;"><button class="btn" onclick="showReport()" style="flex:1;">📝 گزارش</button><button class="btn" onclick="showCreator()" style="flex:1;">🧬 سازنده</button></div>
             </div>
-            <div id="creator-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div><p style="line-height:1.8;font-size:13px;color:var(--text-dim);">سازندگان: اسطوره سیزیف و اشکر<br>این برنامه با الهام از مانهوا Solo Leveling ساخته شده.<br>هدف: برنامه‌ریزی منسجم‌تر برای رسیدن به نسخه‌ای بهتر از خود.<br>این برنامه تماماً توسط Claude AI ساخته شده است.</p><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
+            <div id="creator-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div><p style="line-height:2.2;font-size:14px;color:var(--text-dim);text-align:justify;padding:10px 0;">سازندگان: اسطوره سیزیف و اشکر<br><br>این برنامه با الهام از مانهوا Solo Leveling و ژانرهای غالب در رمان‌های شرق آسیا (کره جنوبی) نوشته شده است.<br><br>هدف از ساخت آن: برنامه‌ریزی منسجم‌تر، هدف‌گرایی بهتر و واضح‌تر برای رسیدن به قله و نسخه‌ای بهتر از دیروز خود.<br><br>استفاده از این برنامه برای همه رایگان و بدون محدودیت است.<br><br>این برنامه تماماً توسط Claude AI ساخته شده است.</p><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
             <div id="report-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">📝 گزارش کلی</div>${state.history.length===0?'<p style="color:var(--text-dim);">هنوز گزارشی ثبت نشده.</p>':state.history.slice(-20).reverse().map(h=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;"><span>📅 ${h.date}</span><span style="color:${h.completedAll?'var(--success)':'var(--danger)'};margin-right:10px;">${h.completedAll?'✅ کامل':'⚠️ پنالتی'}</span>${h.xpGained>0?`<span style="color:var(--neon);">+${h.xpGained} XP</span>`:''}${h.penalty>0?`<span style="color:var(--danger);">-${h.penalty} XP</span>`:''}</div>`).join('')}</div><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
             <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>حالت شب</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>
           `;
