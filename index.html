@@ -141,6 +141,32 @@
     font-family: Vazirmatn;
     font-size: 16px;
 }
+/* Night Mode */
+body.night-mode {
+    --bg: #f0f0f0;
+    --surface: rgba(255,255,255,0.85);
+    --surface2: #e8e8e8;
+    --text: #1a1a1a;
+    --text-dim: #666;
+    background-image: radial-gradient(ellipse at center, #e8e8e8 0%, #d0d0d0 100%);
+}
+body.night-mode .panel {
+    border-color: rgba(0,0,0,0.15);
+    box-shadow: 0 0 20px rgba(0,0,0,0.05), 0 8px 32px rgba(0,0,0,0.1);
+}
+body.night-mode .btn {
+    background: #ddd;
+    border-color: rgba(0,0,0,0.3);
+    color: #333;
+}
+body.night-mode .logo-text {
+    color: #333;
+    text-shadow: none;
+    animation: none;
+}
+body.night-mode .stat-val, body.night-mode .level-num, body.night-mode .xp-fill {
+    color: #333;
+} 
     </style>
 </head>
 <body>
@@ -426,9 +452,7 @@
             </div>
             <div id="creator-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div><p style="line-height:2.2;font-size:14px;color:var(--text-dim);text-align:justify;padding:10px 0;">سازندگان: اسطوره سیزیف و اشکر<br><br>این برنامه با الهام از مانهوا Solo Leveling و ژانرهای غالب در رمان‌های شرق آسیا (کره جنوبی) نوشته شده است.<br><br>هدف از ساخت آن: برنامه‌ریزی منسجم‌تر، هدف‌گرایی بهتر و واضح‌تر برای رسیدن به قله و نسخه‌ای بهتر از دیروز خود.<br><br>استفاده از این برنامه برای همه رایگان و بدون محدودیت است.<br><br>این برنامه تماماً توسط Claude AI ساخته شده است.</p><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
             <div id="report-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">📝 گزارش کلی</div>${state.history.length===0?'<p style="color:var(--text-dim);">هنوز گزارشی ثبت نشده.</p>':state.history.slice(-20).reverse().map(h=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;"><span>📅 ${h.date}</span><span style="color:${h.completedAll?'var(--success)':'var(--danger)'};margin-right:10px;">${h.completedAll?'✅ کامل':'⚠️ پنالتی'}</span>${h.xpGained>0?`<span style="color:var(--neon);">+${h.xpGained} XP</span>`:''}${h.penalty>0?`<span style="color:var(--danger);">-${h.penalty} XP</span>`:''}</div>`).join('')}</div><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
-            <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>حالت شب</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>
-          `;
-        }
+            <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();applyTheme();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>🌙 حالت شب/روز ☀️</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();applyTheme();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>        }
                 function showSettings(){ document.getElementById('main-screen').style.display='none'; document.getElementById('settings-screen').style.display='block'; }
         function showCreator(){ document.getElementById('main-screen').style.display='none'; document.getElementById('creator-screen').style.display='block'; }
         function showReport(){ document.getElementById('main-screen').style.display='none'; document.getElementById('report-screen').style.display='block'; render(); }
