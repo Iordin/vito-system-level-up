@@ -119,54 +119,9 @@
         @keyframes goldPulse { 0%,100% { text-shadow: 0 0 40px var(--gold); } 50% { text-shadow: 0 0 80px var(--gold), 0 0 120px #fff; } }
         #system-break-particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:100001; display:none; }
         .gold-particle { position: absolute; width: 4px; height: 4px; background: var(--gold); border-radius: 50%; animation: particleRise 4s ease-out forwards; }
-      @keyframes particleRise { 0% { opacity:1; transform: translateY(100vh) scale(1); } 100% { opacity:0; transform: translateY(-100px) scale(0); } }
-  #entry-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
-    padding: 20px 0;
-}
-#entry-screen input {
-    width: 100%;
-    max-width: 300px;
-    padding: 12px;
-    border-radius: 25px;
-    border: 1px solid var(--neon-dim);
-    background: var(--surface2);
-    color: #fff;
-    text-align: center;
-    font-family: Vazirmatn;
-    font-size: 16px;
-}
-/* Night Mode */
-body.night-mode {
-    --bg: #f0f0f0;
-    --surface: rgba(255,255,255,0.85);
-    --surface2: #e8e8e8;
-    --text: #1a1a1a;
-    --text-dim: #666;
-    background-image: radial-gradient(ellipse at center, #e8e8e8 0%, #d0d0d0 100%);
-}
-body.night-mode .panel {
-    border-color: rgba(0,0,0,0.15);
-    box-shadow: 0 0 20px rgba(0,0,0,0.05), 0 8px 32px rgba(0,0,0,0.1);
-}
-body.night-mode .btn {
-    background: #ddd;
-    border-color: rgba(0,0,0,0.3);
-    color: #333;
-}
-body.night-mode .logo-text {
-    color: #333;
-    text-shadow: none;
-    animation: none;
-}
-body.night-mode .stat-val, body.night-mode .level-num, body.night-mode .xp-fill {
-    color: #333;
-} 
+        @keyframes particleRise { 0% { opacity:1; transform: translateY(100vh) scale(1); } 100% { opacity:0; transform: translateY(-100px) scale(0); } }
+        #entry-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; width: 100%; padding: 20px 0; }
+        #entry-screen input { width: 100%; max-width: 300px; padding: 12px; border-radius: 25px; border: 1px solid var(--neon-dim); background: var(--surface2); color: #fff; text-align: center; font-family: Vazirmatn; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -245,165 +200,173 @@ body.night-mode .stat-val, body.night-mode .level-num, body.night-mode .xp-fill 
             autoBackup:false, keepBadge:true,
             morningNotification:true, eveningNotification:true, penaltyWarning:true, achievementPopup:true,
             simpleMode:false, devMode:false
-        };        function loadState(){ const raw=localStorage.getItem(STORAGE_KEY); if(raw){ try{ const p=JSON.parse(raw); state=deepMerge(state,p); }catch(e){} } if(!state.quests.length) state.quests=JSON.parse(JSON.stringify(DEFAULT_QUESTS)); if(!state.totalQuestCompletions) state.totalQuestCompletions={}; if(!state.restDaysUsed) state.restDaysUsed=[]; if(!state.sickLeaveUsage) state.sickLeaveUsage=[]; }
-        function loadSettings(){ const raw=localStorage.getItem(SETTINGS_KEY); if(raw){ try{ const p=JSON.parse(raw); settings=deepMerge(settings,p); }catch(e){} } }
-        function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-        function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
-        function deepMerge(target, source){ const o={...target}; for(const k in source){ if(source[k]&&typeof source[k]==='object'&&!Array.isArray(source[k])) o[k]=deepMerge(target[k]||{},source[k]); else o[k]=source[k]; } return o; }
-        function getTodayJalali(){ return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Asia/Tehran'}).format(new Date()).replace(/[\/]/g,'-'); }
-        function getDayType(d){ const p=d.split('-'); const j=jalaliToGregorian(+p[0],+p[1],+p[2]); const pd=(j.getDay()+1)%7; if(pd===6) return'friday'; return pd%2===0?'even':'odd'; }
-        function jalaliToGregorian(jy,jm,jd){ const jy2=jy-979; const days=jd+(jm<=7?(jm-1)*31:(jm-1)*30+6)+Math.floor(jy2*365.25)-79; const g=new Date(2000,0,1); g.setDate(g.getDate()+days); return g; }
-        function getRank(l){ if(l>=70) return'S'; if(l>=50) return'A'; if(l>=35) return'B'; if(l>=20) return'C'; if(l>=10) return'D'; return'E'; }
-        function xpForLevel(l){ return Math.floor(100*Math.pow(l,1.3)); }
-        function xpForNextLevel(){ return xpForLevel(state.user.level+1); }
-        function professionLevelName(l){ if(l>=100) return'قهرمان بلامنازع'; if(l>=80) return'ملی'; if(l>=60) return'حرفه‌ای'; if(l>=40) return'آماتور'; if(l>=20) return'مبتدی'; return'نوآموز'; }
-        function getTopStats(c=2){ return Object.entries(state.stats).sort((a,b)=>b[1]-a[1]).slice(0,c).map(e=>e[0]); }
-        function getQS(id){ const q=state.quests.find(q=>q.id===id); return q?q.streak||0:0; }
-        function getTotalStudyHours(){ let t=0; state.history.forEach(h=>{ if(h.completedAll) t+=state.quests.find(q=>q.id==='study')?.hoursDone||0; }); return t; }
-        function isMonsterDay(){ const dt=getDayType(getTodayJalali()); const r=state.quests.filter(q=>q.days==='all'||q.days===dt); return r.length>0&&r.every(q=>q.completed||(q.hoursTarget&&q.hoursDone>=q.hoursTarget)); }
-        function getMonthlyRestDays(level){ if(level>=100) return 0; if(level>=80) return 1; if(level>=60) return 2; if(level>=40) return 4; if(level>=20) return 6; if(level>=10) return 8; return 10; }
-        function getUsedRestDaysThisMonth(){ const today=getTodayJalali(); const [y,m]=today.split('-'); return state.restDaysUsed.filter(d=>d.startsWith(`${y}-${m}`)).length; }
-        function getRemainingRestDays(){ return Math.max(0, getMonthlyRestDays(state.user.level) - getUsedRestDaysThisMonth()); }
-        function useRestDay(){ const today=getTodayJalali(); if(getRemainingRestDays()<=0) return false; if(state.restDaysUsed.includes(today)) return false; state.restDaysUsed.push(today); saveState(); return true; }
-        function isTodayRestDay(){ return state.restDaysUsed.includes(getTodayJalali()); }
-        function getCurrentJalaliYear(){ return getTodayJalali().split('-')[0]; }
-        function getSickLeaveUsedThisYear(){ return state.sickLeaveUsage.filter(u=>u.year===getCurrentJalaliYear()).length; }
-        function canUseSickLeave(){ return getSickLeaveUsedThisYear()<3 && !state.sickLeaveActive; }
-        function activateSickLeave(days){ if(!canUseSickLeave()) return false; state.sickLeaveActive=true; state.sickLeaveRemaining=Math.min(14,Math.max(1,days)); state.sickLeaveUsage.push({year:getCurrentJalaliYear(), days:state.sickLeaveRemaining}); saveState(); return true; }
-        function deactivateSickLeave(){ state.sickLeaveActive=false; state.sickLeaveRemaining=0; saveState(); }
-        function checkSystemBreak(){
-            if (state.systemBroken) return;
-            if (state.achievements.length >= 1000 && state.user.level >= 1000 &&
-                state.stats.power === 100 && state.stats.speed === 100 && state.stats.endurance === 100 &&
-                state.stats.knowledge === 100 && state.stats.spirit === 100 &&
-                state.vito.finance === 100 && state.vito.mentalHealth === 100 &&
-                state.vito.physicalHealth === 100 && state.vito.mindset === 100 && state.vito.science === 100) {
-                triggerSystemBreak();
-            }
+        };function loadState(){ const raw=localStorage.getItem(STORAGE_KEY); if(raw){ try{ const p=JSON.parse(raw); state=deepMerge(state,p); }catch(e){} } if(!state.quests.length) state.quests=JSON.parse(JSON.stringify(DEFAULT_QUESTS)); if(!state.totalQuestCompletions) state.totalQuestCompletions={}; if(!state.restDaysUsed) state.restDaysUsed=[]; if(!state.sickLeaveUsage) state.sickLeaveUsage=[]; }
+function loadSettings(){ const raw=localStorage.getItem(SETTINGS_KEY); if(raw){ try{ const p=JSON.parse(raw); settings=deepMerge(settings,p); }catch(e){} } }
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
+function deepMerge(target, source){ const o={...target}; for(const k in source){ if(source[k]&&typeof source[k]==='object'&&!Array.isArray(source[k])) o[k]=deepMerge(target[k]||{},source[k]); else o[k]=source[k]; } return o; }
+function getTodayJalali(){ return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Asia/Tehran'}).format(new Date()).replace(/[\/]/g,'-'); }
+function getDayType(d){ const p=d.split('-'); const j=jalaliToGregorian(+p[0],+p[1],+p[2]); const pd=(j.getDay()+1)%7; if(pd===6) return'friday'; return pd%2===0?'even':'odd'; }
+function jalaliToGregorian(jy,jm,jd){ const jy2=jy-979; const days=jd+(jm<=7?(jm-1)*31:(jm-1)*30+6)+Math.floor(jy2*365.25)-79; const g=new Date(2000,0,1); g.setDate(g.getDate()+days); return g; }
+function getRank(l){ if(l>=70) return'S'; if(l>=50) return'A'; if(l>=35) return'B'; if(l>=20) return'C'; if(l>=10) return'D'; return'E'; }
+function xpForLevel(l){ return Math.floor(100*Math.pow(l,1.3)); }
+function xpForNextLevel(){ return xpForLevel(state.user.level+1); }
+function professionLevelName(l){ if(l>=100) return'قهرمان بلامنازع'; if(l>=80) return'ملی'; if(l>=60) return'حرفه‌ای'; if(l>=40) return'آماتور'; if(l>=20) return'مبتدی'; return'نوآموز'; }
+function getTopStats(c=2){ return Object.entries(state.stats).sort((a,b)=>b[1]-a[1]).slice(0,c).map(e=>e[0]); }
+function getQS(id){ const q=state.quests.find(q=>q.id===id); return q?q.streak||0:0; }
+function getTotalStudyHours(){ let t=0; state.history.forEach(h=>{ if(h.completedAll) t+=state.quests.find(q=>q.id==='study')?.hoursDone||0; }); return t; }
+function isMonsterDay(){ const dt=getDayType(getTodayJalali()); const r=state.quests.filter(q=>q.days==='all'||q.days===dt); return r.length>0&&r.every(q=>q.completed||(q.hoursTarget&&q.hoursDone>=q.hoursTarget)); }
+function getMonthlyRestDays(level){ if(level>=100) return 0; if(level>=80) return 1; if(level>=60) return 2; if(level>=40) return 4; if(level>=20) return 6; if(level>=10) return 8; return 10; }
+function getUsedRestDaysThisMonth(){ const today=getTodayJalali(); const [y,m]=today.split('-'); return state.restDaysUsed.filter(d=>d.startsWith(`${y}-${m}`)).length; }
+function getRemainingRestDays(){ return Math.max(0, getMonthlyRestDays(state.user.level) - getUsedRestDaysThisMonth()); }
+function useRestDay(){ const today=getTodayJalali(); if(getRemainingRestDays()<=0) return false; if(state.restDaysUsed.includes(today)) return false; state.restDaysUsed.push(today); saveState(); return true; }
+function isTodayRestDay(){ return state.restDaysUsed.includes(getTodayJalali()); }
+function getCurrentJalaliYear(){ return getTodayJalali().split('-')[0]; }
+function getSickLeaveUsedThisYear(){ return state.sickLeaveUsage.filter(u=>u.year===getCurrentJalaliYear()).length; }
+function canUseSickLeave(){ return getSickLeaveUsedThisYear()<3 && !state.sickLeaveActive; }
+function activateSickLeave(days){ if(!canUseSickLeave()) return false; state.sickLeaveActive=true; state.sickLeaveRemaining=Math.min(14,Math.max(1,days)); state.sickLeaveUsage.push({year:getCurrentJalaliYear(), days:state.sickLeaveRemaining}); saveState(); return true; }
+function deactivateSickLeave(){ state.sickLeaveActive=false; state.sickLeaveRemaining=0; saveState(); }
+function checkSystemBreak(){
+    if (state.systemBroken) return;
+    if (state.achievements.length >= 1000 && state.user.level >= 1000 &&
+        state.stats.power === 100 && state.stats.speed === 100 && state.stats.endurance === 100 &&
+        state.stats.knowledge === 100 && state.stats.spirit === 100 &&
+        state.vito.finance === 100 && state.vito.mentalHealth === 100 &&
+        state.vito.physicalHealth === 100 && state.vito.mindset === 100 && state.vito.science === 100) {
+        triggerSystemBreak();
+    }
+}
+function triggerSystemBreak(){
+    state.systemBroken = true; state.badge = 'systemBreaker'; saveState();
+    const overlay = document.getElementById('system-break-overlay');
+    const glitchEl = document.getElementById('glitch-output');
+    const goldEl = document.getElementById('gold-message');
+    const particlesEl = document.getElementById('system-break-particles');
+    overlay.style.display = 'flex';
+    const glitchLines = ['[SYSTEM ERROR]', 'User data overflow...', 'Recalibrating...', 'Recalibration failed.', 'ERROR: User exceeds maximum defined parameters.', 'Shutting down...', '3...', '2...', '1...', 'SYSTEM TERMINATED.'];
+    let i = 0;
+    function showNextLine(){
+        if (i < glitchLines.length) { glitchEl.textContent += glitchLines[i] + '\n'; i++; setTimeout(showNextLine, 600); }
+        else {
+            setTimeout(() => {
+                glitchEl.style.display = 'none'; goldEl.style.display = 'block';
+                goldEl.innerHTML = 'تو سیستم رو شکستی.<br>از اعداد فراتر رفتی.<br>دیگه هیچ لِوِلی برای تو نیست —<br>چون تو خودِ لِوِلی.<br><br>سیستم رفت... اما تو ماندی.<br>حالا تو سیستم خودت باش.';
+                particlesEl.style.display = 'block';
+                for (let j=0;j<120;j++){ const p=document.createElement('div'); p.className='gold-particle'; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*3+'s'; p.style.animationDuration=(3+Math.random()*5)+'s'; particlesEl.appendChild(p); }
+                setTimeout(() => {
+                    overlay.style.display = 'none'; goldEl.style.display = 'none'; particlesEl.style.display = 'none'; particlesEl.innerHTML = '';
+                    state.user.level = 1; state.user.xp = 0;
+                    state.stats = { power:0, speed:0, endurance:0, knowledge:0, spirit:0 };
+                    state.vito = { finance:0, mentalHealth:0, physicalHealth:0, mindset:0, science:0 };
+                    state.quests = JSON.parse(JSON.stringify(DEFAULT_QUESTS));
+                    state.skills = []; state.history = []; state.streak = 0;
+                    state.achievements = []; state.titlesUnlocked = [];
+                    state.totalQuestCompletions = {}; state.restDaysUsed = [];
+                    state.sickLeaveActive = false; state.sickLeaveRemaining = 0;
+                    state.sickLeaveUsage = []; state.awakeningLevel = 0;
+                    state.user.professionLevel = 0; state.user.title = '';
+                    state.user.confirmedProfession = ''; state.user.detectedProfession = '';
+                    state.lastOpened = ''; state.badge = 'systemBreaker';
+                    saveState(); render();
+                    showToast('✨ سیستم ریست شد — اما تو «افسانه» ماندی.','gold');
+                }, 8000);
+            }, 1000);
         }
-        function triggerSystemBreak(){
-            state.systemBroken = true; state.badge = 'systemBreaker'; saveState();
-            const overlay = document.getElementById('system-break-overlay');
-            const glitchEl = document.getElementById('glitch-output');
-            const goldEl = document.getElementById('gold-message');
-            const particlesEl = document.getElementById('system-break-particles');
-            overlay.style.display = 'flex';
-            const glitchLines = ['[SYSTEM ERROR]', 'User data overflow...', 'Recalibrating...', 'Recalibration failed.', 'ERROR: User exceeds maximum defined parameters.', 'Shutting down...', '3...', '2...', '1...', 'SYSTEM TERMINATED.'];
-            let i = 0;
-            function showNextLine(){
-                if (i < glitchLines.length) { glitchEl.textContent += glitchLines[i] + '\n'; i++; setTimeout(showNextLine, 600); }
-                else {
-                    setTimeout(() => {
-                        glitchEl.style.display = 'none'; goldEl.style.display = 'block';
-                        goldEl.innerHTML = 'تو سیستم رو شکستی.<br>از اعداد فراتر رفتی.<br>دیگه هیچ لِوِلی برای تو نیست —<br>چون تو خودِ لِوِلی.<br><br>سیستم رفت... اما تو ماندی.<br>حالا تو سیستم خودت باش.';
-                        particlesEl.style.display = 'block';
-                        for (let j=0;j<120;j++){ const p=document.createElement('div'); p.className='gold-particle'; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*3+'s'; p.style.animationDuration=(3+Math.random()*5)+'s'; particlesEl.appendChild(p); }
-                        setTimeout(() => {
-                            overlay.style.display = 'none'; goldEl.style.display = 'none'; particlesEl.style.display = 'none'; particlesEl.innerHTML = '';
-                            state.user.level = 1; state.user.xp = 0;
-                            state.stats = { power:0, speed:0, endurance:0, knowledge:0, spirit:0 };
-                            state.vito = { finance:0, mentalHealth:0, physicalHealth:0, mindset:0, science:0 };
-                            state.quests = JSON.parse(JSON.stringify(DEFAULT_QUESTS));
-                            state.skills = []; state.history = []; state.streak = 0;
-                            state.achievements = []; state.titlesUnlocked = [];
-                            state.totalQuestCompletions = {}; state.restDaysUsed = [];
-                            state.sickLeaveActive = false; state.sickLeaveRemaining = 0;
-                            state.sickLeaveUsage = []; state.awakeningLevel = 0;
-                            state.user.professionLevel = 0; state.user.title = '';
-                            state.user.confirmedProfession = ''; state.user.detectedProfession = '';
-                            state.lastOpened = ''; state.badge = 'systemBreaker';
-                            saveState(); render();
-                            showToast('✨ سیستم ریست شد — اما تو «افسانه» ماندی.','gold');
-                        }, 8000);
-                    }, 1000);
-                }
-            }
-            showNextLine();
+    }
+    showNextLine();
+}
+function checkDailyRollover(){
+    const today=getTodayJalali();
+    if(state.lastOpened===today) return;
+    if(state.sickLeaveActive){ state.sickLeaveRemaining--; if(state.sickLeaveRemaining<=0) deactivateSickLeave(); state.lastOpened=today; resetTodayQuests(); saveState(); render(); return; }
+    if(isTodayRestDay()){ state.lastOpened=today; resetTodayQuests(); saveState(); render(); return; }
+    if(state.lastOpened){ const missedDays=getMissedDays(state.lastOpened,today); missedDays.forEach(day=>evaluateDay(day)); }
+    state.lastOpened=today; resetTodayQuests(); saveState(); render();
+}
+function getMissedDays(from,to){ const days=[]; const start=parseJalali(from); const end=parseJalali(to); let c=new Date(start); while(c<end){ c.setDate(c.getDate()+1); days.push(gregorianToJalali(c)); } return days; }
+function parseJalali(d){ const p=d.split('-'); return jalaliToGregorian(+p[0],+p[1],+p[2]); }
+function gregorianToJalali(g){ return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Asia/Tehran'}).format(g).replace(/[\/]/g,'-'); }
+function evaluateDay(d){
+    const dt=getDayType(d); if(dt==='friday' && settings.fridayRest) return;
+    const r=state.quests.filter(q=>q.days==='all'||q.days===dt);
+    const ad=r.length>0&&r.every(q=>q.completed||(q.hoursTarget&&q.hoursDone>=q.hoursTarget));
+    if(ad){ state.streak++; state.history.push({date:d,completedAll:true,xpGained:r.reduce((s,q)=>s+(q.hoursTarget?q.xp*(q.hoursDone||0):q.xp),0),penalty:0,streak:state.streak}); }
+    else if(r.length>0){ const mult=settings.difficulty==='hard'?0.5:settings.difficulty==='survival'?0.6:0.4; const px=Math.max(20,Math.floor(r.reduce((s,q)=>s+q.xp,0)*mult)); state.user.xp-=px; while(state.user.xp<0&&state.user.level>1){ state.user.level--; state.user.xp+=xpForLevel(state.user.level+1); } if(state.user.xp<0) state.user.xp=0; if(state.user.level<1) state.user.level=1; state.streak=0; state.history.push({date:d,completedAll:false,xpGained:0,penalty:px,streak:0}); }
+}
+function resetTodayQuests(){ state.quests.forEach(q=>{ q.completed=false; if(q.hoursDone!==undefined) q.hoursDone=0; }); }
+function completeQuest(qid){
+    const q=state.quests.find(q=>q.id===qid); if(!q) return;
+    q.completed=!q.completed; if(q.hoursTarget!==undefined&&q.completed){ q.completed=(q.hoursDone||0)>=q.hoursTarget; if(!q.completed) return; }
+    const xp=q.hoursTarget?q.xp*(q.hoursDone||0):q.xp;
+    if(q.completed){ addXP(xp); if(q.stat) state.stats[q.stat]+=1; if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
+    else { addXP(-xp); if(q.stat) state.stats[q.stat]=Math.max(0,state.stats[q.stat]-1); q.streak=0; }
+    checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); render();
+}
+function addStudyHour(qid,delta){
+    const q=state.quests.find(q=>q.id===qid); if(!q||q.hoursTarget===undefined) return;
+    q.hoursDone=Math.max(0,Math.min(q.maxHours||10,(q.hoursDone||0)+delta)); q.completed=q.hoursDone>=q.hoursTarget;
+    if(q.completed&&delta>0){ const xp=q.xp*q.hoursDone; addXP(xp); if(q.stat) state.stats[q.stat]+=Math.floor(q.hoursDone/2); if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
+    checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); render();
+}
+function addXP(amount){
+    if(amount>0){ const ab=state.user.awakeningLevel*0.05; if(ab>0) amount+=Math.floor(amount*ab); }
+    state.user.xp+=amount; let lu=false;
+    while(state.user.xp>=xpForNextLevel()&&state.user.level<100000){ state.user.xp-=xpForNextLevel(); state.user.level++; state.user.professionLevel=Math.floor(state.user.level/20); lu=true; }
+    while(state.user.xp<0&&state.user.level>1){ state.user.level--; state.user.xp+=xpForLevel(state.user.level+1); }
+    if(state.user.xp<0) state.user.xp=0; if(state.user.level<1) state.user.level=1;
+    if(lu){ checkAwakening(); if(settings.vibration) navigator.vibrate?.([100,50,100,50,200]); }
+}
+function checkAwakening(){ const ms=[10,25,50,75,100]; const idx=ms.indexOf(state.user.level); if(idx>=0&&state.user.awakeningLevel<idx+1){ state.user.awakeningLevel=idx+1; if(settings.sound) sfxAwakening(); } }
+function detectProfession(){
+    const ak=[]; state.quests.forEach(q=>{ if(q.keywords) ak.push(...q.keywords); }); state.skills.forEach(s=>{ if(s.name) ak.push(s.name); });
+    const ts=getTopStats(); const tv=Object.entries(state.vito).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]);
+    PROFESSION_DB.forEach(p=>p.weight=0);
+    PROFESSION_DB.forEach(p=>{ p.keywords.forEach(kw=>{ if(ak.some(a=>a.includes(kw)||kw.includes(a))) p.weight+=3; }); p.stats.forEach(s=>{ if(ts.includes(s)) p.weight+=2; }); p.vito.forEach(v=>{ if(tv.includes(v)) p.weight+=1; }); });
+    PROFESSION_DB.sort((a,b)=>b.weight-a.weight); const best=PROFESSION_DB[0];
+    if(best&&best.weight>=3){ state.user.detectedProfession=best.name; if(!state.user.confirmedProfession) state.user.confirmedProfession=best.name; }
+}
+function updateTitle(){
+    const tt=getTopStats(); const mx=state.stats[tt[0]]||0; const mn=Math.min(...Object.values(state.stats));
+    if(mn>=60){ state.user.title='مونارک'; return; } if(mx<30){ state.user.title='بی‌عنوان — تازه‌کار'; return; }
+    const ck=[...tt].sort().join('+'); const cand=MYTH_TITLES.filter(t=>t.combo===ck||t.combo.includes(ck)||t.combo==='all_high');
+    if(cand.length>0){ const all=cand.flatMap(c=>c.titles); state.user.title=all[new Date().getDate()%all.length]; }
+}
+function checkAchievements(){ ACHIEVEMENTS.forEach(ach=>{ if(!state.achievements.includes(ach.id)&&ach.check()){ state.achievements.push(ach.id); if(ach.reward&&ach.reward.xp) addXP(ach.reward.xp); if(ach.reward&&ach.reward.stats) Object.entries(ach.reward.stats).forEach(([s,v])=>state.stats[s]+=v); if(settings.sound) sfxAchievement(); showToast(`🏆 Achievement مخفی: ${ach.name}!`,'gold'); saveState(); } }); }
+function addSkill(){ const n=prompt('نام مهارت جدید:'); if(!n) return; const u=prompt('واحد پیشرفت:')||'جلسه'; const x=parseInt(prompt('XP هر واحد:'))||10; state.skills.push({id:'sk_'+Date.now(),name:n,unit:u,xpPerUnit:x,level:1,xp:0,streak:0}); saveState(); render(); }
+function logSkillProgress(sid){ const sk=state.skills.find(s=>s.id===sid); if(!sk) return; const amt=parseInt(prompt(`چقدر ${sk.unit} انجام دادی؟`))||0; if(amt<=0) return; const ex=amt*sk.xpPerUnit; sk.xp+=ex; while(sk.xp>=xpForLevel(sk.level)){ sk.xp-=xpForLevel(sk.level); sk.level++; } addXP(Math.floor(ex*0.3)); saveState(); detectProfession(); updateTitle(); render(); }
+let audioCtx;
+function initAudio(){ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }
+function playSound(freq,type,duration,vol=0.1){ if(!audioCtx||!settings.sound) return; const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain(); osc.type=type; osc.frequency.setValueAtTime(freq,audioCtx.currentTime); gain.gain.setValueAtTime(vol,audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+duration); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime+duration); }
+function sfxQuestComplete(){ initAudio(); playSound(880,'sine',0.15); playSound(1320,'sine',0.1); }
+function sfxLevelUp(){ initAudio(); playSound(523,'triangle',0.2); setTimeout(()=>playSound(659,'triangle',0.2),150); setTimeout(()=>playSound(784,'triangle',0.25),300); }
+function sfxPenalty(){ initAudio(); playSound(80,'sawtooth',0.4,0.08); }
+function sfxAchievement(){ initAudio(); playSound(1047,'sine',0.3); setTimeout(()=>playSound(1319,'sine',0.3),200); setTimeout(()=>playSound(1568,'sine',0.4),400); }
+function sfxAwakening(){ initAudio(); playSound(40,'sine',3,0.15); setTimeout(()=>playSound(60,'sine',2,0.1),500); }
+function checkNotifications(){
+    const n=new Date(); const tt=new Date(n.toLocaleString('en-US',{timeZone:'Asia/Tehran'})); const h=String(tt.getHours()).padStart(2,'0'); const m=String(tt.getMinutes()).padStart(2,'0'); const ct=`${h}:${m}`; const dt=getDayType(getTodayJalali());
+    state.quests.forEach(q=>{ if(q.notifyTime&&q.notifyTime===ct&&!q.completed&&(q.days==='all'||q.days===dt)&&q._notified!==ct){ q._notified=ct; if(settings.notificationSound) showToast(`🔔 ${q.name} — همین الان!`,''); } });
+    if(h==='08'&&m==='00'&&settings.morningNotification) showToast('✨ صبح بخیر قهرمان!','');
+    if(h==='22'&&m==='00'&&state.streak>0&&settings.eveningNotification) showToast(`🔥 استریک ${state.streak} روزه‌ات رو حفظ کن!`,'');
+}
+function showToast(msg,type){ const c=document.getElementById('toasts'); const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg; c.appendChild(t); setTimeout(()=>t.remove(),3500); }
+function resetAllData(){
+    if(confirm('⚠️ همهٔ داده‌ها پاک می‌شه و سیستم مثل روز اول می‌شه. ادامه می‌دی؟')){
+        if(confirm('مطمئنی؟ این کار قابل بازگشت نیست.')){
+            const badge=state.badge; localStorage.clear();
+            if(settings.keepBadge&&badge){ const s={badge}; localStorage.setItem(STORAGE_KEY,JSON.stringify(s)); }
+            location.reload();
         }
-        function checkDailyRollover(){
-            const today=getTodayJalali();
-            if(state.lastOpened===today) return;
-            if(state.sickLeaveActive){ state.sickLeaveRemaining--; if(state.sickLeaveRemaining<=0) deactivateSickLeave(); state.lastOpened=today; resetTodayQuests(); saveState(); render(); return; }
-            if(isTodayRestDay()){ state.lastOpened=today; resetTodayQuests(); saveState(); render(); return; }
-            if(state.lastOpened){ const missedDays=getMissedDays(state.lastOpened,today); missedDays.forEach(day=>evaluateDay(day)); }
-            state.lastOpened=today; resetTodayQuests(); saveState(); render();
-        }
-        function getMissedDays(from,to){ const days=[]; const start=parseJalali(from); const end=parseJalali(to); let c=new Date(start); while(c<end){ c.setDate(c.getDate()+1); days.push(gregorianToJalali(c)); } return days; }
-        function parseJalali(d){ const p=d.split('-'); return jalaliToGregorian(+p[0],+p[1],+p[2]); }
-        function gregorianToJalali(g){ return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Asia/Tehran'}).format(g).replace(/[\/]/g,'-'); }
-        function evaluateDay(d){
-            const dt=getDayType(d); if(dt==='friday' && settings.fridayRest) return;
-            const r=state.quests.filter(q=>q.days==='all'||q.days===dt);
-            const ad=r.length>0&&r.every(q=>q.completed||(q.hoursTarget&&q.hoursDone>=q.hoursTarget));
-            if(ad){ state.streak++; state.history.push({date:d,completedAll:true,xpGained:r.reduce((s,q)=>s+(q.hoursTarget?q.xp*(q.hoursDone||0):q.xp),0),penalty:0,streak:state.streak}); }
-            else if(r.length>0){ const mult=settings.difficulty==='hard'?0.5:settings.difficulty==='survival'?0.6:0.4; const px=Math.max(20,Math.floor(r.reduce((s,q)=>s+q.xp,0)*mult)); state.user.xp-=px; while(state.user.xp<0&&state.user.level>1){ state.user.level--; state.user.xp+=xpForLevel(state.user.level+1); } if(state.user.xp<0) state.user.xp=0; if(state.user.level<1) state.user.level=1; state.streak=0; state.history.push({date:d,completedAll:false,xpGained:0,penalty:px,streak:0}); }
-        }
-        function resetTodayQuests(){ state.quests.forEach(q=>{ q.completed=false; if(q.hoursDone!==undefined) q.hoursDone=0; }); }
-        function completeQuest(qid){
-            const q=state.quests.find(q=>q.id===qid); if(!q) return;
-            q.completed=!q.completed; if(q.hoursTarget!==undefined&&q.completed){ q.completed=(q.hoursDone||0)>=q.hoursTarget; if(!q.completed) return; }
-            const xp=q.hoursTarget?q.xp*(q.hoursDone||0):q.xp;
-            if(q.completed){ addXP(xp); if(q.stat) state.stats[q.stat]+=1; if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
-            else { addXP(-xp); if(q.stat) state.stats[q.stat]=Math.max(0,state.stats[q.stat]-1); q.streak=0; }
-            checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); render();
-        }
-        function addStudyHour(qid,delta){
-            const q=state.quests.find(q=>q.id===qid); if(!q||q.hoursTarget===undefined) return;
-            q.hoursDone=Math.max(0,Math.min(q.maxHours||10,(q.hoursDone||0)+delta)); q.completed=q.hoursDone>=q.hoursTarget;
-            if(q.completed&&delta>0){ const xp=q.xp*q.hoursDone; addXP(xp); if(q.stat) state.stats[q.stat]+=Math.floor(q.hoursDone/2); if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
-            checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); render();
-        }
-        function addXP(amount){
-            if(amount>0){ const ab=state.user.awakeningLevel*0.05; if(ab>0) amount+=Math.floor(amount*ab); }
-            state.user.xp+=amount; let lu=false;
-            while(state.user.xp>=xpForNextLevel()&&state.user.level<100000){ state.user.xp-=xpForNextLevel(); state.user.level++; state.user.professionLevel=Math.floor(state.user.level/20); lu=true; }
-            while(state.user.xp<0&&state.user.level>1){ state.user.level--; state.user.xp+=xpForLevel(state.user.level+1); }
-            if(state.user.xp<0) state.user.xp=0; if(state.user.level<1) state.user.level=1;
-            if(lu){ checkAwakening(); if(settings.vibration) navigator.vibrate?.([100,50,100,50,200]); }
-        }
-        function checkAwakening(){ const ms=[10,25,50,75,100]; const idx=ms.indexOf(state.user.level); if(idx>=0&&state.user.awakeningLevel<idx+1){ state.user.awakeningLevel=idx+1; if(settings.sound) sfxAwakening(); } }
-        function detectProfession(){
-            const ak=[]; state.quests.forEach(q=>{ if(q.keywords) ak.push(...q.keywords); }); state.skills.forEach(s=>{ if(s.name) ak.push(s.name); });
-            const ts=getTopStats(); const tv=Object.entries(state.vito).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]);
-            PROFESSION_DB.forEach(p=>p.weight=0);
-            PROFESSION_DB.forEach(p=>{ p.keywords.forEach(kw=>{ if(ak.some(a=>a.includes(kw)||kw.includes(a))) p.weight+=3; }); p.stats.forEach(s=>{ if(ts.includes(s)) p.weight+=2; }); p.vito.forEach(v=>{ if(tv.includes(v)) p.weight+=1; }); });
-            PROFESSION_DB.sort((a,b)=>b.weight-a.weight); const best=PROFESSION_DB[0];
-            if(best&&best.weight>=3){ state.user.detectedProfession=best.name; if(!state.user.confirmedProfession) state.user.confirmedProfession=best.name; }
-        }
-        function updateTitle(){
-            const tt=getTopStats(); const mx=state.stats[tt[0]]||0; const mn=Math.min(...Object.values(state.stats));
-            if(mn>=60){ state.user.title='مونارک'; return; } if(mx<30){ state.user.title='بی‌عنوان — تازه‌کار'; return; }
-            const ck=[...tt].sort().join('+'); const cand=MYTH_TITLES.filter(t=>t.combo===ck||t.combo.includes(ck)||t.combo==='all_high');
-            if(cand.length>0){ const all=cand.flatMap(c=>c.titles); state.user.title=all[new Date().getDate()%all.length]; }
-        }
-        function checkAchievements(){ ACHIEVEMENTS.forEach(ach=>{ if(!state.achievements.includes(ach.id)&&ach.check()){ state.achievements.push(ach.id); if(ach.reward&&ach.reward.xp) addXP(ach.reward.xp); if(ach.reward&&ach.reward.stats) Object.entries(ach.reward.stats).forEach(([s,v])=>state.stats[s]+=v); if(settings.sound) sfxAchievement(); showToast(`🏆 Achievement مخفی: ${ach.name}!`,'gold'); saveState(); } }); }
-        function addSkill(){ const n=prompt('نام مهارت جدید:'); if(!n) return; const u=prompt('واحد پیشرفت:')||'جلسه'; const x=parseInt(prompt('XP هر واحد:'))||10; state.skills.push({id:'sk_'+Date.now(),name:n,unit:u,xpPerUnit:x,level:1,xp:0,streak:0}); saveState(); render(); }
-        function logSkillProgress(sid){ const sk=state.skills.find(s=>s.id===sid); if(!sk) return; const amt=parseInt(prompt(`چقدر ${sk.unit} انجام دادی؟`))||0; if(amt<=0) return; const ex=amt*sk.xpPerUnit; sk.xp+=ex; while(sk.xp>=xpForLevel(sk.level)){ sk.xp-=xpForLevel(sk.level); sk.level++; } addXP(Math.floor(ex*0.3)); saveState(); detectProfession(); updateTitle(); render(); }
-        let audioCtx;
-        function initAudio(){ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }
-        function playSound(freq,type,duration,vol=0.1){ if(!audioCtx||!settings.sound) return; const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain(); osc.type=type; osc.frequency.setValueAtTime(freq,audioCtx.currentTime); gain.gain.setValueAtTime(vol,audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+duration); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime+duration); }
-        function sfxQuestComplete(){ initAudio(); playSound(880,'sine',0.15); playSound(1320,'sine',0.1); }
-        function sfxLevelUp(){ initAudio(); playSound(523,'triangle',0.2); setTimeout(()=>playSound(659,'triangle',0.2),150); setTimeout(()=>playSound(784,'triangle',0.25),300); }
-        function sfxPenalty(){ initAudio(); playSound(80,'sawtooth',0.4,0.08); }
-        function sfxAchievement(){ initAudio(); playSound(1047,'sine',0.3); setTimeout(()=>playSound(1319,'sine',0.3),200); setTimeout(()=>playSound(1568,'sine',0.4),400); }
-        function sfxAwakening(){ initAudio(); playSound(40,'sine',3,0.15); setTimeout(()=>playSound(60,'sine',2,0.1),500); }
-        function checkNotifications(){
-            const n=new Date(); const tt=new Date(n.toLocaleString('en-US',{timeZone:'Asia/Tehran'})); const h=String(tt.getHours()).padStart(2,'0'); const m=String(tt.getMinutes()).padStart(2,'0'); const ct=`${h}:${m}`; const dt=getDayType(getTodayJalali());
-            state.quests.forEach(q=>{ if(q.notifyTime&&q.notifyTime===ct&&!q.completed&&(q.days==='all'||q.days===dt)&&q._notified!==ct){ q._notified=ct; if(settings.notificationSound) showToast(`🔔 ${q.name} — همین الان!`,''); } });
-            if(h==='08'&&m==='00'&&settings.morningNotification) showToast('✨ صبح بخیر قهرمان!','');
-            if(h==='22'&&m==='00'&&state.streak>0&&settings.eveningNotification) showToast(`🔥 استریک ${state.streak} روزه‌ات رو حفظ کن!`,'');
-        }
-        function showToast(msg,type){ const c=document.getElementById('toasts'); const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg; c.appendChild(t); setTimeout(()=>t.remove(),3500); }
-        function resetAllData(){
-            if(confirm('⚠️ همهٔ داده‌ها پاک می‌شه و سیستم مثل روز اول می‌شه. ادامه می‌دی؟')){
-                if(confirm('مطمئنی؟ این کار قابل بازگشت نیست.')){
-                    const badge=state.badge; localStorage.clear();
-                    if(settings.keepBadge&&badge){ const s={badge}; localStorage.setItem(STORAGE_KEY,JSON.stringify(s)); }
-                    location.reload();
-                }
-            }
-        }
-        function render(){
+    }
+}
+function applyTheme() {
+    const root = document.documentElement;
+    if (settings.theme === 'gold') { root.style.setProperty('--neon', '#d4af37'); root.style.setProperty('--neon-dim', '#8b6914'); }
+    else if (settings.theme === 'green') { root.style.setProperty('--neon', '#00e676'); root.style.setProperty('--neon-dim', '#006633'); }
+    else if (settings.theme === 'purple') { root.style.setProperty('--neon', '#b388ff'); root.style.setProperty('--neon-dim', '#5c3d99'); }
+    else { root.style.setProperty('--neon', '#00ccff'); root.style.setProperty('--neon-dim', '#006688'); }
+    if (settings.nightMode) { document.body.classList.add('night-mode'); }
+    else { document.body.classList.remove('night-mode'); }
+        }        function render(){
             const app=document.getElementById('app');
             const today=getTodayJalali(); const dayType=getDayType(today);
             const dayLabel=dayType==='friday'?'جمعه (استراحت)':dayType==='even'?'روز زوج (بوکس)':'روز فرد (قدرتی)';
@@ -452,41 +415,17 @@ body.night-mode .stat-val, body.night-mode .level-num, body.night-mode .xp-fill 
             </div>
             <div id="creator-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div><p style="line-height:2.2;font-size:14px;color:var(--text-dim);text-align:justify;padding:10px 0;">سازندگان: اسطوره سیزیف و اشکر<br><br>این برنامه با الهام از مانهوا Solo Leveling و ژانرهای غالب در رمان‌های شرق آسیا (کره جنوبی) نوشته شده است.<br><br>هدف از ساخت آن: برنامه‌ریزی منسجم‌تر، هدف‌گرایی بهتر و واضح‌تر برای رسیدن به قله و نسخه‌ای بهتر از دیروز خود.<br><br>استفاده از این برنامه برای همه رایگان و بدون محدودیت است.<br><br>این برنامه تماماً توسط Claude AI ساخته شده است.</p><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
             <div id="report-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">📝 گزارش کلی</div>${state.history.length===0?'<p style="color:var(--text-dim);">هنوز گزارشی ثبت نشده.</p>':state.history.slice(-20).reverse().map(h=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;"><span>📅 ${h.date}</span><span style="color:${h.completedAll?'var(--success)':'var(--danger)'};margin-right:10px;">${h.completedAll?'✅ کامل':'⚠️ پنالتی'}</span>${h.xpGained>0?`<span style="color:var(--neon);">+${h.xpGained} XP</span>`:''}${h.penalty>0?`<span style="color:var(--danger);">-${h.penalty} XP</span>`:''}</div>`).join('')}</div><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
-            <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();applyTheme();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>🌙 حالت شب/روز ☀️</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();applyTheme();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>        }
-                function showSettings(){ document.getElementById('main-screen').style.display='none'; document.getElementById('settings-screen').style.display='block'; }
+            <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();applyTheme();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>🌙 حالت شب/روز ☀️</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();applyTheme();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>
+          `;
+        }
+        function showSettings(){ document.getElementById('main-screen').style.display='none'; document.getElementById('settings-screen').style.display='block'; }
         function showCreator(){ document.getElementById('main-screen').style.display='none'; document.getElementById('creator-screen').style.display='block'; }
         function showReport(){ document.getElementById('main-screen').style.display='none'; document.getElementById('report-screen').style.display='block'; render(); }
         function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
         function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
         function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-
-        function applyTheme() {
-            const root = document.documentElement;
-            if (settings.theme === 'gold') {
-                root.style.setProperty('--neon', '#d4af37');
-                root.style.setProperty('--neon-dim', '#8b6914');
-            } else if (settings.theme === 'green') {
-                root.style.setProperty('--neon', '#00e676');
-                root.style.setProperty('--neon-dim', '#006633');
-            } else if (settings.theme === 'purple') {
-                root.style.setProperty('--neon', '#b388ff');
-                root.style.setProperty('--neon-dim', '#5c3d99');
-            } else {
-                root.style.setProperty('--neon', '#00ccff');
-                root.style.setProperty('--neon-dim', '#006688');
-            }
-        }
-
-        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
-
-        const origRender = render;
-        render = function() {
-            origRender();
-            applyTheme();
-        };
-
+        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); applyTheme(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
         init();
-        applyTheme();
     </script>
 </body>
 </html>
