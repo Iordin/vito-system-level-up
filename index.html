@@ -494,7 +494,7 @@ body.night-mode .toggle-slider { background-color: #999; }
     }
 }
 
-        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
+        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); applyTheme(); render(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
 
         const origRender = render;
         render = function() {
@@ -503,7 +503,6 @@ body.night-mode .toggle-slider { background-color: #999; }
         };
 
         init();
-        applyTheme();
     </script>
 </body>
 </html>
