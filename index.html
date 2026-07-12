@@ -190,9 +190,25 @@ body.night-mode .toast {
 body.night-mode #system-break-overlay .gold-final {
     color: #ffd966;
         }
+   #emergency-night-off {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    z-index: 999999;
+    background: yellow;
+    color: black;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    display: none;
+}
+body.night-mode #emergency-night-off {
+    display: block;
+}
     </style>
 </head>
 <body>
+    <div id="emergency-night-off" onclick="settings.nightMode=false;saveSettings();applyTheme();">❌ خروج از حالت شب</div>
     <div class="app-container" id="app"></div>
     <div class="toast-container" id="toasts"></div>
     <div id="system-break-overlay"><div class="glitch-text" id="glitch-output"></div><div class="gold-final" id="gold-message"></div></div>
@@ -427,21 +443,29 @@ function resetAllData(){
     }
 }
 function applyTheme() {
+    if (!document.body) return;
     const root = document.documentElement;
     if (settings.theme === 'gold') { root.style.setProperty('--neon', '#d4af37'); root.style.setProperty('--neon-dim', '#8b6914'); }
     else if (settings.theme === 'green') { root.style.setProperty('--neon', '#00e676'); root.style.setProperty('--neon-dim', '#006633'); }
     else if (settings.theme === 'purple') { root.style.setProperty('--neon', '#b388ff'); root.style.setProperty('--neon-dim', '#5c3d99'); }
     else { root.style.setProperty('--neon', '#00ccff'); root.style.setProperty('--neon-dim', '#006688'); }
-    if (settings.nightMode && document.body) { document.body.classList.add('night-mode'); }            const app=document.getElementById('app');
-            const today=getTodayJalali(); const dayType=getDayType(today);
-            const dayLabel=dayType==='friday'?'جمعه (استراحت)':dayType==='even'?'روز زوج (بوکس)':'روز فرد (قدرتی)';
-            const nextXP=xpForNextLevel(); const xpProgress=nextXP>0?Math.floor((state.user.xp/nextXP)*100):100;
-            const rank=getRank(state.user.level);
-            const vitoOverall=Math.floor(Object.values(state.vito).reduce((s,v)=>s+v,0)/5);
-            const restRemaining=getRemainingRestDays();
-            const monthlyMax=getMonthlyRestDays(state.user.level);
+    if (settings.nightMode && document.body) { document.body.classList.add('night-mode'); }
+    else if (document.body) { document.body.classList.remove('night-mode'); }
+}
 
-            app.innerHTML=`
+function render(){
+    const app=document.getElementById('app');
+    const today=getTodayJalali(); const dayType=getDayType(today);
+    const dayLabel=dayType==='friday'?'جمعه (استراحت)':dayType==='even'?'روز زوج (بوکس)':'روز فرد (قدرتی)';
+    const nextXP=xpForNextLevel(); const xpProgress=nextXP>0?Math.floor((state.user.xp/nextXP)*100):100;
+    const rank=getRank(state.user.level);
+    const vitoOverall=Math.floor(Object.values(state.vito).reduce((s,v)=>s+v,0)/5);
+    const restRemaining=getRemainingRestDays();
+    const monthlyMax=getMonthlyRestDays(state.user.level);
+
+    app.innerHTML=`
+    `;
+}
             <div id="entry-screen" ${state.user.name?'style="display:none"':''}>
               <div class="logo-text">[SYSTEM]</div>
               <div style="color:var(--text-dim);margin-bottom:10px;">به سیستم خوش آمدی، قهرمان</div>
@@ -489,7 +513,24 @@ function applyTheme() {
         function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
         function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
         function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); applyTheme(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission();
+function init(){
+    loadState();
+    loadSettings();
+    checkDailyRollover();
+    updateTitle();
+    render();
+
+    // حذف حالت شب در صورت وجود در localStorage
+    if (settings.nightMode) {
+        settings.nightMode = false;
+        saveSettings();
+    }
+
+    applyTheme();
+    setInterval(checkNotifications,30000);
+    checkNotifications();
+    if(Notification&&Notification.permission==='default') Notification.requestPermission();
+                                                         }
                         init();
 </script>
 </body>
