@@ -491,8 +491,7 @@ else { document.body.classList.remove('night-mode'); document.body.removeAttribu
         function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
         function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
         function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); applyTheme(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
-        init();
+        function init(){ localStorage.removeItem('vito_settings'); loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); applyTheme(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }        init();
     </script>
 </body>
 </html>
