@@ -121,7 +121,42 @@
         .gold-particle { position: absolute; width: 4px; height: 4px; background: var(--gold); border-radius: 50%; animation: particleRise 4s ease-out forwards; }
         @keyframes particleRise { 0% { opacity:1; transform: translateY(100vh) scale(1); } 100% { opacity:0; transform: translateY(-100px) scale(0); } }
         #entry-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; width: 100%; padding: 20px 0; }
-        #entry-screen input { width: 100%; max-width: 300px; padding: 12px; border-radius: 25px; border: 1px solid var(--neon-dim); background: var(--surface2); color: #fff; text-align: center; font-family: Vazirmatn; font-size: 16px; }
+      #entry-screen input { width: 100%; max-width: 300px; padding: 12px; border-radius: 25px; border: 1px solid var(--neon-dim); background: var(--surface2); color: #fff; text-align: center; font-family: Vazirmatn; font-size: 16px; }
+  :root {
+    --radius: 8px;
+}
+.panel {
+    border-radius: var(--radius);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+.btn {
+    border-radius: 8px;
+}
+.small-btn {
+    border-radius: 8px;
+}
+.xp-bar, .xp-fill {
+    border-radius: 4px;
+}
+.stat-chip {
+    border-radius: 8px;
+}
+.vito-axis .bar, .vito-axis .fill {
+    border-radius: 4px;
+}
+.skill-card {
+    border-radius: 10px;
+}
+.skill-bar, .skill-fill {
+    border-radius: 4px;
+}
+.quest-xp, .quest-time {
+    border-radius: 8px;
+}
+.toast {
+    border-radius: 12px;
+}
     </style>
 </head>
 <body>
