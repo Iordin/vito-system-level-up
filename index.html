@@ -38,9 +38,14 @@
         }
         .panel::before {
             content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,180,255,0.03) 2px, rgba(0,180,255,0.03) 4px),
-                        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,180,255,0.03) 2px, rgba(0,180,255,0.03) 4px);
-            pointer-events: none;
+            .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,180,255,0.03) 2px, rgba(0,180,255,0.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,180,255,0.03) 2px, rgba(0,180,255,0.03) 4px);
+    pointer-events: none;
+            }            pointer-events: none;
         }
         .panel::after {
             content: ''; position: absolute; top:-50%; left:-50%; width:200%; height:200%;
@@ -75,8 +80,16 @@
         @keyframes logoPulse { 0%,100% { text-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(0,204,255,0.4); } 50% { text-shadow: 0 0 50px rgba(0,204,255,1), 0 0 100px rgba(0,204,255,0.7); } }
         .stat-val, .xp-val, .level-num, .quest-xp, .vito-axis span { font-family: var(--font-numbers); font-weight: 400; letter-spacing: 2px; }
         .xp-bar { width:100%; height:8px; background:var(--surface2); border-radius:10px; overflow:hidden; margin:6px 0; }
-        .xp-fill { height:100%; background:linear-gradient(90deg, var(--neon-dim), var(--neon)); border-radius:10px; transition: width 0.5s; box-shadow: 0 0 8px var(--neon); }
-        .stats-row { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+        .xp-fill {
+    height: 100%;
+    background: linear-gradient(270deg, var(--neon-dim) 0%, var(--neon) 40%, #fff 60%, var(--neon) 80%, var(--neon-dim) 100%);
+    background-size: 200% 100%;
+    border-radius: 6px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: energyFlow 2.5s linear infinite;
+    position: relative;
+}        .stats-row { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
         .stat-chip { background:var(--surface2); border:1px solid rgba(0,204,255,0.2); padding:6px 12px; border-radius:20px; font-size:12px; white-space:nowrap; }
         .stat-val { color:var(--neon); font-weight:bold; margin:0 4px; }
         .vito-axis { margin:6px 0; display:flex; align-items:center; gap:8px; font-size:12px; }
@@ -698,6 +711,9 @@ body.night-mode .profession-level {
 body.night-mode .profession-name {
     color: #d9ccf0;                     /* بنفش ملایم */
 }
+  body.night-mode .profession-sep {
+    color: rgba(255, 255, 255, 0.2);
+  }
     </style>
 </head>
 <body>
