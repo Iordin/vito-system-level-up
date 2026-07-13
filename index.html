@@ -609,8 +609,9 @@ body.night-mode .profession-name {
     position: relative;
 }
 @keyframes energyFlow {
-    0% { background-position: 250% 0; }
-    100% { background-position: -250% 0; }
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
 }
 .xp-fill::after {
     content: '';
@@ -657,6 +658,46 @@ body.night-mode .xp-text .current {
     color: #b388ff;
     text-shadow: 0 0 6px rgba(179,136,255,0.6);
     }  
+   /* --- اصلاح نمایش حرفه (رنگ‌های متناسب) --- */
+.profession-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0, 200, 255, 0.06);
+    border: 1px solid rgba(0, 200, 255, 0.2);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 9px;
+}
+
+.profession-level {
+    font-family: var(--font-headings);
+    font-weight: 600;
+    color: var(--neon);                 /* آبی نئونی برای سطح */
+    letter-spacing: 0.5px;
+}
+
+.profession-sep {
+    color: rgba(255, 255, 255, 0.25);
+    margin: 0 1px;
+}
+
+.profession-name {
+    font-weight: 400;
+    color: #c0d8f0;                     /* آبی بسیار ملایم، هماهنگ با پالت */
+}
+
+/* شب */
+body.night-mode .profession-tag {
+    background: rgba(179, 136, 255, 0.08);
+    border-color: rgba(179, 136, 255, 0.25);
+}
+body.night-mode .profession-level {
+    color: #b388ff;                     /* بنفش نئونی */
+}
+body.night-mode .profession-name {
+    color: #d9ccf0;                     /* بنفش ملایم */
+}
     </style>
 </head>
 <body>
