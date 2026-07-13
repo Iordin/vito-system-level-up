@@ -366,7 +366,7 @@ function applyTheme() {
     else { root.style.setProperty('--neon', '#00ccff'); root.style.setProperty('--neon-dim', '#006688'); }
     if (settings.nightMode) { document.body.classList.add('night-mode'); document.body.style.background = '#f0f0f0'; }
     else { document.body.classList.remove('night-mode'); document.body.style.background = ''; }
-}        function render(){
+        }        function render(){
             const app=document.getElementById('app');
             const today=getTodayJalali(); const dayType=getDayType(today);
             const dayLabel=dayType==='friday'?'جمعه (استراحت)':dayType==='even'?'روز زوج (بوکس)':'روز فرد (قدرتی)';
