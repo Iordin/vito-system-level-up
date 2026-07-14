@@ -973,6 +973,87 @@ body.night-mode .toast {
     position: relative;
     overflow: hidden;
 }  
+/* ========== ویتو ========== */
+.vito-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.vito-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.vito-label {
+  font-size: 12px;
+  color: #e0d8b0;
+  margin-bottom: 4px;
+}
+.vito-bar {
+  height: 8px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.vito-fill {
+  height: 100%;
+  background: linear-gradient(270deg, #8b6914, #d4af37, #fff8e0);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  transition: width 0.8s;
+  animation: vitoShimmer 3s infinite;
+  box-shadow: 0 0 12px rgba(212,175,55,0.3);
+}
+@keyframes vitoShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+.vito-value {
+  font-family: var(--font-numbers);
+  font-size: 11px;
+  color: var(--gold);
+  text-align: right;
+  margin-top: 2px;
+}
+.vito-overall {
+  text-align: center;
+  margin-top: 14px;
+}
+.vito-big {
+  font-family: var(--font-numbers);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 15px rgba(212,175,55,0.5);
+  display: block;
+}
+.vito-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* شب */
+body.night-mode .vito-card {
+  border-color: rgba(179,136,255,0.2);
+}
+body.night-mode .vito-label {
+  color: #d9ccf0;
+}
+body.night-mode .vito-fill {
+  background: linear-gradient(270deg, #5c3d99, #b388ff, #e0d4ff);
+  box-shadow: 0 0 12px rgba(179,136,255,0.3);
+}
+body.night-mode .vito-value {
+  color: #b388ff;
+}
+body.night-mode .vito-big {
+  color: #b388ff;
+  text-shadow: 0 0 15px rgba(179,136,255,0.5);
+}
     </style>
 </head>
 <body>
@@ -1284,8 +1365,28 @@ function applyTheme() {
   </div>
 </div>
               </div>
-              <div class="panel gold"><div class="panel-header">نسخه ویتو</div>${['💰 مالی','🧘 سلامت ذهن','🏋️ سلامت فیزیکی','🧠 ذهنیت','🔬 علم'].map((label,i)=>{const keys=['finance','mentalHealth','physicalHealth','mindset','science'];const val=state.vito[keys[i]];return`<div class="vito-axis"><span class="label">${label}</span><div class="bar"><div class="fill" style="width:${val}%"></div></div><span style="width:35px;text-align:right;font-size:10px;">${val}%</span></div>`;}).join('')}<div style="text-align:center;margin-top:6px;font-size:14px;color:var(--gold);">نزدیکی به نسخه ویتو: ${vitoOverall}%</div></div>
-              <div class="panel"><div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;"><span style="color:var(--text-dim);font-size:11px;">🔥 استریک: ${state.streak} روز</span><span style="color:var(--text-dim);font-size:11px;">🏆 Achievements: ${state.achievements.length}</span><span style="color:var(--text-dim);font-size:11px;">🛌 روزهای استراحت: ${restRemaining}/${monthlyMax}</span></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">${restRemaining>0&&!isTodayRestDay()?`<button class="small-btn" onclick="useRestDay();render();">🛌 امروز استراحت</button>`:''}${canUseSickLeave()?`<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);render();">🏥 حالت تعلیق</button>`:''}${state.sickLeaveActive?`<button class="small-btn" onclick="deactivateSickLeave();render();">✅ پایان تعلیق</button>`:''}</div></div>
+              <div class="panel gold" id="vito-panel">
+  <div class="panel-header">⚖️ نسخه ویتو</div>
+  <div class="vito-grid">
+    ${['💰 مالی','🧘 سلامت ذهن','🏋️ سلامت فیزیکی','🧠 ذهنیت','🔬 علم'].map((label,i)=>{
+      const keys=['finance','mentalHealth','physicalHealth','mindset','science'];
+      const val=state.vito[keys[i]];
+      return `
+      <div class="vito-card">
+        <div class="vito-label">${label}</div>
+        <div class="vito-bar">
+          <div class="vito-fill" style="width:${val}%"></div>
+        </div>
+        <div class="vito-value">${val}%</div>
+      </div>
+      `;
+    }).join('')}
+  </div>
+  <div class="vito-overall">
+    <span class="vito-big">${vitoOverall}%</span>
+    <span class="vito-sub">نزدیکی به نسخه ویتو</span>
+  </div>
+</div>              <div class="panel"><div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;"><span style="color:var(--text-dim);font-size:11px;">🔥 استریک: ${state.streak} روز</span><span style="color:var(--text-dim);font-size:11px;">🏆 Achievements: ${state.achievements.length}</span><span style="color:var(--text-dim);font-size:11px;">🛌 روزهای استراحت: ${restRemaining}/${monthlyMax}</span></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">${restRemaining>0&&!isTodayRestDay()?`<button class="small-btn" onclick="useRestDay();render();">🛌 امروز استراحت</button>`:''}${canUseSickLeave()?`<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);render();">🏥 حالت تعلیق</button>`:''}${state.sickLeaveActive?`<button class="small-btn" onclick="deactivateSickLeave();render();">✅ پایان تعلیق</button>`:''}</div></div>
               <div class="panel">
   <div class="collapsible-header open" data-target="#quests-content">
     <span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span>
