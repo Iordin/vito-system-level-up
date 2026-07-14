@@ -79,17 +79,7 @@
         }
         @keyframes logoPulse { 0%,100% { text-shadow: 0 0 30px rgba(0,204,255,0.8), 0 0 60px rgba(0,204,255,0.4); } 50% { text-shadow: 0 0 50px rgba(0,204,255,1), 0 0 100px rgba(0,204,255,0.7); } }
         .stat-val, .xp-val, .level-num, .quest-xp, .vito-axis span { font-family: var(--font-numbers); font-weight: 400; letter-spacing: 2px; }
-        .xp-bar { width:100%; height:8px; background:var(--surface2); border-radius:10px; overflow:hidden; margin:6px 0; }
-        .xp-fill {
-    height: 100%;
-    background: linear-gradient(270deg, var(--neon-dim) 0%, var(--neon) 40%, #fff 60%, var(--neon) 80%, var(--neon-dim) 100%);
-    background-size: 200% 100%;
-    border-radius: 6px;
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 15px rgba(0, 200, 255, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    animation: energyFlow 2.5s linear infinite;
-    position: relative;
-}        .stats-row { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+                .stats-row { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
         .stat-chip { background:var(--surface2); border:1px solid rgba(0,204,255,0.2); padding:6px 12px; border-radius:20px; font-size:12px; white-space:nowrap; }
         .stat-val { color:var(--neon); font-weight:bold; margin:0 4px; }
         .vito-axis { margin:6px 0; display:flex; align-items:center; gap:8px; font-size:12px; }
@@ -148,9 +138,6 @@
 }
 .small-btn {
     border-radius: 8px;
-}
-.xp-bar, .xp-fill {
-    border-radius: 4px;
 }
 .stat-chip {
     border-radius: 8px;
@@ -597,49 +584,6 @@ body.night-mode .profession-level {
 body.night-mode .profession-name {
     color: #ddd;
 } 
-/* ========== فاز ۳: Energy Bar (XP) ========== */
-.xp-bar {
-    width: 100%;
-    height: 10px;
-    background: rgba(0,0,0,0.5);
-    border-radius: 6px;
-    overflow: visible;
-    position: relative;
-    margin: 8px 0 4px;
-    border: 1px solid rgba(0,200,255,0.15);
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
-}
-.xp-fill {
-    height: 100%;
-    background: linear-gradient(90deg,
-        transparent 0%, var(--neon-dim) 15%, var(--neon) 40%,
-        #fff 55%, var(--neon) 75%, var(--neon-dim) 100%);
-    background-size: 250% 100%;
-    border-radius: 6px;
-    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
-    box-shadow: 0 0 15px rgba(0,200,255,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
-    animation: energyFlow 2s linear infinite;
-    position: relative;
-}
-@keyframes energyFlow {
-    0%   { background-position: 100% 0; }
-    100% { background-position: -100% 0; }
-}
-}
-.xp-fill::after {
-    content: '';
-    position: absolute;
-    top: -2px; right: -2px;
-    width: 8px; height: 8px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 8px 2px var(--neon), 0 0 18px 6px rgba(0,200,255,0.6);
-    animation: sparkPulse 1.2s ease-in-out infinite;
-}
-@keyframes sparkPulse {
-    0%,100% { opacity:0.6; transform:scale(1); }
-    50% { opacity:1; transform:scale(1.5); }
-}
 .xp-text {
     font-family: var(--font-numbers);
     font-size: 9px;
@@ -653,24 +597,6 @@ body.night-mode .profession-name {
     text-shadow: 0 0 6px rgba(0,200,255,0.5);
     font-weight: 600;
 }
-
-/* شب */
-body.night-mode .xp-bar {
-    border-color: rgba(179,136,255,0.2);
-}
-body.night-mode .xp-fill {
-    background: linear-gradient(90deg,
-        transparent 0%, #5c3d99 15%, #b388ff 40%,
-        #e0d4ff 55%, #b388ff 75%, #5c3d99 100%);
-    box-shadow: 0 0 15px rgba(179,136,255,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
-}
-body.night-mode .xp-fill::after {
-    box-shadow: 0 0 8px 2px #b388ff, 0 0 18px 6px rgba(179,136,255,0.6);
-}
-body.night-mode .xp-text .current {
-    color: #b388ff;
-    text-shadow: 0 0 6px rgba(179,136,255,0.6);
-    }  
    /* --- اصلاح نمایش حرفه (رنگ‌های متناسب) --- */
 .profession-tag {
     display: inline-flex;
@@ -699,22 +625,7 @@ body.night-mode .xp-text .current {
     font-weight: 400;
     color: #c0d8f0;                     /* آبی بسیار ملایم، هماهنگ با پالت */
 }
-
-/* شب */
-body.night-mode .profession-tag {
-    background: rgba(179, 136, 255, 0.08);
-    border-color: rgba(179, 136, 255, 0.25);
-}
-body.night-mode .profession-level {
-    color: #b388ff;                     /* بنفش نئونی */
-}
-body.night-mode .profession-name {
-    color: #d9ccf0;                     /* بنفش ملایم */
-}
-  body.night-mode .profession-sep {
-    color: rgba(255, 255, 255, 0.2);
-  }
-    </style>
+      </style>
 </head>
 <body>
     <div class="app-container" id="app"></div>
