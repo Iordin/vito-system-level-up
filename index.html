@@ -526,7 +526,11 @@ body.night-mode .level-display {
     color: #b388ff;
     text-shadow: 0 0 20px rgba(179, 136, 255, 0.8), 0 0 50px rgba(179, 136, 255, 0.4);
 }
-@keyframes levelPulseNight {
+body.night-mode .vito-fill {
+  background: linear-gradient(270deg, #5c3d99, #b388ff, #e0d4ff);
+  box-shadow: 0 0 8px rgba(179, 136, 255, 0.3);
+}
+        @keyframes levelPulseNight {
     0%, 100% { text-shadow: 0 0 20px rgba(179, 136, 255, 0.8), 0 0 50px rgba(179, 136, 255, 0.4); }
     50% { text-shadow: 0 0 35px rgba(179, 136, 255, 1), 0 0 80px rgba(179, 136, 255, 0.7); }
 }
@@ -1002,15 +1006,10 @@ body.night-mode .toast {
 .vito-fill {
   height: 100%;
   background: linear-gradient(270deg, #8b6914, #d4af37, #fff8e0);
-  background-size: 200% 100%;
+  background-size: 100% 100%;
   border-radius: 6px;
-  transition: width 0.8s;
-  animation: vitoShimmer 3s infinite;
-  box-shadow: 0 0 12px rgba(212,175,55,0.3);
-}
-@keyframes vitoShimmer {
-  0%   { background-position: 0% 0; }
-  100% { background-position: 200% 0; }
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
 }
 .vito-value {
   font-family: var(--font-numbers);
