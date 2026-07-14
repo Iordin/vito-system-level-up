@@ -699,24 +699,6 @@ body.night-mode .xp-text .current {
   z-index: 2;
 }
 
-/* هگزاگون‌های اطراف */
-.stat-hexagon {
-  position: absolute;
-  width: 70px; height: 70px;
-  background: var(--panel-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid var(--glass-border);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 15px rgba(0,200,255,0.3), inset 0 0 10px rgba(0,200,255,0.1);
-  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));
-  transition: all 0.3s;
-}
-
 .hex-value {
   font-family: var(--font-numbers);
   font-size: 22px;
@@ -731,13 +713,6 @@ body.night-mode .xp-text .current {
   color: var(--text-dim);
   margin-top: 2px;
   letter-spacing: 1px;
-}
-
-/* هگزاگون‌ها: glow روی hover */
-.stat-hexagon:hover {
-  border-color: var(--neon);
-  box-shadow: 0 0 30px rgba(0,200,255,0.6), inset 0 0 20px rgba(0,200,255,0.2);
-  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
 }
 
 /* ========== حالت شب ========== */
@@ -793,35 +768,6 @@ body.night-mode .hex-value {
   z-index: 2;
 }
 
-.stat-hexagon {
-  position: absolute;
-  width: 70px; height: 70px;
-  background: var(--panel-bg);
-  border: 1.5px solid var(--glass-border);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 15px rgba(0,200,255,0.3), inset 0 0 10px rgba(0,200,255,0.1);
-  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));
-  transition: all 0.3s;
-}
-.stat-hexagon::before {
-  content: '';
-  position: absolute;
-  top: -5px; left: -5px; right: -5px; bottom: -5px;
-  background: rgba(10, 15, 30, 0.3);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  z-index: -1;
-}
-.stat-hexagon:hover {
-  border-color: var(--neon);
-  box-shadow: 0 0 30px rgba(0,200,255,0.6), inset 0 0 20px rgba(0,200,255,0.2);
-  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
-    }
 .hex-value {
   font-family: var(--font-numbers);
   font-size: 22px;
@@ -838,12 +784,6 @@ body.night-mode .hex-value {
   letter-spacing: 1px;
 }
 
-.stat-hexagon:hover {
-  border-color: var(--neon);
-  box-shadow: 0 0 30px rgba(0,200,255,0.6), inset 0 0 20px rgba(0,200,255,0.2);
-  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
-}
-
 /* حالت شب */
 body.night-mode .radar-core {
   border-color: #b388ff;
@@ -851,18 +791,39 @@ body.night-mode .radar-core {
   text-shadow: 0 0 10px #b388ff;
   box-shadow: 0 0 20px rgba(179,136,255,0.5), inset 0 0 10px rgba(179,136,255,0.1);
 }
-body.night-mode .stat-hexagon {
-  border-color: rgba(179,136,255,0.4);
-  box-shadow: 0 0 15px rgba(179,136,255,0.3), inset 0 0 10px rgba(179,136,255,0.1);
-}
-body.night-mode .stat-hexagon:hover {
-  border-color: #b388ff;
-  box-shadow: 0 0 30px rgba(179,136,255,0.6), inset 0 0 20px rgba(179,136,255,0.2);
-}
 body.night-mode .hex-value {
   color: #b388ff;
   text-shadow: 0 0 12px #b388ff;
                             }
+ .stat-hexagon {
+  position: absolute;
+  width: 70px; height: 70px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--glass-border);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));
+  transition: all 0.3s;
+  filter: drop-shadow(0 0 12px rgba(0,200,255,0.4));
+}
+.stat-hexagon:hover {
+  border-color: var(--neon);
+  filter: drop-shadow(0 0 25px rgba(0,200,255,0.8));
+  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
+}
+
+/* Night mode */
+body.night-mode .stat-hexagon {
+  border-color: rgba(179,136,255,0.4);
+  filter: drop-shadow(0 0 12px rgba(179,136,255,0.4));
+}
+body.night-mode .stat-hexagon:hover {
+  border-color: #b388ff;
+  filter: drop-shadow(0 0 25px rgba(179,136,255,0.8));
+    }
     </style>
 </head>
 <body>
