@@ -824,6 +824,150 @@ body.night-mode .stat-hexagon:hover {
   border-color: #b388ff;
   filter: drop-shadow(0 0 25px rgba(179,136,255,0.8));
     }
+  /* ========== فاز ۵: Quests Timeline & Ripple ========== */
+.quest-timeline {
+  position: relative;
+  padding-right: 24px;
+  margin: 8px 0;
+}
+
+/* خط عمودی */
+.quest-timeline::before {
+  content: '';
+  position: absolute;
+  right: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--neon-dim), var(--neon), var(--neon-dim));
+  opacity: 0.4;
+  border-radius: 1px;
+}
+
+.timeline-entry {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+/* نود (دایره) */
+.timeline-node {
+  position: absolute;
+  right: -16px;  /* تنظیم نسبت به خط */
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  background: var(--surface2);
+  border: 2px solid var(--neon);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--neon);
+  z-index: 2;
+  transition: all 0.3s;
+}
+.timeline-node.completed {
+  background: var(--neon);
+  box-shadow: 0 0 14px var(--neon);
+}
+
+/* کارت شیشه‌ای */
+.timeline-card {
+  flex: 1;
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0,200,255,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ripple on hover */
+.timeline-card::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: radial-gradient(circle, rgba(0,200,255,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s, opacity 0.6s;
+  opacity: 0;
+}
+.timeline-card:hover::after {
+  width: 300px;
+  height: 300px;
+  opacity: 1;
+}
+.timeline-card:hover {
+  border-color: var(--neon);
+  box-shadow: 0 0 20px rgba(0,200,255,0.3);
+  transform: translateX(-4px);
+}
+
+.quest-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.quest-name {
+  font-size: 14px;
+}
+.quest-extra {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.study-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.quest-streak {
+  font-size: 11px;
+  color: var(--gold);
+}
+
+/* Toast notifications شیشه‌ای */
+.toast {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--neon);
+  box-shadow: 0 0 25px rgba(0,200,255,0.3);
+}
+
+/* Night mode */
+body.night-mode .quest-timeline::before {
+  background: linear-gradient(to bottom, #5c3d99, #b388ff, #5c3d99);
+}
+body.night-mode .timeline-node {
+  border-color: #b388ff;
+  box-shadow: 0 0 8px #b388ff;
+}
+body.night-mode .timeline-node.completed {
+  background: #b388ff;
+  box-shadow: 0 0 14px #b388ff;
+}
+body.night-mode .timeline-card {
+  border-color: rgba(179,136,255,0.25);
+}
+body.night-mode .timeline-card:hover {
+  border-color: #b388ff;
+  box-shadow: 0 0 20px rgba(179,136,255,0.3);
+}
+body.night-mode .timeline-card::after {
+  background: radial-gradient(circle, rgba(179,136,255,0.2) 0%, transparent 70%);
+}
+body.night-mode .toast {
+  border-color: #b388ff;
+  box-shadow: 0 0 25px rgba(179,136,255,0.3);
+}
     </style>
 </head>
 <body>
@@ -1137,8 +1281,36 @@ function applyTheme() {
               </div>
               <div class="panel gold"><div class="panel-header">نسخه ویتو</div>${['💰 مالی','🧘 سلامت ذهن','🏋️ سلامت فیزیکی','🧠 ذهنیت','🔬 علم'].map((label,i)=>{const keys=['finance','mentalHealth','physicalHealth','mindset','science'];const val=state.vito[keys[i]];return`<div class="vito-axis"><span class="label">${label}</span><div class="bar"><div class="fill" style="width:${val}%"></div></div><span style="width:35px;text-align:right;font-size:10px;">${val}%</span></div>`;}).join('')}<div style="text-align:center;margin-top:6px;font-size:14px;color:var(--gold);">نزدیکی به نسخه ویتو: ${vitoOverall}%</div></div>
               <div class="panel"><div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;"><span style="color:var(--text-dim);font-size:11px;">🔥 استریک: ${state.streak} روز</span><span style="color:var(--text-dim);font-size:11px;">🏆 Achievements: ${state.achievements.length}</span><span style="color:var(--text-dim);font-size:11px;">🛌 روزهای استراحت: ${restRemaining}/${monthlyMax}</span></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">${restRemaining>0&&!isTodayRestDay()?`<button class="small-btn" onclick="useRestDay();render();">🛌 امروز استراحت</button>`:''}${canUseSickLeave()?`<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);render();">🏥 حالت تعلیق</button>`:''}${state.sickLeaveActive?`<button class="small-btn" onclick="deactivateSickLeave();render();">✅ پایان تعلیق</button>`:''}</div></div>
-              <div class="panel"><div class="collapsible-header open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');"><span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span></div><div class="collapsible-body open">${state.quests.filter(q=>q.days==='all'||q.days===dayType||dayType==='friday').map(q=>{let xpDisplay=q.hoursTarget!==undefined?`${q.xp} XP/ساعت`:`${q.xp} XP`;return`<div class="quest-item"><div style="display:flex;align-items:center;gap:6px;flex:1;"><input type="checkbox" class="quest-check" ${q.completed?'checked':''} onchange="completeQuest('${q.id}')" ${dayType==='friday'||state.sickLeaveActive?'disabled':''}><span class="${q.completed?'quest-done':''}">${q.name}</span><span class="quest-xp">${xpDisplay}</span></div>${q.hoursTarget!==undefined?`<div style="display:flex;align-items:center;gap:4px;"><button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button><span style="font-size:11px;">${q.hoursDone||0}h</span><button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button></div>`:''}${q.notifyTime?`<span class="quest-time">🔔 ${q.notifyTime}</span>`:''}${q.streak>0?`<span style="font-size:9px;color:var(--gold);">🔥${q.streak}</span>`:''}</div>`;}).join('')}</div></div>
-              <div class="panel"><div class="collapsible-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');"><span>🎓 مهارت‌ها</span><span class="arrow">▼</span></div><div class="collapsible-body">${state.skills.map(sk=>`<div class="skill-card"><div style="display:flex;justify-content:space-between;"><span>${sk.name}</span><span style="color:var(--neon);">سطح ${sk.level}</span></div><div class="skill-bar"><div class="skill-fill" style="width:${Math.min(100,sk.xp/xpForLevel(sk.level)*100)}%"></div></div><div style="font-size:10px;color:var(--text-dim);">${sk.xp} / ${xpForLevel(sk.level)} XP (${sk.xpPerUnit} XP/${sk.unit})</div><button class="small-btn" onclick="logSkillProgress('${sk.id}')" style="margin-top:6px;">➕ ثبت ${sk.unit}</button></div>`).join('')||'<div style="color:var(--text-dim);">هنوز مهارتی ثبت نشده.</div>'}<button class="small-btn" onclick="addSkill()" style="margin-top:8px;">➕ مهارت جدید</button></div></div>
+              <div class="panel"><div class="collapsible-header open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');"><span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span></div>
+<div class="collapsible-body open">
+  <div class="quest-timeline">
+    ${state.quests.filter(q=>q.days==='all'||q.days===dayType||dayType==='friday').map(q=>{
+      let xpDisplay = q.hoursTarget!==undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`;
+      return `
+      <div class="timeline-entry">
+        <div class="timeline-node ${q.completed ? 'completed' : ''}"></div>
+        <div class="timeline-card">
+          <div class="quest-main">
+            <input type="checkbox" class="quest-check" ${q.completed?'checked':''} onchange="completeQuest('${q.id}')" ${dayType==='friday'||state.sickLeaveActive?'disabled':''}>
+            <span class="quest-name ${q.completed?'quest-done':''}">${q.name}</span>
+            <span class="quest-xp">${xpDisplay}</span>
+          </div>
+          <div class="quest-extra">
+            ${q.hoursTarget!==undefined ? `
+            <div class="study-controls">
+              <button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button>
+              <span>${q.hoursDone||0}h</span>
+              <button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button>
+            </div>` : ''}
+            ${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}
+            ${q.streak>0 ? `<span class="quest-streak">🔥${q.streak}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      `;
+    }).join('')}
+  </div>
+</div>              <div class="panel"><div class="collapsible-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');"><span>🎓 مهارت‌ها</span><span class="arrow">▼</span></div><div class="collapsible-body">${state.skills.map(sk=>`<div class="skill-card"><div style="display:flex;justify-content:space-between;"><span>${sk.name}</span><span style="color:var(--neon);">سطح ${sk.level}</span></div><div class="skill-bar"><div class="skill-fill" style="width:${Math.min(100,sk.xp/xpForLevel(sk.level)*100)}%"></div></div><div style="font-size:10px;color:var(--text-dim);">${sk.xp} / ${xpForLevel(sk.level)} XP (${sk.xpPerUnit} XP/${sk.unit})</div><button class="small-btn" onclick="logSkillProgress('${sk.id}')" style="margin-top:6px;">➕ ثبت ${sk.unit}</button></div>`).join('')||'<div style="color:var(--text-dim);">هنوز مهارتی ثبت نشده.</div>'}<button class="small-btn" onclick="addSkill()" style="margin-top:8px;">➕ مهارت جدید</button></div></div>
               <div class="panel"><div class="collapsible-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');"><span>🏆 Achievements (${state.achievements.length})</span><span class="arrow">▼</span></div><div class="collapsible-body">${state.achievements.length===0?'<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>':state.achievements.slice(-20).map(id=>{const ach=ACHIEVEMENTS.find(a=>a.id===id);return ach?`<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>`:'';}).join('')}</div></div>
               <div style="display:flex;gap:10px;margin-top:10px;"><button class="btn" onclick="showReport()" style="flex:1;">📝 گزارش</button><button class="btn" onclick="showCreator()" style="flex:1;">🧬 سازنده</button></div>
             </div>
