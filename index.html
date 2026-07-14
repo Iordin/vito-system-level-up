@@ -668,6 +668,100 @@ body.night-mode .xp-text .current {
     color: #b388ff;
     text-shadow: 0 0 6px rgba(179, 136, 255, 0.6);
 }  
+   /* ========== فاز ۴-A : Stats Radar ========== */
+.stats-radar {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 20px auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-core {
+  position: absolute;
+  width: 50px; height: 50px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--neon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-numbers);
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--neon);
+  text-shadow: 0 0 10px var(--neon);
+  box-shadow: 0 0 20px rgba(0,200,255,0.5), inset 0 0 10px rgba(0,200,255,0.1);
+  z-index: 2;
+}
+
+/* هگزاگون‌های اطراف */
+.stat-hexagon {
+  position: absolute;
+  width: 70px; height: 70px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid var(--glass-border);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0,200,255,0.3), inset 0 0 10px rgba(0,200,255,0.1);
+  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));
+  transition: all 0.3s;
+}
+
+.hex-value {
+  font-family: var(--font-numbers);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--neon);
+  text-shadow: 0 0 12px var(--neon);
+  line-height: 1;
+}
+
+.hex-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  letter-spacing: 1px;
+}
+
+/* هگزاگون‌ها: glow روی hover */
+.stat-hexagon:hover {
+  border-color: var(--neon);
+  box-shadow: 0 0 30px rgba(0,200,255,0.6), inset 0 0 20px rgba(0,200,255,0.2);
+  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
+}
+
+/* ========== حالت شب ========== */
+body.night-mode .radar-core {
+  border-color: #b388ff;
+  color: #b388ff;
+  text-shadow: 0 0 10px #b388ff;
+  box-shadow: 0 0 20px rgba(179,136,255,0.5), inset 0 0 10px rgba(179,136,255,0.1);
+}
+
+body.night-mode .stat-hexagon {
+  border-color: rgba(179,136,255,0.4);
+  box-shadow: 0 0 15px rgba(179,136,255,0.3), inset 0 0 10px rgba(179,136,255,0.1);
+}
+
+body.night-mode .stat-hexagon:hover {
+  border-color: #b388ff;
+  box-shadow: 0 0 30px rgba(179,136,255,0.6), inset 0 0 20px rgba(179,136,255,0.2);
+}
+
+body.night-mode .hex-value {
+  color: #b388ff;
+  text-shadow: 0 0 12px #b388ff;
+}
     </style>
 </head>
 <body>
@@ -954,13 +1048,29 @@ function applyTheme() {
 <div class="xp-text">
   <span class="current">${state.user.xp} XP</span>
   <span>${nextXP} XP ${state.user.awakeningLevel>0?`(+${state.user.awakeningLevel*5}%)`:''}</span>
-</div>                <div class="stats-row">
-                  <span class="stat-chip">💪 قدرت <span class="stat-val">${state.stats.power}</span></span>
-                  <span class="stat-chip">⚡ سرعت <span class="stat-val">${state.stats.speed}</span></span>
-                  <span class="stat-chip">🛡️ استقامت <span class="stat-val">${state.stats.endurance}</span></span>
-                  <span class="stat-chip">📖 دانش <span class="stat-val">${state.stats.knowledge}</span></span>
-                  <span class="stat-chip">✨ روحیه <span class="stat-val">${state.stats.spirit}</span></span>
-                </div>
+</div>                <div class="stats-radar">
+  <div class="radar-core">STATS</div>
+  <div class="stat-hexagon" style="--angle:0deg;">
+    <span class="hex-value">${state.stats.power}</span>
+    <span class="hex-label">قدرت</span>
+  </div>
+  <div class="stat-hexagon" style="--angle:72deg;">
+    <span class="hex-value">${state.stats.speed}</span>
+    <span class="hex-label">سرعت</span>
+  </div>
+  <div class="stat-hexagon" style="--angle:144deg;">
+    <span class="hex-value">${state.stats.endurance}</span>
+    <span class="hex-label">استقامت</span>
+  </div>
+  <div class="stat-hexagon" style="--angle:216deg;">
+    <span class="hex-value">${state.stats.knowledge}</span>
+    <span class="hex-label">دانش</span>
+  </div>
+  <div class="stat-hexagon" style="--angle:288deg;">
+    <span class="hex-value">${state.stats.spirit}</span>
+    <span class="hex-label">روحیه</span>
+  </div>
+</div>
               </div>
               <div class="panel gold"><div class="panel-header">نسخه ویتو</div>${['💰 مالی','🧘 سلامت ذهن','🏋️ سلامت فیزیکی','🧠 ذهنیت','🔬 علم'].map((label,i)=>{const keys=['finance','mentalHealth','physicalHealth','mindset','science'];const val=state.vito[keys[i]];return`<div class="vito-axis"><span class="label">${label}</span><div class="bar"><div class="fill" style="width:${val}%"></div></div><span style="width:35px;text-align:right;font-size:10px;">${val}%</span></div>`;}).join('')}<div style="text-align:center;margin-top:6px;font-size:14px;color:var(--gold);">نزدیکی به نسخه ویتو: ${vitoOverall}%</div></div>
               <div class="panel"><div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;"><span style="color:var(--text-dim);font-size:11px;">🔥 استریک: ${state.streak} روز</span><span style="color:var(--text-dim);font-size:11px;">🏆 Achievements: ${state.achievements.length}</span><span style="color:var(--text-dim);font-size:11px;">🛌 روزهای استراحت: ${restRemaining}/${monthlyMax}</span></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">${restRemaining>0&&!isTodayRestDay()?`<button class="small-btn" onclick="useRestDay();render();">🛌 امروز استراحت</button>`:''}${canUseSickLeave()?`<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);render();">🏥 حالت تعلیق</button>`:''}${state.sickLeaveActive?`<button class="small-btn" onclick="deactivateSickLeave();render();">✅ پایان تعلیق</button>`:''}</div></div>
