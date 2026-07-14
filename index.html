@@ -762,6 +762,95 @@ body.night-mode .hex-value {
   color: #b388ff;
   text-shadow: 0 0 12px #b388ff;
 }
+ /* ========== فاز ۴-A : Stats Radar ========== */
+.stats-radar {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 20px auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-core {
+  position: absolute;
+  width: 50px; height: 50px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--neon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-numbers);
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--neon);
+  text-shadow: 0 0 10px var(--neon);
+  box-shadow: 0 0 20px rgba(0,200,255,0.5), inset 0 0 10px rgba(0,200,255,0.1);
+  z-index: 2;
+}
+
+.stat-hexagon {
+  position: absolute;
+  width: 70px; height: 70px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid var(--glass-border);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0,200,255,0.3), inset 0 0 10px rgba(0,200,255,0.1);
+  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));
+  transition: all 0.3s;
+}
+
+.hex-value {
+  font-family: var(--font-numbers);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--neon);
+  text-shadow: 0 0 12px var(--neon);
+  line-height: 1;
+}
+
+.hex-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  letter-spacing: 1px;
+}
+
+.stat-hexagon:hover {
+  border-color: var(--neon);
+  box-shadow: 0 0 30px rgba(0,200,255,0.6), inset 0 0 20px rgba(0,200,255,0.2);
+  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
+}
+
+/* حالت شب */
+body.night-mode .radar-core {
+  border-color: #b388ff;
+  color: #b388ff;
+  text-shadow: 0 0 10px #b388ff;
+  box-shadow: 0 0 20px rgba(179,136,255,0.5), inset 0 0 10px rgba(179,136,255,0.1);
+}
+body.night-mode .stat-hexagon {
+  border-color: rgba(179,136,255,0.4);
+  box-shadow: 0 0 15px rgba(179,136,255,0.3), inset 0 0 10px rgba(179,136,255,0.1);
+}
+body.night-mode .stat-hexagon:hover {
+  border-color: #b388ff;
+  box-shadow: 0 0 30px rgba(179,136,255,0.6), inset 0 0 20px rgba(179,136,255,0.2);
+}
+body.night-mode .hex-value {
+  color: #b388ff;
+  text-shadow: 0 0 12px #b388ff;
+                            }
     </style>
 </head>
 <body>
@@ -1048,7 +1137,8 @@ function applyTheme() {
 <div class="xp-text">
   <span class="current">${state.user.xp} XP</span>
   <span>${nextXP} XP ${state.user.awakeningLevel>0?`(+${state.user.awakeningLevel*5}%)`:''}</span>
-</div>                <div class="stats-radar">
+</div>                
+<div class="stats-radar">
   <div class="radar-core">STATS</div>
   <div class="stat-hexagon" style="--angle:0deg;">
     <span class="hex-value">${state.stats.power}</span>
