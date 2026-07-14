@@ -1287,10 +1287,10 @@ function applyTheme() {
               <div class="panel gold"><div class="panel-header">نسخه ویتو</div>${['💰 مالی','🧘 سلامت ذهن','🏋️ سلامت فیزیکی','🧠 ذهنیت','🔬 علم'].map((label,i)=>{const keys=['finance','mentalHealth','physicalHealth','mindset','science'];const val=state.vito[keys[i]];return`<div class="vito-axis"><span class="label">${label}</span><div class="bar"><div class="fill" style="width:${val}%"></div></div><span style="width:35px;text-align:right;font-size:10px;">${val}%</span></div>`;}).join('')}<div style="text-align:center;margin-top:6px;font-size:14px;color:var(--gold);">نزدیکی به نسخه ویتو: ${vitoOverall}%</div></div>
               <div class="panel"><div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;"><span style="color:var(--text-dim);font-size:11px;">🔥 استریک: ${state.streak} روز</span><span style="color:var(--text-dim);font-size:11px;">🏆 Achievements: ${state.achievements.length}</span><span style="color:var(--text-dim);font-size:11px;">🛌 روزهای استراحت: ${restRemaining}/${monthlyMax}</span></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">${restRemaining>0&&!isTodayRestDay()?`<button class="small-btn" onclick="useRestDay();render();">🛌 امروز استراحت</button>`:''}${canUseSickLeave()?`<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);render();">🏥 حالت تعلیق</button>`:''}${state.sickLeaveActive?`<button class="small-btn" onclick="deactivateSickLeave();render();">✅ پایان تعلیق</button>`:''}</div></div>
               <div class="panel">
-  <div class="collapsible-header open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
+  <div class="collapsible-header open" data-target="#quests-content">
     <span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span>
   </div>
-  <div class="collapsible-body open">
+  <div class="collapsible-body open" id="quests-content">
     <div class="quest-timeline">
       ${state.quests.filter(q=>q.days==='all'||q.days===dayType||dayType==='friday').map(q=>{
         let xpDisplay = q.hoursTarget!==undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`;
@@ -1322,10 +1322,10 @@ function applyTheme() {
 </div>
 
 <div class="panel">
-  <div class="collapsible-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
+  <div class="collapsible-header" data-target="#skills-content">
     <span>🎓 مهارت‌ها</span><span class="arrow">▼</span>
   </div>
-  <div class="collapsible-body">
+  <div class="collapsible-body" id="skills-content">
     ${state.skills.map(sk=>`
     <div class="skill-card">
       <div style="display:flex;justify-content:space-between;">
@@ -1341,16 +1341,17 @@ function applyTheme() {
 </div>
 
 <div class="panel">
-  <div class="collapsible-header" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
+  <div class="collapsible-header" data-target="#achievements-content">
     <span>🏆 Achievements (${state.achievements.length})</span><span class="arrow">▼</span>
   </div>
-  <div class="collapsible-body">
+  <div class="collapsible-body" id="achievements-content">
     ${state.achievements.length===0?'<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>':state.achievements.slice(-20).map(id=>{
       const ach=ACHIEVEMENTS.find(a=>a.id===id);
       return ach?`<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>`:'';
     }).join('')}
   </div>
-</div>            </div>
+</div>
+</div>
             <div id="creator-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div><p style="line-height:2.2;font-size:14px;color:var(--text-dim);text-align:justify;padding:10px 0;">سازندگان: اسطوره سیزیف و اشکر<br><br>این برنامه با الهام از مانهوا Solo Leveling و ژانرهای غالب در رمان‌های شرق آسیا (کره جنوبی) نوشته شده است.<br><br>هدف از ساخت آن: برنامه‌ریزی منسجم‌تر، هدف‌گرایی بهتر و واضح‌تر برای رسیدن به قله و نسخه‌ای بهتر از دیروز خود.<br><br>استفاده از این برنامه برای همه رایگان و بدون محدودیت است.<br><br>این برنامه تماماً توسط Claude AI ساخته شده است.</p><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
             <div id="report-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">📝 گزارش کلی</div>${state.history.length===0?'<p style="color:var(--text-dim);">هنوز گزارشی ثبت نشده.</p>':state.history.slice(-20).reverse().map(h=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;"><span>📅 ${h.date}</span><span style="color:${h.completedAll?'var(--success)':'var(--danger)'};margin-right:10px;">${h.completedAll?'✅ کامل':'⚠️ پنالتی'}</span>${h.xpGained>0?`<span style="color:var(--neon);">+${h.xpGained} XP</span>`:''}${h.penalty>0?`<span style="color:var(--danger);">-${h.penalty} XP</span>`:''}</div>`).join('')}</div><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
             <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();applyTheme();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>🌙 حالت شب/روز ☀️</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();applyTheme();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>
@@ -1364,6 +1365,16 @@ function applyTheme() {
         function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
         function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); applyTheme(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
         init();
+   document.addEventListener('click', function(e) {
+    const header = e.target.closest('.collapsible-header');
+    if (!header) return;
+    const targetId = header.getAttribute('data-target');
+    if (!targetId) return;
+    const body = document.querySelector(targetId);
+    if (!body) return;
+    header.classList.toggle('open');
+    body.classList.toggle('open');
+});
     </script>
 </body>
 </html>
