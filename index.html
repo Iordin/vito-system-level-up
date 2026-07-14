@@ -36,17 +36,6 @@
             box-shadow: 0 0 20px rgba(0,180,255,0.15), inset 0 0 20px rgba(0,180,255,0.05), 0 8px 32px rgba(0,0,0,0.4);
             position: relative; overflow: hidden;
         }
-        .panel::before {
-            content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
-            .panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,180,255,0.03) 2px, rgba(0,180,255,0.03) 4px),
-                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,180,255,0.03) 2px, rgba(0,180,255,0.03) 4px);
-    pointer-events: none;
-            }            pointer-events: none;
-        }
         .panel::after {
             content: ''; position: absolute; top:-50%; left:-50%; width:200%; height:200%;
             background: radial-gradient(ellipse at 30% 20%, rgba(0,200,255,0.08) 0%, transparent 60%);
@@ -625,7 +614,61 @@ body.night-mode .profession-name {
     font-weight: 400;
     color: #c0d8f0;                     /* آبی بسیار ملایم، هماهنگ با پالت */
 }
-      </style>
+ /* ========== نوار XP نهایی (RTL کامل) ========== */
+.xp-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 8px 0 4px;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6);
+    direction: rtl;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(270deg,
+        var(--neon-dim) 0%,
+        var(--neon) 40%,
+        #fff 60%,
+        var(--neon) 80%,
+        var(--neon-dim) 100%);
+    background-size: 200% 100%;
+    border-radius: 6px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: energyFlowRTL 2.5s linear infinite;
+}
+
+@keyframes energyFlowRTL {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+.xp-fill::after { display: none; }
+
+/* شب */
+body.night-mode .xp-bar {
+    border-color: rgba(179, 136, 255, 0.25);
+}
+body.night-mode .xp-fill {
+    background: linear-gradient(270deg,
+        #5c3d99 0%,
+        #b388ff 40%,
+        #e0d4ff 60%,
+        #b388ff 80%,
+        #5c3d99 100%);
+    box-shadow: 0 0 15px rgba(179, 136, 255, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+body.night-mode .xp-text .current {
+    color: #b388ff;
+    text-shadow: 0 0 6px rgba(179, 136, 255, 0.6);
+}  
+    </style>
 </head>
 <body>
     <div class="app-container" id="app"></div>
