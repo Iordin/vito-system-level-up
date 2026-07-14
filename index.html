@@ -797,8 +797,6 @@ body.night-mode .hex-value {
   position: absolute;
   width: 70px; height: 70px;
   background: var(--panel-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1.5px solid var(--glass-border);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   display: flex;
@@ -809,7 +807,21 @@ body.night-mode .hex-value {
   transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle)));
   transition: all 0.3s;
 }
-
+.stat-hexagon::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: -5px; right: -5px; bottom: -5px;
+  background: rgba(10, 15, 30, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  z-index: -1;
+}
+.stat-hexagon:hover {
+  border-color: var(--neon);
+  box-shadow: 0 0 30px rgba(0,200,255,0.6), inset 0 0 20px rgba(0,200,255,0.2);
+  transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
+    }
 .hex-value {
   font-family: var(--font-numbers);
   font-size: 22px;
