@@ -1009,8 +1009,8 @@ body.night-mode .toast {
   box-shadow: 0 0 12px rgba(212,175,55,0.3);
 }
 @keyframes vitoShimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+    0%   { background-position: 100% 0; }   /* درخشش از سمت راست */
+    100% { background-position: -100% 0; }  /* حرکت به سمت چپ */
 }
 .vito-value {
   font-family: var(--font-numbers);
@@ -1054,6 +1054,30 @@ body.night-mode .vito-big {
   color: #b388ff;
   text-shadow: 0 0 15px rgba(179,136,255,0.5);
 }
+/* رفع بریده شدن پایین پنل ویتو */
+#vito-panel {
+    padding-bottom: 24px;   /* فضای اضافی پایین */
+    overflow: visible;      /* اجازه نمایش کامل محتوا */
+}
+
+/* اطمینان از اینکه شبه‌عنصرها همچنان محدود بمانند */
+#vito-panel::before,
+#vito-panel::after {
+    pointer-events: none;
+}
+/* ========== رفع مشکلات UI ========== */
+
+/* ۱. فضای کافی پایین پنل ویتو */
+#vito-panel {
+    padding-bottom: 24px;
+    overflow: visible;
+}
+
+/* ۲. انیمیشن RTL برای نوارهای ویتو */
+@keyframes vitoShimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+} 
     </style>
 </head>
 <body>
