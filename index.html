@@ -1074,6 +1074,40 @@ body.night-mode .vito-big {
   border: none;
   box-shadow: none;
  }
+/* ========== فاز ۷-A: Status Panel شناور ========== */
+
+/* پس‌زمینه گرادیان محو */
+#status-panel {
+  background: linear-gradient(to bottom, 
+    rgba(5, 5, 20, 0.9) 0%, 
+    rgba(5, 5, 20, 0.4) 60%,
+    transparent 100%) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 20px 16px 10px !important;
+  margin-bottom: 20px !important;
+}
+
+/* حذف شبه‌عنصرها */
+#status-panel::before,
+#status-panel::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* کادر شیشه‌ای اطلاعات بالا */
+.status-info-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: var(--glass-shadow);
+}
     </style>
 </head>
 <body>
@@ -1342,51 +1376,53 @@ function applyTheme() {
                 <button class="small-btn" onclick="showSettings()" style="font-size:20px;padding:5px 10px;">⚙️</button>
               </div>
               <div class="panel" id="status-panel">
-                <div class="status-header">
-  <div class="rank-badge ${rank}-rank">${rank}</div>
-  <div class="status-header-left">
-    <div class="name-title">${state.user.name||'قهرمان'} ${state.badge==='systemBreaker'?'👑':''}</div>
-    <span class="profession-tag">
-  <span class="profession-level">${professionLevelName(state.user.professionLevel||0)}</span>
-  <span class="profession-sep">·</span>
-  <span class="profession-name">${state.user.confirmedProfession||''}</span>
-</span>
+  <div class="status-info-card">
+    <div class="status-header">
+      <div class="rank-badge ${rank}-rank">${rank}</div>
+      <div class="status-header-left">
+        <div class="name-title">${state.user.name||'قهرمان'} ${state.badge==='systemBreaker'?'👑':''}</div>
+        <span class="profession-tag">
+          <span class="profession-level">${professionLevelName(state.user.professionLevel||0)}</span>
+          <span class="profession-sep">·</span>
+          <span class="profession-name">${state.user.confirmedProfession||''}</span>
+        </span>
+      </div>
+    </div>
+    <div class="myth-title">«${state.user.title||'بی‌عنوان'}»</div>
+    <div class="level-display">LV.${state.user.level}</div>
+    <div class="xp-bar">
+      <div class="xp-fill" style="width:${xpProgress}%"></div>
+    </div>
+    <div class="xp-text">
+      <span class="current">${state.user.xp} XP</span>
+      <span>${nextXP} XP ${state.user.awakeningLevel>0?`(+${state.user.awakeningLevel*5}%)`:''}</span>
+    </div>
+  </div>
+
+  <div class="stats-radar">
+    <div class="radar-core">STATS</div>
+    <div class="stat-hexagon" style="--angle:0deg;">
+      <span class="hex-value">${state.stats.power}</span>
+      <span class="hex-label">قدرت</span>
+    </div>
+    <div class="stat-hexagon" style="--angle:72deg;">
+      <span class="hex-value">${state.stats.speed}</span>
+      <span class="hex-label">سرعت</span>
+    </div>
+    <div class="stat-hexagon" style="--angle:144deg;">
+      <span class="hex-value">${state.stats.endurance}</span>
+      <span class="hex-label">استقامت</span>
+    </div>
+    <div class="stat-hexagon" style="--angle:216deg;">
+      <span class="hex-value">${state.stats.knowledge}</span>
+      <span class="hex-label">دانش</span>
+    </div>
+    <div class="stat-hexagon" style="--angle:288deg;">
+      <span class="hex-value">${state.stats.spirit}</span>
+      <span class="hex-label">روحیه</span>
+    </div>
+  </div>
 </div>
-</div>
-<div class="myth-title">«${state.user.title||'بی‌عنوان'}»</div>
-<div class="xp-bar">
-  <div class="xp-fill" style="width:${xpProgress}%"></div>
-</div>
-<div class="xp-text">
-  <span class="current">${state.user.xp} XP</span>
-  <span>${nextXP} XP ${state.user.awakeningLevel>0?`(+${state.user.awakeningLevel*5}%)`:''}</span>
-</div>                
-<div class="stats-radar">
-  <div class="radar-core">STATS</div>
-  <div class="stat-hexagon" style="--angle:0deg;">
-    <span class="hex-value">${state.stats.power}</span>
-    <span class="hex-label">قدرت</span>
-  </div>
-  <div class="stat-hexagon" style="--angle:72deg;">
-    <span class="hex-value">${state.stats.speed}</span>
-    <span class="hex-label">سرعت</span>
-  </div>
-  <div class="stat-hexagon" style="--angle:144deg;">
-    <span class="hex-value">${state.stats.endurance}</span>
-    <span class="hex-label">استقامت</span>
-  </div>
-  <div class="stat-hexagon" style="--angle:216deg;">
-    <span class="hex-value">${state.stats.knowledge}</span>
-    <span class="hex-label">دانش</span>
-  </div>
-  <div class="stat-hexagon" style="--angle:288deg;">
-    <span class="hex-value">${state.stats.spirit}</span>
-    <span class="hex-label">روحیه</span>
-  </div>
-</div>
-              </div>
-              <div class="panel gold" id="vito-panel">
-  <div class="panel-header">⚖️ نسخه ویتو</div>
   <div class="vito-grid">
     ${['💰 مالی','🧘 سلامت ذهن','🏋️ سلامت فیزیکی','🧠 ذهنیت','🔬 علم'].map((label,i)=>{
       const keys=['finance','mentalHealth','physicalHealth','mindset','science'];
