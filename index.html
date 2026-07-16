@@ -1088,8 +1088,22 @@ body.night-mode .vito-big {
   box-shadow: none !important;
   padding: 20px 16px 10px !important;
   margin-bottom: 20px !important;
+  position: relative;
 }
 
+/* اضافه شدن fade-out پایین پنل */
+#status-panel::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent 0%, #050510 90%);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 0 0 24px 24px;
+}
 /* حذف شبه‌عنصرها */
 #status-panel::before,
 #status-panel::after {
@@ -1394,10 +1408,10 @@ function applyTheme() {
               <button class="btn gold-btn" onclick="showCreator()">🧬 سازنده</button>
             </div>
             <div id="main-screen" style="display:${state.user.name?'block':'none'}">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <div class="logo-text" style="font-size:20px;">[SYSTEM] ${state.badge==='systemBreaker'?'⭐':''}</div>
-                <button class="small-btn" onclick="showSettings()" style="font-size:20px;padding:5px 10px;">⚙️</button>
-              </div>
+<div style="display:flex;justify-content:center;align-items:center;margin-bottom:10px;position:relative;">
+  <div class="logo-text" style="font-size:20px;">[SYSTEM] ${state.badge==='systemBreaker'?'⭐':''}</div>
+  <button class="small-btn" onclick="showSettings()" style="position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:20px;padding:5px 10px;">⚙️</button>
+</div>
               <div class="panel" id="status-panel">
   <div class="status-info-card">
     <div class="status-header">
