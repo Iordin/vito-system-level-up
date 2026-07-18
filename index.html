@@ -1376,6 +1376,35 @@ body.night-mode #vito-panel::after {
 body.night-mode #tab-content::after {
     background: linear-gradient(to top, var(--void-bg, #04030f) 0%, transparent 100%);
 }
+ /* ========== رفع قطعی بریدگی و تداخل ========== */
+
+/* ۱. غیرفعال کردن overflow:hidden روی تمام پنل‌ها */
+.panel,
+.panel.gold,
+#status-panel,
+#vito-panel {
+    overflow: visible !important;
+}
+
+/* ۲. فاصلهٔ داخلی کافی برای گوشه‌های گرد و محتوای داخل */
+.panel {
+    padding-bottom: 24px !important;
+}
+
+/* ۳. حاشیهٔ خارجی برای جداسازی پنل‌ها از پس‌زمینه */
+.panel {
+    margin-bottom: 20px;
+}
+
+/* ۴. فاصلهٔ بالای همهٔ پنل‌های داخل تب (نه فقط اولی) */
+#tab-content .panel {
+    margin-top: 16px;
+}
+
+/* ۵. برای خود #tab-content هم کمی فاصله از پایین */
+#tab-content {
+    padding-bottom: 60px;   /* فضای خالی تا انتهای صفحه */
+}
     </style>
 </head>
 <body>
