@@ -1355,6 +1355,7 @@ body.night-mode .tab-btn:hover {
             theme:'blue', glow:'medium', bg:'dark', nightMode:false,
             sound:true, notificationSound:true, vibration:true, music:false,
             difficulty:'normal', fridayRest:true, graceDay:false,
+            active Tab: 'status',
             autoBackup:false, keepBadge:true,
             morningNotification:true, eveningNotification:true, penaltyWarning:true, achievementPopup:true,
             simpleMode:false, devMode:false
@@ -1656,7 +1657,7 @@ function applyTheme() {
         function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
         function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
         function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); applyTheme(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }
+        function init(){ loadState(); loadSettings(); checkDailyRollover(); updateTitle(); render(); applyTheme(); setInterval(checkNotifications,30000); checkNotifications(); if(Notification&&Notification.permission==='default') Notification.requestPermission(); }if (state.user.name) renderTabContent(); }
         init();
    document.addEventListener('click', function(e) {
     const header = e.target.closest('.collapsible-header');
