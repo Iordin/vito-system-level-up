@@ -1558,7 +1558,8 @@ function renderTabContent() {
     const monthlyMax = getMonthlyRestDays(state.user.level);
     const activeTab = state.activeTab || 'status';
     let html = '';
-   } else if (activeTab === 'status') {
+   
+    if (activeTab === 'status') {
     html = `
         <div class="panel" id="status-panel">
             <div class="status-info-card">
