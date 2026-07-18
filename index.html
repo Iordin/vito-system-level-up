@@ -1255,6 +1255,17 @@ body.night-mode .skills-section {
 body.night-mode .skills-header {
     color: #b388ff;
 }
+/* ========== رفع قطعی بریدگی ویتو ========== */
+
+/* اطمینان از عدم برش محتوا */
+#vito-panel {
+    overflow: visible !important;
+    padding-bottom: 80px;            /* فضای خالی پایین برای ماسک */
+    
+    /* ماسک محو کننده – فقط پایین‌ترین ۳۰٪ پنل را محو می‌کند */
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 30%);
+    mask-image: linear-gradient(to top, transparent 0%, black 30%);
+}
   </style>
  </head>
  <body>
