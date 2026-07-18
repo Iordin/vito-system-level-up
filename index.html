@@ -1405,6 +1405,25 @@ body.night-mode #tab-content::after {
 #tab-content {
     padding-bottom: 60px;   /* فضای خالی تا انتهای صفحه */
 }
+ #status-panel {
+    margin-top: 0 !important;      /* چسبیدن کامل */
+ }
+        #tab-content {
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
+    padding-bottom: 40px;          /* فضای تنفس برای خود ماسک */
+        }
+        .panel, .panel.gold, #vito-panel {
+    overflow: visible !important;
+    border: none !important;        /* حذف حاشیه‌های تیز */
+    background: transparent !important;
+        }
+        .status-info-card,
+.vito-card,
+.timeline-card {
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+}
     </style>
 </head>
 <body>
