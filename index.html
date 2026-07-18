@@ -1147,32 +1147,24 @@ body.night-mode .vito-big {
 }  
 /* ========== Header Bar متقارن ========== */
 .header-bar {
-    display: flex;
-    align-items: center;            /* تراز عمودی دقیق عنوان و دکمه */
-    justify-content: space-between;
-    margin-bottom: 24px;            /* فاصله تا کارت امین */
-    position: relative;
-    z-index: 3;
-    overflow: visible;
-    height: 40px;                   /* ارتفاع ثابت برای تراز بهتر */
-}
-
-.header-spacer {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-}
-
-.logo-text {
-  flex: 1;
-  text-align: center;
-  line-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 24px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  z-index: 3;
+  overflow: visible;
 }
 
 .settings-btn {
+  position: absolute;
+  right: 0;
   width: 40px;
   height: 40px;
-  flex-shrink: 0;
   background: rgba(0, 20, 40, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -1197,6 +1189,17 @@ body.night-mode .vito-big {
   transform: scale(1.08);
 }
 
+.logo-text {
+  font-size: 20px;
+  margin: 0;
+  text-align: center;
+}
+
+/* حذف spacer */
+.header-spacer {
+  display: none;
+}
+
 /* شب */
 body.night-mode .settings-btn {
   border-color: rgba(179, 136, 255, 0.5);
@@ -1209,7 +1212,7 @@ body.night-mode .settings-btn:hover {
   color: #fff;
   text-shadow: 0 0 14px #b388ff;
   box-shadow: 0 0 25px rgba(179, 136, 255, 0.7);
-    }
+}
 body.night-mode .settings-btn:hover {
     animation: settingsPulseNight 1.2s infinite;
 }
@@ -1481,9 +1484,8 @@ function applyTheme() {
             </div>
             <div id="main-screen" style="display:${state.user.name?'block':'none'}">
 <div class="header-bar">
-  <div class="header-spacer"></div>
-  <div class="logo-text" style="font-size:20px;">[SYSTEM] ${state.badge==='systemBreaker'?'⭐':''}</div>
   <button class="settings-btn" onclick="showSettings()">⚙️</button>
+  <div class="logo-text" style="font-size:20px;">[SYSTEM] ${state.badge==='systemBreaker'?'⭐':''}</div>
 </div>
               <div class="panel" id="status-panel">
   <div class="status-info-card">
