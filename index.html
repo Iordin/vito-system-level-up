@@ -1349,6 +1349,33 @@ body.night-mode .tab-bar::after {
 body.night-mode #vito-panel::after {
     background: linear-gradient(to top, var(--void-bg, #04030f), transparent);
 }
+/* ========== رفع نهایی بریدگی و چسبیدگی ========== */
+
+/* ۱. محو شدن پایین تمام محتوای تب‌ها */
+#tab-content {
+    position: relative;
+}
+#tab-content::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;                    /* ارتفاع محو */
+    background: linear-gradient(to top, var(--void-bg, #050510) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 10;                     /* بالاتر از پنل‌ها */
+}
+
+/* ۲. فاصلهٔ یکسان بالای همهٔ پنل‌های داخل تب */
+#tab-content > .panel:first-child {
+    margin-top: 16px;                /* جدا شدن از تب‌بار */
+}
+
+/* ۳. تنظیم برای شب */
+body.night-mode #tab-content::after {
+    background: linear-gradient(to top, var(--void-bg, #04030f) 0%, transparent 100%);
+}
     </style>
 </head>
 <body>
