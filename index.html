@@ -1504,7 +1504,13 @@ function render() {
         <div id="settings-screen" style="display:none;">...</div>
     `;
         }
-.loadSettings();
+
+    if (state.user.name) renderTabContent();
+}
+
+function init() {
+    loadState();
+    loadSettings();
     checkDailyRollover();
     updateTitle();
     render();
@@ -1512,9 +1518,9 @@ function render() {
     setInterval(checkNotifications, 30000);
     checkNotifications();
     if (Notification && Notification.permission === 'default') Notification.requestPermission();
-    // این خط را درست قبل از بسته شدن init اضافه کنید
     if (state.user.name) renderTabContent();
-}        init();
+}
+init();
    document.addEventListener('click', function(e) {
     const header = e.target.closest('.collapsible-header');
     if (!header) return;
