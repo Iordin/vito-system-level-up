@@ -1255,6 +1255,68 @@ body.night-mode .skills-section {
 body.night-mode .skills-header {
     color: #b388ff;
 }
+ /* ========== رفع مشکلات Layout ========== */
+
+/* ۱. جلوگیری از تداخل رتبه و نام */
+.rank-badge {
+    width: 40px;          /* کمی کوچک‌تر */
+    height: 40px;
+    font-size: 14px;
+}
+.status-header {
+    gap: 14px;            /* فاصله بیشتر بین هگزاگون و متن */
+    margin-bottom: 4px;
+}
+
+/* ۲. فاصله‌گذاری عمودی سراسری */
+body {
+    padding: 16px 10px;   /* فضای بیشتر از بالا و پایین */
+}
+.app-container {
+    padding-bottom: 20px; /* فضای اضافی بعد از آخرین پنل */
+}
+
+/* ۳. اطمینان از عدم برش پنل‌های طلایی (ویتو) */
+.panel.gold {
+    overflow: visible;    /* دیگر برش نخورد */
+}
+#vito-panel {
+    padding-bottom: 36px;
+    margin-bottom: 24px;
+    overflow: visible !important;
+}
+
+/* ۴. جدا شدن واضح‌تر تب‌بار از محتوای زیر */
+.tab-bar {
+    margin-bottom: 16px;
+}
+#tab-content > .panel:first-child {
+    margin-top: 0;        /* حذف فاصله اضافی بالای اولین پنل */
+}
+
+/* ۵. بهبود responsiveness عمومی */
+.panel {
+    overflow: visible;    /* حذف overflow:hidden از همه پنل‌ها */
+}
+
+/* ۶. تنظیم z-index فقط برای عناصری که لازم دارند */
+.header-bar {
+    z-index: 5;
+}
+.settings-btn {
+    z-index: 6;
+}
+.time-hud,
+.tab-bar,
+#tab-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* ۷. اطمینان از فاصله کافی داخل کارت‌ها */
+.status-info-card {
+    padding: 16px;
+}
     </style>
 </head>
 <body>
