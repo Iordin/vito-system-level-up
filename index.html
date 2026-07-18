@@ -1266,6 +1266,32 @@ body.night-mode .skills-header {
     -webkit-mask-image: linear-gradient(to top, transparent 0%, black 30%);
     mask-image: linear-gradient(to top, transparent 0%, black 30%);
 }
+/* ========== رفع نهایی ویتو (بالا + پایین) ========== */
+
+/* تنظیم فاصله از تب‌بار (برای هماهنگی با سایر پنل‌ها) */
+#vito-panel {
+    margin-top: 16px !important;      /* فاصله از تب‌بار */
+    padding-bottom: 36px !important;  /* فضای خالی پایین برای gradient */
+    overflow: visible !important;     /* جلوگیری از برش */
+}
+
+/* gradient محو در پایین پنل */
+#vito-panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 36px;                     /* هماندازه padding-bottom */
+    background: linear-gradient(to top, var(--void-bg, #050510) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* برای حالت شب */
+body.night-mode #vito-panel::after {
+    background: linear-gradient(to top, var(--void-bg, #04030f) 0%, transparent 100%);
+}
   </style>
  </head>
  <body>
