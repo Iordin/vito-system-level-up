@@ -1255,7 +1255,33 @@ body.night-mode .skills-section {
 body.night-mode .skills-header {
     color: #b388ff;
 }
-    </style>
+ #status-panel {
+    margin-top: 0 !important;
+}
+
+.panel, .panel.gold, #status-panel, #vito-panel {
+    overflow: visible !important;
+}
+
+#vito-panel {
+    position: relative;
+    padding-bottom: 60px;
+}
+#vito-panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(to top, var(--void-bg, #050510) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+body.night-mode #vito-panel::after {
+    background: linear-gradient(to top, var(--void-bg, #04030f) 0%, transparent 100%);
+}  
+  </style>
  </head>
  <body>
   <div class="app-container" id="app"></div>
