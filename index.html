@@ -1317,6 +1317,79 @@ body {
 .status-info-card {
     padding: 16px;
 }
+ .tab-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+ }
+/* ========== Soft Blended Edges ========== */
+
+/* ۱. حذف overflow:hidden از پنل‌ها */
+.panel {
+    overflow: visible;
+}
+
+/* ۲. ماسک محو شونده پایین پنل‌ها */
+.panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--void-bg, #050510));
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 0 0 16px 16px;
+}
+
+/* ۳. برای پنل طلایی */
+.panel.gold::after {
+    background: linear-gradient(to bottom, transparent, var(--void-bg, #050510));
+}
+
+/* ۴. نرم‌تر کردن گوشه‌ها */
+.panel {
+    border-radius: 16px;
+}
+
+/* ۵. سایه بیرونی ملایم */
+.panel {
+    box-shadow: 0 0 30px rgba(0, 200, 255, 0.1), 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ۶. محو شدن پایین status-panel */
+#status-panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--void-bg, #050510));
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ۷. محو شدن پایین vito-panel */
+#vito-panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--void-bg, #050510));
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ۸. برای شب */
+body.night-mode .panel::after,
+body.night-mode #status-panel::after,
+body.night-mode #vito-panel::after {
+    background: linear-gradient(to bottom, transparent, var(--void-bg, #04030f));
+}   
     </style>
 </head>
 <body>
