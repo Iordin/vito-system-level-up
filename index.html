@@ -1230,76 +1230,77 @@ body.night-mode .tab-btn:hover {
     <div id="system-break-particles"></div>
     <script src="achievements.js"></script>
     <script>
-        const DEFAULT_QUESTS = [
-            { id:'cold_shower', name:'دوش آب سرد', xp:20, stat:'spirit', vito:['mentalHealth','mindset'], days:'all', notifyTime:'06:00', completed:false, streak:0, keywords:['دوش','آب سرد'] },
-            { id:'sunlight', name:'آفتاب ۱۰+ دقیقه', xp:10, stat:'spirit', vito:['mentalHealth'], days:'all', notifyTime:'07:00', completed:false, streak:0, keywords:['آفتاب','خورشید'] },
-            { id:'study', name:'مطالعه (ساعتی)', xp:25, stat:'knowledge', vito:['science'], days:'all', notifyTime:'09:00', completed:false, streak:0, hoursTarget:5, hoursDone:0, maxHours:10, keywords:['مطالعه','درس','کتاب'] },
-            { id:'warmup', name:'گرم کردن', xp:10, stat:'endurance', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['گرم کردن'] },
-            { id:'jump_rope', name:'طناب زدن', xp:20, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['طناب'] },
-            { id:'footwork', name:'رقص پا', xp:15, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['رقص پا'] },
-            { id:'slip', name:'جاخالی و اسلیپ', xp:15, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['جاخالی'] },
-            { id:'shadow_box', name:'شادو بوکس', xp:25, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['شادو','بوکس'] },
-            { id:'pullup', name:'بارفیکس', xp:25, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['بارفیکس'] },
-            { id:'pushup', name:'شنا', xp:20, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['شنا'] },
-            { id:'neck', name:'تمرین گردن', xp:15, stat:'endurance', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['گردن'] },
-            { id:'abs', name:'تمرین شکم', xp:20, stat:'endurance', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['شکم'] },
-            { id:'explosive_pushup', name:'شنای انفجاری', xp:30, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['انفجاری'] }
-        ];
-        const PROFESSION_DB = [
-            { name:'بوکسور', keywords:['بوکس','شادو','کیسه بوکس','مشت','رینگ','اسپارینگ'], stats:['speed','power','endurance'], vito:['physicalHealth'], weight:0 },
-            { name:'کشتی‌گیر', keywords:['کشتی','زیرگیری','خاک','فن','تاتامی','پل'], stats:['power','endurance'], vito:['physicalHealth'], weight:0 },
-            { name:'بدنساز', keywords:['بدنسازی','عضله','وزنه','دمبل','پرس سینه','اسکات','مکمل','پروتئین'], stats:['power','endurance'], vito:['physicalHealth'], weight:0 },
-            { name:'دونده', keywords:['دو','ماراتن','سرعت','دویدن','اینتروال'], stats:['speed','endurance'], vito:['physicalHealth'], weight:0 },
-            { name:'شناگر', keywords:['شنا','استخر','آب','کرال','قورباغه','غواصی'], stats:['endurance','speed'], vito:['physicalHealth'], weight:0 },
-            { name:'فوتبالیست', keywords:['فوتبال','توپ','گل','پاس','دریبل','شوت'], stats:['speed','endurance'], vito:['physicalHealth'], weight:0 },
-            { name:'یوگی', keywords:['یوگا','مراقبه','آسانا','مدیتیشن','تنفس'], stats:['spirit','endurance'], vito:['mentalHealth','mindset'], weight:0 },
-            { name:'نویسنده', keywords:['نوشتن','داستان','رمان','قلم','کتاب','تایپ','مقاله'], stats:['knowledge','spirit'], vito:['mindset'], weight:0 },
-            { name:'برنامه‌نویس', keywords:['کد','برنامه','گیت','الگوریتم','پایتون','JS','API','HTML','CSS'], stats:['knowledge'], vito:['science','mindset'], weight:0 },
-            { name:'مترجم', keywords:['ترجمه','زبان','واژه','انگلیسی','فارسی','آلمانی','فرانسه'], stats:['knowledge'], vito:['science'], weight:0 },
-            { name:'معلم', keywords:['تدریس','کلاس','درس','دانش‌آموز','استاد','آموزش'], stats:['knowledge','spirit'], vito:['science','mindset'], weight:0 },
-            { name:'فروشنده', keywords:['فروش','مشتری','تخفیف','قرارداد','بازاریابی'], stats:['knowledge'], vito:['finance','mindset'], weight:0 },
-            { name:'کارآفرین', keywords:['استارتاپ','بیزینس','سرمایه','طرح','کسب و کار'], stats:['knowledge','spirit'], vito:['finance','mindset'], weight:0 },
-            { name:'موسیقی‌دان', keywords:['موسیقی','گیتار','پیانو','ساز','نت','آهنگ','خوانندگی'], stats:['spirit'], vito:['mindset'], weight:0 },
-            { name:'آشپز', keywords:['آشپزی','غذا','رسپی','قابلمه','پخت'], stats:['spirit','knowledge'], vito:['physicalHealth'], weight:0 },
-            { name:'پزشک', keywords:['پزشکی','درمان','بیمار','دارو','جراحی'], stats:['knowledge'], vito:['physicalHealth','science'], weight:0 },
-            { name:'محقق', keywords:['تحقیق','پژوهش','آزمایشگاه','مقاله','علمی'], stats:['knowledge'], vito:['science'], weight:0 },
-            { name:'عکاس', keywords:['عکاسی','دوربین','لنز','کادر','نور','فتوگرافی'], stats:['spirit'], vito:['mindset'], weight:0 },
-            { name:'طراح گرافیک', keywords:['طراحی','گرافیک','فتوشاپ','لوگو','برند','UI','UX'], stats:['knowledge','spirit'], vito:['mindset'], weight:0 },
-            { name:'مهندس', keywords:['مهندسی','ساختمان','نقشه','محاسبات','طراحی فنی'], stats:['knowledge'], vito:['science'], weight:0 }
-        ];
-        const MYTH_TITLES = [
-            { combo:'power+spirit', titles:['اژدهافکن','شیردل','رستم دستان','آرس','گیلگمش'] },
-            { combo:'power+knowledge', titles:['ارتشتار خردمند','جنگجوی خردمند','ابوالهول','آتنا'] },
-            { combo:'speed+spirit', titles:['سروش بیدار','بادپا','نیکه','شاهین‌نشین','سایه نینجا','کمان آرتمیس'] },
-            { combo:'endurance+spirit', titles:['کوه مراقبه','آیرون‌مایند','اشک ققنوس','آیین مهر','دل الماس'] },
-            { combo:'power+endurance', titles:['پیلتن','ببر بیان','گلادیاتور','اسپارتی','تافته‌رگ','هرکول'] },
-            { combo:'knowledge+spirit', titles:['جمشیدجام','فره کیانی','موبد راز','کیمیاگر','حلقه افلاطون','چشم میمیر','اودین'] },
-            { combo:'speed+power', titles:['تیغ سام','آخیلیس','باد شمشیر','مشت شمال'] },
-            { combo:'speed+endurance', titles:['آشیل پایدار','رانده گرگ','گردباد'] },
-            { combo:'endurance+knowledge', titles:['اودیسئوس'] },
-            { combo:'all_high', titles:['مونارک','سیستم‌شکن','آخرین لول','رستم دستان','جمشید'] },
-            { combo:'all_max', titles:['ویتوی کامل','پوچی','خالق','ابدی'] }
-        ];
-        let ACHIEVEMENTS = [];
-        if (typeof FULL_ACHIEVEMENTS !== 'undefined') { ACHIEVEMENTS = FULL_ACHIEVEMENTS; }
-        const STORAGE_KEY = 'vito_system';
-        const SETTINGS_KEY = 'vito_settings';
-        let state = {
-            user: { name:'', confirmedProfession:'', detectedProfession:'', level:1, xp:0, awakeningLevel:0, professionLevel:0, title:'' },
-            stats: { power:0, speed:0, endurance:0, knowledge:0, spirit:0 },
-            vito: { finance:0, mentalHealth:0, physicalHealth:0, mindset:0, science:0 },
-            quests: [], skills: [], history: [], lastOpened:'', streak:0, achievements:[], titlesUnlocked:[],
-            totalQuestCompletions:{}, restDaysUsed:[], sickLeaveActive:false, sickLeaveRemaining:0,
-            sickLeaveUsage:[], systemBroken:false, badge:'', activeTab: 'status',
-        };
-        let settings = {
-            theme:'blue', glow:'medium', bg:'dark', nightMode:false,
-            sound:true, notificationSound:true, vibration:true, music:false,
-            difficulty:'normal', fridayRest:true, graceDay:false,
-            autoBackup:false, keepBadge:true,
-            morningNotification:true, eveningNotification:true, penaltyWarning:true, achievementPopup:true,
-            simpleMode:false, devMode:false
-        };function loadState(){ const raw=localStorage.getItem(STORAGE_KEY); if(raw){ try{ const p=JSON.parse(raw); state=deepMerge(state,p); }catch(e){} } if(!state.quests.length) state.quests=JSON.parse(JSON.stringify(DEFAULT_QUESTS)); if(!state.totalQuestCompletions) state.totalQuestCompletions={}; if(!state.restDaysUsed) state.restDaysUsed=[]; if(!state.sickLeaveUsage) state.sickLeaveUsage=[]; }
+  const DEFAULT_QUESTS = [
+    { id:'cold_shower', name:'دوش آب سرد', xp:20, stat:'spirit', vito:['mentalHealth','mindset'], days:'all', notifyTime:'06:00', completed:false, streak:0, keywords:['دوش','آب سرد'] },
+    { id:'sunlight', name:'آفتاب ۱۰+ دقیقه', xp:10, stat:'spirit', vito:['mentalHealth'], days:'all', notifyTime:'07:00', completed:false, streak:0, keywords:['آفتاب','خورشید'] },
+    { id:'study', name:'مطالعه (ساعتی)', xp:25, stat:'knowledge', vito:['science'], days:'all', notifyTime:'09:00', completed:false, streak:0, hoursTarget:5, hoursDone:0, maxHours:10, keywords:['مطالعه','درس','کتاب'] },
+    { id:'warmup', name:'گرم کردن', xp:10, stat:'endurance', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['گرم کردن'] },
+    { id:'jump_rope', name:'طناب زدن', xp:20, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['طناب'] },
+    { id:'footwork', name:'رقص پا', xp:15, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['رقص پا'] },
+    { id:'slip', name:'جاخالی و اسلیپ', xp:15, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['جاخالی'] },
+    { id:'shadow_box', name:'شادو بوکس', xp:25, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['شادو','بوکس'] },
+    { id:'pullup', name:'بارفیکس', xp:25, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['بارفیکس'] },
+    { id:'pushup', name:'شنا', xp:20, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['شنا'] },
+    { id:'neck', name:'تمرین گردن', xp:15, stat:'endurance', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['گردن'] },
+    { id:'abs', name:'تمرین شکم', xp:20, stat:'endurance', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['شکم'] },
+    { id:'explosive_pushup', name:'شنای انفجاری', xp:30, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['انفجاری'] }
+];
+const PROFESSION_DB = [
+    { name:'بوکسور', keywords:['بوکس','شادو','کیسه بوکس','مشت','رینگ','اسپارینگ'], stats:['speed','power','endurance'], vito:['physicalHealth'], weight:0 },
+    { name:'کشتی‌گیر', keywords:['کشتی','زیرگیری','خاک','فن','تاتامی','پل'], stats:['power','endurance'], vito:['physicalHealth'], weight:0 },
+    { name:'بدنساز', keywords:['بدنسازی','عضله','وزنه','دمبل','پرس سینه','اسکات','مکمل','پروتئین'], stats:['power','endurance'], vito:['physicalHealth'], weight:0 },
+    { name:'دونده', keywords:['دو','ماراتن','سرعت','دویدن','اینتروال'], stats:['speed','endurance'], vito:['physicalHealth'], weight:0 },
+    { name:'شناگر', keywords:['شنا','استخر','آب','کرال','قورباغه','غواصی'], stats:['endurance','speed'], vito:['physicalHealth'], weight:0 },
+    { name:'فوتبالیست', keywords:['فوتبال','توپ','گل','پاس','دریبل','شوت'], stats:['speed','endurance'], vito:['physicalHealth'], weight:0 },
+    { name:'یوگی', keywords:['یوگا','مراقبه','آسانا','مدیتیشن','تنفس'], stats:['spirit','endurance'], vito:['mentalHealth','mindset'], weight:0 },
+    { name:'نویسنده', keywords:['نوشتن','داستان','رمان','قلم','کتاب','تایپ','مقاله'], stats:['knowledge','spirit'], vito:['mindset'], weight:0 },
+    { name:'برنامه‌نویس', keywords:['کد','برنامه','گیت','الگوریتم','پایتون','JS','API','HTML','CSS'], stats:['knowledge'], vito:['science','mindset'], weight:0 },
+    { name:'مترجم', keywords:['ترجمه','زبان','واژه','انگلیسی','فارسی','آلمانی','فرانسه'], stats:['knowledge'], vito:['science'], weight:0 },
+    { name:'معلم', keywords:['تدریس','کلاس','درس','دانش‌آموز','استاد','آموزش'], stats:['knowledge','spirit'], vito:['science','mindset'], weight:0 },
+    { name:'فروشنده', keywords:['فروش','مشتری','تخفیف','قرارداد','بازاریابی'], stats:['knowledge'], vito:['finance','mindset'], weight:0 },
+    { name:'کارآفرین', keywords:['استارتاپ','بیزینس','سرمایه','طرح','کسب و کار'], stats:['knowledge','spirit'], vito:['finance','mindset'], weight:0 },
+    { name:'موسیقی‌دان', keywords:['موسیقی','گیتار','پیانو','ساز','نت','آهنگ','خوانندگی'], stats:['spirit'], vito:['mindset'], weight:0 },
+    { name:'آشپز', keywords:['آشپزی','غذا','رسپی','قابلمه','پخت'], stats:['spirit','knowledge'], vito:['physicalHealth'], weight:0 },
+    { name:'پزشک', keywords:['پزشکی','درمان','بیمار','دارو','جراحی'], stats:['knowledge'], vito:['physicalHealth','science'], weight:0 },
+    { name:'محقق', keywords:['تحقیق','پژوهش','آزمایشگاه','مقاله','علمی'], stats:['knowledge'], vito:['science'], weight:0 },
+    { name:'عکاس', keywords:['عکاسی','دوربین','لنز','کادر','نور','فتوگرافی'], stats:['spirit'], vito:['mindset'], weight:0 },
+    { name:'طراح گرافیک', keywords:['طراحی','گرافیک','فتوشاپ','لوگو','برند','UI','UX'], stats:['knowledge','spirit'], vito:['mindset'], weight:0 },
+    { name:'مهندس', keywords:['مهندسی','ساختمان','نقشه','محاسبات','طراحی فنی'], stats:['knowledge'], vito:['science'], weight:0 }
+];
+const MYTH_TITLES = [
+    { combo:'power+spirit', titles:['اژدهافکن','شیردل','رستم دستان','آرس','گیلگمش'] },
+    { combo:'power+knowledge', titles:['ارتشتار خردمند','جنگجوی خردمند','ابوالهول','آتنا'] },
+    { combo:'speed+spirit', titles:['سروش بیدار','بادپا','نیکه','شاهین‌نشین','سایه نینجا','کمان آرتمیس'] },
+    { combo:'endurance+spirit', titles:['کوه مراقبه','آیرون‌مایند','اشک ققنوس','آیین مهر','دل الماس'] },
+    { combo:'power+endurance', titles:['پیلتن','ببر بیان','گلادیاتور','اسپارتی','تافته‌رگ','هرکول'] },
+    { combo:'knowledge+spirit', titles:['جمشیدجام','فره کیانی','موبد راز','کیمیاگر','حلقه افلاطون','چشم میمیر','اودین'] },
+    { combo:'speed+power', titles:['تیغ سام','آخیلیس','باد شمشیر','مشت شمال'] },
+    { combo:'speed+endurance', titles:['آشیل پایدار','رانده گرگ','گردباد'] },
+    { combo:'endurance+knowledge', titles:['اودیسئوس'] },
+    { combo:'all_high', titles:['مونارک','سیستم‌شکن','آخرین لول','رستم دستان','جمشید'] },
+    { combo:'all_max', titles:['ویتوی کامل','پوچی','خالق','ابدی'] }
+];
+let ACHIEVEMENTS = [];
+if (typeof FULL_ACHIEVEMENTS !== 'undefined') { ACHIEVEMENTS = FULL_ACHIEVEMENTS; }
+const STORAGE_KEY = 'vito_system';
+const SETTINGS_KEY = 'vito_settings';
+let state = {
+    user: { name:'', confirmedProfession:'', detectedProfession:'', level:1, xp:0, awakeningLevel:0, professionLevel:0, title:'' },
+    stats: { power:0, speed:0, endurance:0, knowledge:0, spirit:0 },
+    vito: { finance:0, mentalHealth:0, physicalHealth:0, mindset:0, science:0 },
+    quests: [], skills: [], history: [], lastOpened:'', streak:0, achievements:[], titlesUnlocked:[],
+    totalQuestCompletions:{}, restDaysUsed:[], sickLeaveActive:false, sickLeaveRemaining:0,
+    sickLeaveUsage:[], systemBroken:false, badge:'', activeTab: 'status'
+};
+let settings = {
+    theme:'blue', glow:'medium', bg:'dark', nightMode:false,
+    sound:true, notificationSound:true, vibration:true, music:false,
+    difficulty:'normal', fridayRest:true, graceDay:false,
+    autoBackup:false, keepBadge:true,
+    morningNotification:true, eveningNotification:true, penaltyWarning:true, achievementPopup:true,
+    simpleMode:false, devMode:false
+};
+function loadState(){ const raw=localStorage.getItem(STORAGE_KEY); if(raw){ try{ const p=JSON.parse(raw); state=deepMerge(state,p); }catch(e){} } if(!state.quests.length) state.quests=JSON.parse(JSON.stringify(DEFAULT_QUESTS)); if(!state.totalQuestCompletions) state.totalQuestCompletions={}; if(!state.restDaysUsed) state.restDaysUsed=[]; if(!state.sickLeaveUsage) state.sickLeaveUsage=[]; }
 function loadSettings(){ const raw=localStorage.getItem(SETTINGS_KEY); if(raw){ try{ const p=JSON.parse(raw); settings=deepMerge(settings,p); }catch(e){} } }
 function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
@@ -1399,13 +1400,13 @@ function completeQuest(qid){
     const xp=q.hoursTarget?q.xp*(q.hoursDone||0):q.xp;
     if(q.completed){ addXP(xp); if(q.stat) state.stats[q.stat]+=1; if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
     else { addXP(-xp); if(q.stat) state.stats[q.stat]=Math.max(0,state.stats[q.stat]-1); q.streak=0; }
-    checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); render();
+    checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); renderTabContent();
 }
 function addStudyHour(qid,delta){
     const q=state.quests.find(q=>q.id===qid); if(!q||q.hoursTarget===undefined) return;
     q.hoursDone=Math.max(0,Math.min(q.maxHours||10,(q.hoursDone||0)+delta)); q.completed=q.hoursDone>=q.hoursTarget;
     if(q.completed&&delta>0){ const xp=q.xp*q.hoursDone; addXP(xp); if(q.stat) state.stats[q.stat]+=Math.floor(q.hoursDone/2); if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
-    checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); render();
+    checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); renderTabContent();
 }
 function addXP(amount){
     if(amount>0){ const ab=state.user.awakeningLevel*0.05; if(ab>0) amount+=Math.floor(amount*ab); }
@@ -1465,13 +1466,12 @@ function applyTheme() {
     else { root.style.setProperty('--neon', '#00ccff'); root.style.setProperty('--neon-dim', '#006688'); }
     if (settings.nightMode) { document.body.classList.add('night-mode'); document.body.style.background = '#f0f0f0'; }
     else { document.body.classList.remove('night-mode'); document.body.style.background = ''; }
-        }        
+}
 function render() {
     const app = document.getElementById('app');
     const today = getTodayJalali();
     const restRemaining = getRemainingRestDays();
     const monthlyMax = getMonthlyRestDays(state.user.level);
-
     app.innerHTML = `
         <div id="entry-screen" ${state.user.name ? 'style="display:none"' : ''}>
             <div class="logo-text">[SYSTEM]</div>
@@ -1499,264 +1499,20 @@ function render() {
             </div>
             <div id="tab-content"></div>
         </div>
-        <div id="creator-screen" style="display:none;">...</div>
-        <div id="report-screen" style="display:none;">...</div>
-        <div id="settings-screen" style="display:none;">...</div>
+        <div id="creator-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div><p style="line-height:2.2;font-size:14px;color:var(--text-dim);text-align:justify;padding:10px 0;">سازندگان: اسطوره سیزیف و اشکر<br><br>این برنامه با الهام از مانهوا Solo Leveling و ژانرهای غالب در رمان‌های شرق آسیا (کره جنوبی) نوشته شده است.<br><br>هدف از ساخت آن: برنامه‌ریزی منسجم‌تر، هدف‌گرایی بهتر و واضح‌تر برای رسیدن به قله و نسخه‌ای بهتر از دیروز خود.<br><br>استفاده از این برنامه برای همه رایگان و بدون محدودیت است.<br><br>این برنامه تماماً توسط Claude AI ساخته شده است.</p><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
+        <div id="report-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">📝 گزارش کلی</div>${state.history.length===0?'<p style="color:var(--text-dim);">هنوز گزارشی ثبت نشده.</p>':state.history.slice(-20).reverse().map(h=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;"><span>📅 ${h.date}</span><span style="color:${h.completedAll?'var(--success)':'var(--danger)'};margin-right:10px;">${h.completedAll?'✅ کامل':'⚠️ پنالتی'}</span>${h.xpGained>0?`<span style="color:var(--neon);">+${h.xpGained} XP</span>`:''}${h.penalty>0?`<span style="color:var(--danger);">-${h.penalty} XP</span>`:''}</div>`).join('')}</div><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
+        <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();applyTheme();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>🌙 حالت شب/روز ☀️</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();applyTheme();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>
     `;
-        }
-
     if (state.user.name) renderTabContent();
 }
-
-function init() {
-    loadState();
-    loadSettings();
-    checkDailyRollover();
-    updateTitle();
-    render();
-    applyTheme();
-    setInterval(checkNotifications, 30000);
-    checkNotifications();
-    if (Notification && Notification.permission === 'default') Notification.requestPermission();
-    if (state.user.name) renderTabContent();
-}
-init();
-   document.addEventListener('click', function(e) {
-    const header = e.target.closest('.collapsible-header');
-    if (!header) return;
-    const targetId = header.getAttribute('data-target');
-    if (!targetId) return;
-    const body = document.querySelector(targetId);
-    if (!body) return;
-    header.classList.toggle('open');
-    body.classList.toggle('open');
-});
- function switchTab(tabName) {
-    state.activeTab = tabName;
-    saveState();
-    renderTabContent();
-}
-
-function renderTabContent() {
-    const container = document.getElementById('tab-content');
-    if (!container) return;
-
-    const today = getTodayJalali();
-    const dayType = getDayType(today);
-    const dayLabel = dayType === 'friday' ? 'جمعه (استراحت)' : dayType === 'even' ? 'روز زوج (بوکس)' : 'روز فرد (قدرتی)';
-    const nextXP = xpForNextLevel();
-    const xpProgress = nextXP > 0 ? Math.floor((state.user.xp / nextXP) * 100) : 100;
-    const rank = getRank(state.user.level);
-    const vitoOverall = Math.floor(Object.values(state.vito).reduce((s, v) => s + v, 0) / 5);
-    const restRemaining = getRemainingRestDays();
-    const monthlyMax = getMonthlyRestDays(state.user.level);
-    const activeTab = state.activeTab || 'status';
-
-    let html = '';
-
-    if (activeTab === 'status') {
-        html = `
-            <div class="panel" id="status-panel">
-                <div class="status-info-card">
-                    <div class="status-header">
-                        <div class="rank-badge ${rank}-rank">${rank}</div>
-                        <div class="status-header-left">
-                            <div class="name-title">${state.user.name || 'قهرمان'} ${state.badge === 'systemBreaker' ? '👑' : ''}</div>
-                            <span class="profession-tag">
-                                <span class="profession-level">${professionLevelName(state.user.professionLevel || 0)}</span>
-                                <span class="profession-sep">·</span>
-                                <span class="profession-name">${state.user.confirmedProfession || ''}</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="myth-title">«${state.user.title || 'بی‌عنوان'}»</div>
-                    <div class="level-display">LV.${state.user.level}</div>
-                    <div class="xp-bar"><div class="xp-fill" style="width:${xpProgress}%"></div></div>
-                    <div class="xp-text">
-                        <span class="current">${state.user.xp} XP</span>
-                        <span>${nextXP} XP ${state.user.awakeningLevel > 0 ? `(+${state.user.awakeningLevel * 5}%)` : ''}</span>
-                    </div>
-                </div>
-                <div class="stats-radar">
-                    <div class="radar-core">STATS</div>
-                    <div class="stat-hexagon" style="--angle:0deg;"><span class="hex-value">${state.stats.power}</span><span class="hex-label">قدرت</span></div>
-                    <div class="stat-hexagon" style="--angle:72deg;"><span class="hex-value">${state.stats.speed}</span><span class="hex-label">سرعت</span></div>
-                    <div class="stat-hexagon" style="--angle:144deg;"><span class="hex-value">${state.stats.endurance}</span><span class="hex-label">استقامت</span></div>
-                    <div class="stat-hexagon" style="--angle:216deg;"><span class="hex-value">${state.stats.knowledge}</span><span class="hex-label">دانش</span></div>
-                    <div class="stat-hexagon" style="--angle:288deg;"><span class="hex-value">${state.stats.spirit}</span><span class="hex-label">روحیه</span></div>
-                </div>
-            </div>
-        `;
-    } else if (activeTab === 'quests') {
-        html = `
-            <div class="panel">
-                <div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div>
-                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-                    ${restRemaining > 0 && !isTodayRestDay() ? `<button class="small-btn" onclick="useRestDay();renderTabContent();">🛌 امروز استراحت</button>` : ''}
-                    ${canUseSickLeave() ? `<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);renderTabContent();">🏥 حالت تعلیق</button>` : ''}
-                    ${state.sickLeaveActive ? `<button class="small-btn" onclick="deactivateSickLeave();renderTabContent();">✅ پایان تعلیق</button>` : ''}
-                </div>
-<script>
-// ========== DEFAULT DATA ==========
-const DEFAULT_QUESTS = [
-    { id:'cold_shower', name:'دوش آب سرد', xp:20, stat:'spirit', vito:['mentalHealth','mindset'], days:'all', notifyTime:'06:00', completed:false, streak:0, keywords:['دوش','آب سرد'] },
-    { id:'sunlight', name:'آفتاب ۱۰+ دقیقه', xp:10, stat:'spirit', vito:['mentalHealth'], days:'all', notifyTime:'07:00', completed:false, streak:0, keywords:['آفتاب','خورشید'] },
-    { id:'study', name:'مطالعه (ساعتی)', xp:25, stat:'knowledge', vito:['science'], days:'all', notifyTime:'09:00', completed:false, streak:0, hoursTarget:5, hoursDone:0, maxHours:10, keywords:['مطالعه','درس','کتاب'] },
-    { id:'warmup', name:'گرم کردن', xp:10, stat:'endurance', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['گرم کردن'] },
-    { id:'jump_rope', name:'طناب زدن', xp:20, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['طناب'] },
-    { id:'footwork', name:'رقص پا', xp:15, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['رقص پا'] },
-    { id:'slip', name:'جاخالی و اسلیپ', xp:15, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['جاخالی'] },
-    { id:'shadow_box', name:'شادو بوکس', xp:25, stat:'speed', vito:['physicalHealth'], days:'even', notifyTime:'', completed:false, streak:0, keywords:['شادو','بوکس'] },
-    { id:'pullup', name:'بارفیکس', xp:25, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['بارفیکس'] },
-    { id:'pushup', name:'شنا', xp:20, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['شنا'] },
-    { id:'neck', name:'تمرین گردن', xp:15, stat:'endurance', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['گردن'] },
-    { id:'abs', name:'تمرین شکم', xp:20, stat:'endurance', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['شکم'] },
-    { id:'explosive_pushup', name:'شنای انفجاری', xp:30, stat:'power', vito:['physicalHealth'], days:'odd', notifyTime:'', completed:false, streak:0, keywords:['انفجاری'] }
-];
-const PROFESSION_DB = [ /* ... (same as before) ... */ ];
-const MYTH_TITLES = [ /* ... (same as before) ... */ ];
-let ACHIEVEMENTS = [];
-if (typeof FULL_ACHIEVEMENTS !== 'undefined') { ACHIEVEMENTS = FULL_ACHIEVEMENTS; }
-
-// ========== STATE & SETTINGS ==========
-const STORAGE_KEY = 'vito_system';
-const SETTINGS_KEY = 'vito_settings';
-let state = {
-    user: { name:'', confirmedProfession:'', detectedProfession:'', level:1, xp:0, awakeningLevel:0, professionLevel:0, title:'' },
-    stats: { power:0, speed:0, endurance:0, knowledge:0, spirit:0 },
-    vito: { finance:0, mentalHealth:0, physicalHealth:0, mindset:0, science:0 },
-    quests: [], skills: [], history: [], lastOpened:'', streak:0, achievements:[], titlesUnlocked:[],
-    totalQuestCompletions:{}, restDaysUsed:[], sickLeaveActive:false, sickLeaveRemaining:0,
-    sickLeaveUsage:[], systemBroken:false, badge:'',
-    activeTab: 'status'   // <-- مهم!
-};
-let settings = {
-    theme:'blue', glow:'medium', bg:'dark', nightMode:false,
-    sound:true, notificationSound:true, vibration:true, music:false,
-    difficulty:'normal', fridayRest:true, graceDay:false,
-    autoBackup:false, keepBadge:true,
-    morningNotification:true, eveningNotification:true, penaltyWarning:true, achievementPopup:true,
-    simpleMode:false, devMode:false
-};
-
-// ========== HELPER FUNCTIONS ==========
-function loadState(){ /* ... (same as before) ... */ }
-function loadSettings(){ /* ... */ }
-function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
-function deepMerge(target, source){ /* ... */ }
-function getTodayJalali(){ /* ... */ }
-function getDayType(d){ /* ... */ }
-function jalaliToGregorian(jy,jm,jd){ /* ... */ }
-function getRank(l){ /* ... */ }
-function xpForLevel(l){ return Math.floor(100*Math.pow(l,1.3)); }
-function xpForNextLevel(){ return xpForLevel(state.user.level+1); }
-function professionLevelName(l){ /* ... */ }
-function getTopStats(c=2){ /* ... */ }
-function getQS(id){ /* ... */ }
-function getTotalStudyHours(){ /* ... */ }
-function isMonsterDay(){ /* ... */ }
-function getMonthlyRestDays(level){ /* ... */ }
-function getUsedRestDaysThisMonth(){ /* ... */ }
-function getRemainingRestDays(){ /* ... */ }
-function useRestDay(){ /* ... */ }
-function isTodayRestDay(){ /* ... */ }
-function getCurrentJalaliYear(){ /* ... */ }
-function getSickLeaveUsedThisYear(){ /* ... */ }
-function canUseSickLeave(){ /* ... */ }
-function activateSickLeave(days){ /* ... */ }
-function deactivateSickLeave(){ /* ... */ }
-function checkSystemBreak(){ /* ... */ }
-function triggerSystemBreak(){ /* ... */ }
-function checkDailyRollover(){ /* ... */ }
-function getMissedDays(from,to){ /* ... */ }
-function parseJalali(d){ /* ... */ }
-function gregorianToJalali(g){ /* ... */ }
-function evaluateDay(d){ /* ... */ }
-function resetTodayQuests(){ /* ... */ }
-function completeQuest(qid){
-    const q=state.quests.find(q=>q.id===qid); if(!q) return;
-    q.completed=!q.completed; if(q.hoursTarget!==undefined&&q.completed){ q.completed=(q.hoursDone||0)>=q.hoursTarget; if(!q.completed) return; }
-    const xp=q.hoursTarget?q.xp*(q.hoursDone||0):q.xp;
-    if(q.completed){ addXP(xp); if(q.stat) state.stats[q.stat]+=1; if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
-    else { addXP(-xp); if(q.stat) state.stats[q.stat]=Math.max(0,state.stats[q.stat]-1); q.streak=0; }
-    checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak();
-    renderTabContent();  // به‌روزرسانی تب فعال بدون رفرش کل صفحه
-}
-function addStudyHour(qid,delta){ /* ... */ renderTabContent(); }
-function addXP(amount){ /* ... */ }
-function checkAwakening(){ /* ... */ }
-function detectProfession(){ /* ... */ }
-function updateTitle(){ /* ... */ }
-function checkAchievements(){ /* ... */ }
-function addSkill(){ /* ... */ render(); }
-function logSkillProgress(sid){ /* ... */ render(); }
-let audioCtx;
-function initAudio(){ /* ... */ }
-function playSound(freq,type,duration,vol=0.1){ /* ... */ }
-function sfxQuestComplete(){ /* ... */ }
-function sfxLevelUp(){ /* ... */ }
-function sfxPenalty(){ /* ... */ }
-function sfxAchievement(){ /* ... */ }
-function sfxAwakening(){ /* ... */ }
-function checkNotifications(){ /* ... */ }
-function showToast(msg,type){ /* ... */ }
-function resetAllData(){ /* ... */ }
-function applyTheme() { /* ... */ }
-
-// ========== RENDER ==========
-function render() {
-    const app = document.getElementById('app');
-    const today = getTodayJalali();
-    const restRemaining = getRemainingRestDays();
-    const monthlyMax = getMonthlyRestDays(state.user.level);
-
-    app.innerHTML = `
-        <div id="entry-screen" ${state.user.name ? 'style="display:none"' : ''}>
-            <div class="logo-text">[SYSTEM]</div>
-            <div style="color:var(--text-dim);margin-bottom:10px;">به سیستم خوش آمدی، قهرمان</div>
-            <input type="text" id="name-input" placeholder="نام خود را وارد کن...">
-            <button class="btn" onclick="saveName()">ورود به سیستم</button>
-            <button class="btn gold-btn" onclick="showCreator()">🧬 سازنده</button>
-        </div>
-        <div id="main-screen" style="display:${state.user.name ? 'block' : 'none'}">
-            <div class="header-bar">
-                <button class="settings-btn" onclick="showSettings()">⚙️</button>
-                <div class="logo-text" style="font-size:20px;">[SYSTEM] ${state.badge === 'systemBreaker' ? '⭐' : ''}</div>
-            </div>
-            <div class="time-hud">
-                <span>📅 ${today}</span>
-                <span>🔥 ${state.streak} روز</span>
-                <span>🛌 ${restRemaining}/${monthlyMax}</span>
-                <span>🏆 ${state.achievements.length}</span>
-            </div>
-            <div class="tab-bar">
-                <button class="tab-btn ${(state.activeTab || 'status') === 'status' ? 'active' : ''}" onclick="switchTab('status')">⚔️ وضعیت</button>
-                <button class="tab-btn ${(state.activeTab || 'status') === 'quests' ? 'active' : ''}" onclick="switchTab('quests')">📋 کوئست</button>
-                <button class="tab-btn ${(state.activeTab || 'status') === 'vito' ? 'active' : ''}" onclick="switchTab('vito')">⚖️ ویتو</button>
-                <button class="tab-btn ${(state.activeTab || 'status') === 'achievements' ? 'active' : ''}" onclick="switchTab('achievements')">🏆 اچیومنت</button>
-            </div>
-            <div id="tab-content"></div>
-        </div>
-        <div id="creator-screen" style="display:none;">...</div>
-        <div id="report-screen" style="display:none;">...</div>
-        <div id="settings-screen" style="display:none;">...</div>
-    `;
-
-    if (state.user.name) renderTabContent();
-}
-
-// ========== TAB SWITCHING ==========
 function switchTab(tabName) {
     state.activeTab = tabName;
     saveState();
     renderTabContent();
 }
-
 function renderTabContent() {
     const container = document.getElementById('tab-content');
     if (!container) return;
-
     const today = getTodayJalali();
     const dayType = getDayType(today);
     const dayLabel = dayType === 'friday' ? 'جمعه (استراحت)' : dayType === 'even' ? 'روز زوج (بوکس)' : 'روز فرد (قدرتی)';
@@ -1767,9 +1523,7 @@ function renderTabContent() {
     const restRemaining = getRemainingRestDays();
     const monthlyMax = getMonthlyRestDays(state.user.level);
     const activeTab = state.activeTab || 'status';
-
     let html = '';
-
     if (activeTab === 'status') {
         html = `
             <div class="panel" id="status-panel">
@@ -1778,20 +1532,13 @@ function renderTabContent() {
                         <div class="rank-badge ${rank}-rank">${rank}</div>
                         <div class="status-header-left">
                             <div class="name-title">${state.user.name || 'قهرمان'} ${state.badge === 'systemBreaker' ? '👑' : ''}</div>
-                            <span class="profession-tag">
-                                <span class="profession-level">${professionLevelName(state.user.professionLevel || 0)}</span>
-                                <span class="profession-sep">·</span>
-                                <span class="profession-name">${state.user.confirmedProfession || ''}</span>
-                            </span>
+                            <span class="profession-tag"><span class="profession-level">${professionLevelName(state.user.professionLevel || 0)}</span><span class="profession-sep">·</span><span class="profession-name">${state.user.confirmedProfession || ''}</span></span>
                         </div>
                     </div>
                     <div class="myth-title">«${state.user.title || 'بی‌عنوان'}»</div>
                     <div class="level-display">LV.${state.user.level}</div>
                     <div class="xp-bar"><div class="xp-fill" style="width:${xpProgress}%"></div></div>
-                    <div class="xp-text">
-                        <span class="current">${state.user.xp} XP</span>
-                        <span>${nextXP} XP ${state.user.awakeningLevel > 0 ? `(+${state.user.awakeningLevel * 5}%)` : ''}</span>
-                    </div>
+                    <div class="xp-text"><span class="current">${state.user.xp} XP</span><span>${nextXP} XP ${state.user.awakeningLevel > 0 ? `(+${state.user.awakeningLevel * 5}%)` : ''}</span></div>
                 </div>
                 <div class="stats-radar">
                     <div class="radar-core">STATS</div>
@@ -1805,70 +1552,21 @@ function renderTabContent() {
         `;
     } else if (activeTab === 'quests') {
         html = `
-            <div class="panel">
-                <div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div>
-                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-                    ${restRemaining > 0 && !isTodayRestDay() ? `<button class="small-btn" onclick="useRestDay();renderTabContent();">🛌 امروز استراحت</button>` : ''}
-                    ${canUseSickLeave() ? `<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);renderTabContent();">🏥 حالت تعلیق</button>` : ''}
-                    ${state.sickLeaveActive ? `<button class="small-btn" onclick="deactivateSickLeave();renderTabContent();">✅ پایان تعلیق</button>` : ''}
-                </div>
-            </div>
+            <div class="panel"><div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">${restRemaining > 0 && !isTodayRestDay() ? `<button class="small-btn" onclick="useRestDay();renderTabContent();">🛌 امروز استراحت</button>` : ''}${canUseSickLeave() ? `<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);renderTabContent();">🏥 حالت تعلیق</button>` : ''}${state.sickLeaveActive ? `<button class="small-btn" onclick="deactivateSickLeave();renderTabContent();">✅ پایان تعلیق</button>` : ''}</div></div>
             <div class="panel">
                 <div class="collapsible-header open" data-target="#quests-content"><span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span></div>
-                <div class="collapsible-body open" id="quests-content">
-                    <div class="quest-timeline">
-                        ${state.quests.filter(q => q.days === 'all' || q.days === dayType || dayType === 'friday').map(q => {
-                            let xpDisplay = q.hoursTarget !== undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`;
-                            return `
-                                <div class="timeline-entry">
-                                    <div class="timeline-node ${q.completed ? 'completed' : ''}"></div>
-                                    <div class="timeline-card">
-                                        <div class="quest-main">
-                                            <input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}>
-                                            <span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span>
-                                            <span class="quest-xp">${xpDisplay}</span>
-                                        </div>
-                                        <div class="quest-extra">
-                                            ${q.hoursTarget !== undefined ? `<div class="study-controls"><button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button><span>${q.hoursDone || 0}h</span><button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button></div>` : ''}
-                                            ${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}
-                                            ${q.streak > 0 ? `<span class="quest-streak">🔥${q.streak}</span>` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
+                <div class="collapsible-body open" id="quests-content"><div class="quest-timeline">${state.quests.filter(q => q.days === 'all' || q.days === dayType || dayType === 'friday').map(q => { let xpDisplay = q.hoursTarget !== undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`; return `<div class="timeline-entry"><div class="timeline-node ${q.completed ? 'completed' : ''}"></div><div class="timeline-card"><div class="quest-main"><input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}><span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span><span class="quest-xp">${xpDisplay}</span></div><div class="quest-extra">${q.hoursTarget !== undefined ? `<div class="study-controls"><button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button><span>${q.hoursDone || 0}h</span><button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button></div>` : ''}${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}${q.streak > 0 ? `<span class="quest-streak">🔥${q.streak}</span>` : ''}</div></div></div>`; }).join('')}</div></div>
             </div>
             <div class="panel">
                 <div class="collapsible-header" data-target="#skills-content"><span>🎓 مهارت‌ها</span><span class="arrow">▼</span></div>
-                <div class="collapsible-body" id="skills-content">
-                    ${state.skills.map(sk => `
-                        <div class="skill-card">
-                            <div class="skill-header">
-                                <span class="skill-name">${sk.name}</span>
-                                <span class="skill-level">سطح ${sk.level}</span>
-                            </div>
-                            <div class="skill-bar"><div class="skill-fill" style="width:${Math.min(100, sk.xp / xpForLevel(sk.level) * 100)}%"></div></div>
-                            <div class="skill-xp-text">${sk.xp} / ${xpForLevel(sk.level)} XP (${sk.xpPerUnit} XP/${sk.unit})</div>
-                            <button class="skill-log-btn" onclick="logSkillProgress('${sk.id}')">➕ ثبت ${sk.unit}</button>
-                        </div>
-                    `).join('') || '<div class="skill-empty">هنوز مهارتی ثبت نشده.</div>'}
-                    <button class="skill-add-btn" onclick="addSkill()">➕ مهارت جدید</button>
-                </div>
+                <div class="collapsible-body" id="skills-content">${state.skills.map(sk => `<div class="skill-card"><div class="skill-header"><span class="skill-name">${sk.name}</span><span class="skill-level">سطح ${sk.level}</span></div><div class="skill-bar"><div class="skill-fill" style="width:${Math.min(100, sk.xp / xpForLevel(sk.level) * 100)}%"></div></div><div class="skill-xp-text">${sk.xp} / ${xpForLevel(sk.level)} XP (${sk.xpPerUnit} XP/${sk.unit})</div><button class="skill-log-btn" onclick="logSkillProgress('${sk.id}')">➕ ثبت ${sk.unit}</button></div>`).join('') || '<div class="skill-empty">هنوز مهارتی ثبت نشده.</div>'}<button class="skill-add-btn" onclick="addSkill()">➕ مهارت جدید</button></div>
             </div>
         `;
     } else if (activeTab === 'vito') {
         html = `
             <div class="panel gold" id="vito-panel">
                 <div class="panel-header">⚖️ نسخه ویتو</div>
-                <div class="vito-grid">
-                    ${['💰 مالی', '🧘 سلامت ذهن', '🏋️ سلامت فیزیکی', '🧠 ذهنیت', '🔬 علم'].map((label, i) => {
-                        const keys = ['finance', 'mentalHealth', 'physicalHealth', 'mindset', 'science'];
-                        const val = state.vito[keys[i]];
-                        return `<div class="vito-card"><div class="vito-label">${label}</div><div class="vito-bar"><div class="vito-fill" style="width:${val}%"></div></div><div class="vito-value">${val}%</div></div>`;
-                    }).join('')}
-                </div>
+                <div class="vito-grid">${['💰 مالی', '🧘 سلامت ذهن', '🏋️ سلامت فیزیکی', '🧠 ذهنیت', '🔬 علم'].map((label, i) => { const keys = ['finance', 'mentalHealth', 'physicalHealth', 'mindset', 'science']; const val = state.vito[keys[i]]; return `<div class="vito-card"><div class="vito-label">${label}</div><div class="vito-bar"><div class="vito-fill" style="width:${val}%"></div></div><div class="vito-value">${val}%</div></div>`; }).join('')}</div>
                 <div class="vito-overall"><span class="vito-big">${vitoOverall}%</span><span class="vito-sub">نزدیکی به نسخه ویتو</span></div>
             </div>
         `;
@@ -1876,20 +1574,12 @@ function renderTabContent() {
         html = `
             <div class="panel">
                 <div class="collapsible-header open" data-target="#achievements-content"><span>🏆 Achievements (${state.achievements.length})</span><span class="arrow">▼</span></div>
-                <div class="collapsible-body open" id="achievements-content">
-                    ${state.achievements.length === 0 ? '<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>' : state.achievements.slice(-20).map(id => {
-                        const ach = ACHIEVEMENTS.find(a => a.id === id);
-                        return ach ? `<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>` : '';
-                    }).join('')}
-                </div>
+                <div class="collapsible-body open" id="achievements-content">${state.achievements.length === 0 ? '<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>' : state.achievements.slice(-20).map(id => { const ach = ACHIEVEMENTS.find(a => a.id === id); return ach ? `<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>` : ''; }).join('')}</div>
             </div>
         `;
     }
-
     container.innerHTML = html;
 }
-
-// ========== INIT ==========
 function init() {
     loadState();
     loadSettings();
@@ -1903,8 +1593,6 @@ function init() {
     if (state.user.name) renderTabContent();
 }
 init();
-
-// ========== EVENT LISTENERS ==========
 document.addEventListener('click', function(e) {
     const header = e.target.closest('.collapsible-header');
     if (!header) return;
@@ -1915,14 +1603,12 @@ document.addEventListener('click', function(e) {
     header.classList.toggle('open');
     body.classList.toggle('open');
 });
-
-// navigation helpers
 function showSettings(){ document.getElementById('main-screen').style.display='none'; document.getElementById('settings-screen').style.display='block'; }
 function showCreator(){ document.getElementById('main-screen').style.display='none'; document.getElementById('creator-screen').style.display='block'; }
 function showReport(){ document.getElementById('main-screen').style.display='none'; document.getElementById('report-screen').style.display='block'; render(); }
 function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
 function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
 function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-    </script>
+</script>
 </body>
     </html>
