@@ -1220,6 +1220,66 @@ body.night-mode .settings-btn:hover {
     0%, 100% { box-shadow: 0 0 25px rgba(179,136,255,0.7); }
     50% { box-shadow: 0 0 40px rgba(179,136,255,0.9); }
 }
+/* ========== فاز ۷-B: Tab Bar & HUD ========== */
+.time-hud {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  border-bottom: 1px solid rgba(0,200,255,0.1);
+}
+
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 4px;
+  font-size: 11px;
+  font-family: var(--font-headings);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0,200,255,0.2);
+  border-radius: 10px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  border-color: var(--neon);
+  color: var(--neon);
+  text-shadow: 0 0 8px var(--neon);
+  box-shadow: 0 0 15px rgba(0,200,255,0.3);
+  background: rgba(0,200,255,0.08);
+}
+
+.tab-btn:hover {
+  border-color: var(--neon);
+  color: #fff;
+}
+
+/* شب */
+body.night-mode .tab-btn {
+  border-color: rgba(179,136,255,0.2);
+}
+body.night-mode .tab-btn.active {
+  border-color: #b388ff;
+  color: #b388ff;
+  text-shadow: 0 0 8px #b388ff;
+  box-shadow: 0 0 15px rgba(179,136,255,0.3);
+  background: rgba(179,136,255,0.08);
+}
+body.night-mode .tab-btn:hover {
+  border-color: #b388ff;
+}
     </style>
 </head>
 <body>
@@ -1541,87 +1601,51 @@ function applyTheme() {
       const val=state.vito[keys[i]];
       return `
       <div class="vito-card">
-        <div class="vito-label">${label}</div>
-        <div class="vito-bar">
-          <div class="vito-fill" style="width:${val}%"></div>
-        </div>
-        <div class="vito-value">${val}%</div>
-      </div>
-      `;
-    }).join('')}
-  </div>
-  <div class="vito-overall">
-    <span class="vito-big">${vitoOverall}%</span>
-    <span class="vito-sub">نزدیکی به نسخه ویتو</span>
-  </div>
-</div>              <div class="panel"><div style="color:var(--neon);font-size:12px;">📅 ${today} — ${dayLabel}</div><div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;"><span style="color:var(--text-dim);font-size:11px;">🔥 استریک: ${state.streak} روز</span><span style="color:var(--text-dim);font-size:11px;">🏆 Achievements: ${state.achievements.length}</span><span style="color:var(--text-dim);font-size:11px;">🛌 روزهای استراحت: ${restRemaining}/${monthlyMax}</span></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">${restRemaining>0&&!isTodayRestDay()?`<button class="small-btn" onclick="useRestDay();render();">🛌 امروز استراحت</button>`:''}${canUseSickLeave()?`<button class="small-btn" onclick="activateSickLeave(prompt('چند روز؟ (حداکثر ۱۴)')||7);render();">🏥 حالت تعلیق</button>`:''}${state.sickLeaveActive?`<button class="small-btn" onclick="deactivateSickLeave();render();">✅ پایان تعلیق</button>`:''}</div></div>
-              <div class="panel">
-  <div class="collapsible-header open" data-target="#quests-content">
-    <span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span>
-  </div>
-  <div class="collapsible-body open" id="quests-content">
-    <div class="quest-timeline">
-      ${state.quests.filter(q=>q.days==='all'||q.days===dayType||dayType==='friday').map(q=>{
-        let xpDisplay = q.hoursTarget!==undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`;
-        return `
-        <div class="timeline-entry">
-          <div class="timeline-node ${q.completed ? 'completed' : ''}"></div>
-          <div class="timeline-card">
-            <div class="quest-main">
-              <input type="checkbox" class="quest-check" ${q.completed?'checked':''} onchange="completeQuest('${q.id}')" ${dayType==='friday'||state.sickLeaveActive?'disabled':''}>
-              <span class="quest-name ${q.completed?'quest-done':''}">${q.name}</span>
-              <span class="quest-xp">${xpDisplay}</span>
-            </div>
-            <div class="quest-extra">
-              ${q.hoursTarget!==undefined ? `
-              <div class="study-controls">
-                <button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button>
-                <span>${q.hoursDone||0}h</span>
-                <button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button>
-              </div>` : ''}
-              ${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}
-              ${q.streak>0 ? `<span class="quest-streak">🔥${q.streak}</span>` : ''}
-            </div>
-          </div>
-        </div>
-        `;
-      }).join('')}
+ function render(){
+  const app=document.getElementById('app');
+  const today=getTodayJalali();
+  const dayType=getDayType(today);
+  const nextXP=xpForNextLevel();
+  const xpProgress=nextXP>0?Math.floor((state.user.xp/nextXP)*100):100;
+  const rank=getRank(state.user.level);
+  const vitoOverall=Math.floor(Object.values(state.vito).reduce((s,v)=>s+v,0)/5);
+  const restRemaining=getRemainingRestDays();
+  const monthlyMax=getMonthlyRestDays(state.user.level);
+
+  app.innerHTML=`
+    <div id="entry-screen" ${state.user.name?'style="display:none"':''}>
+      <div class="logo-text">[SYSTEM]</div>
+      <div style="color:var(--text-dim);margin-bottom:10px;">به سیستم خوش آمدی، قهرمان</div>
+      <input type="text" id="name-input" placeholder="نام خود را وارد کن...">
+      <button class="btn" onclick="saveName()">ورود به سیستم</button>
+      <button class="btn gold-btn" onclick="showCreator()">🧬 سازنده</button>
     </div>
-  </div>
-</div>
-
-<div class="panel">
-  <div class="collapsible-header" data-target="#skills-content">
-    <span>🎓 مهارت‌ها</span><span class="arrow">▼</span>
-  </div>
-  <div class="collapsible-body" id="skills-content">
-    ${state.skills.map(sk=>`
-    <div class="skill-card">
-      <div style="display:flex;justify-content:space-between;">
-        <span>${sk.name}</span>
-        <span style="color:var(--neon);">سطح ${sk.level}</span>
+    <div id="main-screen" style="display:${state.user.name?'block':'none'}">
+      <div class="header-bar">
+        <button class="settings-btn" onclick="showSettings()">⚙️</button>
+        <div class="logo-text" style="font-size:20px;">[SYSTEM] ${state.badge==='systemBreaker'?'⭐':''}</div>
       </div>
-      <div class="skill-bar"><div class="skill-fill" style="width:${Math.min(100,sk.xp/xpForLevel(sk.level)*100)}%"></div></div>
-      <div style="font-size:10px;color:var(--text-dim);">${sk.xp} / ${xpForLevel(sk.level)} XP (${sk.xpPerUnit} XP/${sk.unit})</div>
-      <button class="small-btn" onclick="logSkillProgress('${sk.id}')" style="margin-top:6px;">➕ ثبت ${sk.unit}</button>
-    </div>`).join('')||'<div style="color:var(--text-dim);">هنوز مهارتی ثبت نشده.</div>'}
-    <button class="small-btn" onclick="addSkill()" style="margin-top:8px;">➕ مهارت جدید</button>
-  </div>
-</div>
+      <div class="time-hud">
+        <span>📅 ${today}</span>
+        <span>🔥 ${state.streak} روز</span>
+        <span>🛌 ${restRemaining}/${monthlyMax}</span>
+        <span>🏆 ${state.achievements.length}</span>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn ${(state.activeTab||'status')==='status'?'active':''}" onclick="switchTab('status')">⚔️ وضعیت</button>
+        <button class="tab-btn ${(state.activeTab||'status')==='quests'?'active':''}" onclick="switchTab('quests')">📋 کوئست</button>
+        <button class="tab-btn ${(state.activeTab||'status')==='vito'?'active':''}" onclick="switchTab('vito')">⚖️ ویتو</button>
+        <button class="tab-btn ${(state.activeTab||'status')==='achievements'?'active':''}" onclick="switchTab('achievements')">🏆 اچیومنت</button>
+      </div>
+      <div id="tab-content"></div>
+    </div>
+    <div id="creator-screen" style="display:none;">...</div>
+    <div id="report-screen" style="display:none;">...</div>
+    <div id="settings-screen" style="display:none;">...</div>
+  `;
 
-<div class="panel">
-  <div class="collapsible-header" data-target="#achievements-content">
-    <span>🏆 Achievements (${state.achievements.length})</span><span class="arrow">▼</span>
-  </div>
-  <div class="collapsible-body" id="achievements-content">
-    ${state.achievements.length===0?'<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>':state.achievements.slice(-20).map(id=>{
-      const ach=ACHIEVEMENTS.find(a=>a.id===id);
-      return ach?`<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>`:'';
-    }).join('')}
-  </div>
-</div>
-</div>
-            <div id="creator-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">🧬 سازندگان</div><p style="line-height:2.2;font-size:14px;color:var(--text-dim);text-align:justify;padding:10px 0;">سازندگان: اسطوره سیزیف و اشکر<br><br>این برنامه با الهام از مانهوا Solo Leveling و ژانرهای غالب در رمان‌های شرق آسیا (کره جنوبی) نوشته شده است.<br><br>هدف از ساخت آن: برنامه‌ریزی منسجم‌تر، هدف‌گرایی بهتر و واضح‌تر برای رسیدن به قله و نسخه‌ای بهتر از دیروز خود.<br><br>استفاده از این برنامه برای همه رایگان و بدون محدودیت است.<br><br>این برنامه تماماً توسط Claude AI ساخته شده است.</p><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
+  if (state.user.name) renderTabContent();
+                                                                      }
             <div id="report-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">📝 گزارش کلی</div>${state.history.length===0?'<p style="color:var(--text-dim);">هنوز گزارشی ثبت نشده.</p>':state.history.slice(-20).reverse().map(h=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;"><span>📅 ${h.date}</span><span style="color:${h.completedAll?'var(--success)':'var(--danger)'};margin-right:10px;">${h.completedAll?'✅ کامل':'⚠️ پنالتی'}</span>${h.xpGained>0?`<span style="color:var(--neon);">+${h.xpGained} XP</span>`:''}${h.penalty>0?`<span style="color:var(--danger);">-${h.penalty} XP</span>`:''}</div>`).join('')}</div><button class="btn back-btn" onclick="goHome()">🔙 بازگشت</button></div></div>
             <div id="settings-screen" style="display:none;"><div class="panel"><div style="color:var(--neon);font-size:16px;margin-bottom:12px;">⚙️ تنظیمات</div><div class="settings-section"><h3>🎨 شخصی‌سازی ظاهر</h3><div class="setting-row"><span>تم رنگی</span><select onchange="settings.theme=this.value;saveSettings();applyTheme();"><option value="blue" ${settings.theme==='blue'?'selected':''}>آبی نئونی</option><option value="gold" ${settings.theme==='gold'?'selected':''}>طلایی</option><option value="green" ${settings.theme==='green'?'selected':''}>سبز</option><option value="purple" ${settings.theme==='purple'?'selected':''}>بنفش</option></select></div><div class="setting-row"><span>🌙 حالت شب/روز ☀️</span><label class="toggle-switch"><input type="checkbox" ${settings.nightMode?'checked':''} onchange="settings.nightMode=this.checked;saveSettings();applyTheme();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🔊 صدا و بازخورد</h3><div class="setting-row"><span>صدای سیستم</span><label class="toggle-switch"><input type="checkbox" ${settings.sound?'checked':''} onchange="settings.sound=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div><div class="setting-row"><span>ویبره</span><label class="toggle-switch"><input type="checkbox" ${settings.vibration?'checked':''} onchange="settings.vibration=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>🎯 سختی و انعطاف</h3><div class="setting-row"><span>حالت سختی</span><select onchange="settings.difficulty=this.value;saveSettings();"><option value="normal" ${settings.difficulty==='normal'?'selected':''}>عادی</option><option value="hard" ${settings.difficulty==='hard'?'selected':''}>سخت‌گیرانه</option><option value="survival" ${settings.difficulty==='survival'?'selected':''}>بقا</option></select></div><div class="setting-row"><span>جمعه‌ها</span><label class="toggle-switch"><input type="checkbox" ${settings.fridayRest?'checked':''} onchange="settings.fridayRest=this.checked;saveSettings();"><span class="toggle-slider"></span></label></div></div><div class="settings-section"><h3>💾 داده و امنیت</h3><button class="small-btn" onclick="exportData()">📥 Export داده</button><button class="small-btn" onclick="resetAllData()" style="background:var(--danger);margin-top:5px;">🔄 ریست کامل</button></div><button class="btn back-btn" onclick="goHome()" style="margin-top:15px;">🔙 بازگشت</button></div></div>
           `;
