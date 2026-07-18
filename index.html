@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a0a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>سیستم ویتو</title>
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-code@v1.1.2/dist/font-face.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-    <style>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>سیستم ویتو</title>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-code@v1.1.2/dist/font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+  <style>
         :root {
             --bg: #0a0a0f; --surface: rgba(10,15,30,0.7); --surface2: #181820;
             --neon: #00ccff; --neon-dim: #006688; --gold: #d4af37; --danger: #ff3355;
@@ -1255,184 +1255,18 @@ body.night-mode .skills-section {
 body.night-mode .skills-header {
     color: #b388ff;
 }
- /* ========== رفع مشکلات Layout ========== */
-
-/* ۱. جلوگیری از تداخل رتبه و نام */
-.rank-badge {
-    width: 40px;          /* کمی کوچک‌تر */
-    height: 40px;
-    font-size: 14px;
-}
-.status-header {
-    gap: 14px;            /* فاصله بیشتر بین هگزاگون و متن */
-    margin-bottom: 4px;
-}
-
-/* ۲. فاصله‌گذاری عمودی سراسری */
-body {
-    padding: 16px 10px;   /* فضای بیشتر از بالا و پایین */
-}
-.app-container {
-    padding-bottom: 20px; /* فضای اضافی بعد از آخرین پنل */
-}
-
-/* ۳. اطمینان از عدم برش پنل‌های طلایی (ویتو) */
-.panel.gold {
-    overflow: visible;    /* دیگر برش نخورد */
-}
-#vito-panel {
-    padding-bottom: 36px;
-    margin-bottom: 24px;
-    overflow: visible !important;
-}
-
-/* ۴. جدا شدن واضح‌تر تب‌بار از محتوای زیر */
-.tab-bar {
-    margin-bottom: 16px;
-}
-#tab-content > .panel:first-child {
-    margin-top: 0;        /* حذف فاصله اضافی بالای اولین پنل */
-}
-
-/* ۵. بهبود responsiveness عمومی */
-.panel {
-    overflow: visible;    /* حذف overflow:hidden از همه پنل‌ها */
-}
-
-/* ۶. تنظیم z-index فقط برای عناصری که لازم دارند */
-.header-bar {
-    z-index: 5;
-}
-.settings-btn {
-    z-index: 6;
-}
-.time-hud,
-.tab-bar,
-#tab-content {
-    position: relative;
-    z-index: 2;
-}
-
-/* ۷. اطمینان از فاصله کافی داخل کارت‌ها */
-.status-info-card {
-    padding: 16px;
-}
-  .tab-bar {
-    position: relative;
-}
-.tab-bar::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--neon-dim), var(--neon), var(--neon-dim), transparent);
-    opacity: 0.5;
-}
-/* شب */
-body.night-mode .tab-bar::after {
-    background: linear-gradient(to right, transparent, #5c3d99, #b388ff, #5c3d99, transparent);
-}
-  #vito-panel::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: linear-gradient(to top, var(--void-bg, #050510), transparent);
-    pointer-events: none;
-    z-index: 2;
-    border-radius: 0 0 16px 16px;
-}
-body.night-mode #vito-panel::after {
-    background: linear-gradient(to top, var(--void-bg, #04030f), transparent);
-}
-/* ========== رفع نهایی بریدگی و چسبیدگی ========== */
-
-/* ۱. محو شدن پایین تمام محتوای تب‌ها */
-#tab-content {
-    position: relative;
-}
-#tab-content::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;                    /* ارتفاع محو */
-    background: linear-gradient(to top, var(--void-bg, #050510) 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 10;                     /* بالاتر از پنل‌ها */
-}
-
-/* ۲. فاصلهٔ یکسان بالای همهٔ پنل‌های داخل تب */
-#tab-content > .panel:first-child {
-    margin-top: 16px;                /* جدا شدن از تب‌بار */
-}
-
-/* ۳. تنظیم برای شب */
-body.night-mode #tab-content::after {
-    background: linear-gradient(to top, var(--void-bg, #04030f) 0%, transparent 100%);
-}
- /* ========== رفع قطعی بریدگی و تداخل ========== */
-
-/* ۱. غیرفعال کردن overflow:hidden روی تمام پنل‌ها */
-.panel,
-.panel.gold,
-#status-panel,
-#vito-panel {
-    overflow: visible !important;
-}
-
-/* ۲. فاصلهٔ داخلی کافی برای گوشه‌های گرد و محتوای داخل */
-.panel {
-    padding-bottom: 24px !important;
-}
-
-/* ۳. حاشیهٔ خارجی برای جداسازی پنل‌ها از پس‌زمینه */
-.panel {
-    margin-bottom: 20px;
-}
-
-/* ۴. فاصلهٔ بالای همهٔ پنل‌های داخل تب (نه فقط اولی) */
-#tab-content .panel {
-    margin-top: 16px;
-}
-
-/* ۵. برای خود #tab-content هم کمی فاصله از پایین */
-#tab-content {
-    padding-bottom: 60px;   /* فضای خالی تا انتهای صفحه */
-}
- #status-panel {
-    margin-top: 0 !important;      /* چسبیدن کامل */
- }
-        #tab-content {
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
-    padding-bottom: 40px;          /* فضای تنفس برای خود ماسک */
-        }
-        .panel, .panel.gold, #vito-panel {
-    overflow: visible !important;
-    border: none !important;        /* حذف حاشیه‌های تیز */
-    background: transparent !important;
-        }
-        .status-info-card,
-.vito-card,
-.timeline-card {
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-}
     </style>
-</head>
-<body>
-    <div class="app-container" id="app"></div>
-    <div class="toast-container" id="toasts"></div>
-    <div id="system-break-overlay"><div class="glitch-text" id="glitch-output"></div><div class="gold-final" id="gold-message"></div></div>
-    <div id="system-break-particles"></div>
-    <script src="achievements.js"></script>
-    <script>
+ </head>
+ <body>
+  <div class="app-container" id="app"></div>
+  <div class="toast-container" id="toasts"></div>
+  <div id="system-break-overlay">
+   <div class="glitch-text" id="glitch-output"></div>
+   <div class="gold-final" id="gold-message"></div>
+  </div>
+  <div id="system-break-particles"></div>
+  <script src="achievements.js"></script>
+  <script>
   const DEFAULT_QUESTS = [
     { id:'cold_shower', name:'دوش آب سرد', xp:20, stat:'spirit', vito:['mentalHealth','mindset'], days:'all', notifyTime:'06:00', completed:false, streak:0, keywords:['دوش','آب سرد'] },
     { id:'sunlight', name:'آفتاب ۱۰+ دقیقه', xp:10, stat:'spirit', vito:['mentalHealth'], days:'all', notifyTime:'07:00', completed:false, streak:0, keywords:['آفتاب','خورشید'] },
@@ -1865,5 +1699,5 @@ function goHome(){ document.getElementById('main-screen').style.display='block';
 function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
 function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
 </script>
-</body>
-</html>
+ </body>
+    </html>
