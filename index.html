@@ -1255,7 +1255,61 @@ body.night-mode .skills-section {
 body.night-mode .skills-header {
     color: #b388ff;
 }
-    </style>
+/* دکمه حذف کوئست */
+.quest-delete-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 50, 80, 0.3);
+    color: var(--danger);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+.quest-delete-btn:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+    box-shadow: 0 0 10px rgba(255, 50, 80, 0.5);
+}
+
+/* دکمه افزودن کوئست جدید */
+.quest-add-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: 1px dashed rgba(0, 200, 255, 0.3);
+    color: var(--neon);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.3s;
+}
+.quest-add-btn:hover {
+    border-color: var(--neon);
+    background: rgba(0, 200, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+}
+
+/* شب */
+body.night-mode .quest-delete-btn {
+    border-color: rgba(255, 82, 82, 0.3);
+}
+body.night-mode .quest-add-btn {
+    border-color: rgba(179, 136, 255, 0.3);
+    color: #b388ff;
+}
+body.night-mode .quest-add-btn:hover {
+    border-color: #b388ff;
+    background: rgba(179, 136, 255, 0.05);
+}
+  </style>
  </head>
  <body>
   <div class="app-container" id="app"></div>
@@ -1432,13 +1486,62 @@ function evaluateDay(d){
 }
 function resetTodayQuests(){ state.quests.forEach(q=>{ q.completed=false; if(q.hoursDone!==undefined) q.hoursDone=0; }); }
 function completeQuest(qid){
-    const q=state.quests.find(q=>q.id===qid); if(!q) return;
-    q.completed=!q.completed; if(q.hoursTarget!==undefined&&q.completed){ q.completed=(q.hoursDone||0)>=q.hoursTarget; if(!q.completed) return; }
-    const xp=q.hoursTarget?q.xp*(q.hoursDone||0):q.xp;
-    if(q.completed){ addXP(xp); if(q.stat) state.stats[q.stat]+=1; if(q.vito) q.vito.forEach(v=>state.vito[v]=Math.min(100,state.vito[v]+Math.ceil(xp/150))); q.streak=(q.streak||0)+1; state.totalQuestCompletions[q.id]=(state.totalQuestCompletions[q.id]||0)+1; if(settings.sound) sfxQuestComplete(); }
-    else { addXP(-xp); if(q.stat) state.stats[q.stat]=Math.max(0,state.stats[q.stat]-1); q.streak=0; }
+    const q = state.quests.find(q => q.id === qid); if (!q) return;
+    q.completed = !q.completed;
+    if (q.hoursTarget !== undefined && q.completed) {
+        q.completed = (q.hoursDone || 0) >= q.hoursTarget;
+        if (!q.completed) return;
+    }
+    const xp = q.hoursTarget ? q.xp * (q.hoursDone || 0) : q.xp;
+    if (q.completed) {
+        addXP(xp);
+        if (q.stat) state.stats[q.stat] += 1;
+        if (q.vito) q.vito.forEach(v => state.vito[v] = Math.min(100, state.vito[v] + Math.ceil(xp / 150)));
+        q.streak = (q.streak || 0) + 1;
+        state.totalQuestCompletions[q.id] = (state.totalQuestCompletions[q.id] || 0) + 1;
+        if (settings.sound) sfxQuestComplete();
+    } else {
+        addXP(-xp);
+        if (q.stat) state.stats[q.stat] = Math.max(0, state.stats[q.stat] - 1);
+        q.streak = 0;
+    }
     checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); renderTabContent();
 }
+
+function deleteQuest(qid) {
+    if (!confirm('این کوئست برای همیشه حذف شود؟')) return;
+    state.quests = state.quests.filter(q => q.id !== qid);
+    saveState();
+    detectProfession();
+    updateTitle();
+    renderTabContent();
+}
+
+function addQuest() {
+    const name = prompt('نام کوئست جدید:');
+    if (!name) return;
+    const xp = parseInt(prompt('XP کوئست:')) || 10;
+    const stat = prompt('استیت مرتبط (power/speed/endurance/knowledge/spirit):') || '';
+    const days = prompt('روزهای فعال (all/even/odd):') || 'all';
+    const notifyTime = prompt('ساعت یادآوری (مثلاً 08:00 یا خالی):') || '';
+    const keywords = prompt('کلمات کلیدی (با کاما جدا کنید):') || name;
+    state.quests.push({
+        id: 'q_' + Date.now(),
+        name,
+        xp,
+        stat: stat || null,
+        vito: [],
+        days,
+        notifyTime,
+        completed: false,
+        streak: 0,
+        keywords: keywords.split(',').map(k => k.trim())
+    });
+    saveState();
+    detectProfession();
+    updateTitle();
+    renderTabContent();
+   }
 function addStudyHour(qid,delta){
     const q=state.quests.find(q=>q.id===qid); if(!q||q.hoursTarget===undefined) return;
     q.hoursDone=Math.max(0,Math.min(q.maxHours||10,(q.hoursDone||0)+delta)); q.completed=q.hoursDone>=q.hoursTarget;
@@ -1635,13 +1738,12 @@ function renderTabContent() {
                                     <div class="quest-main">
                                         <input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}>
                                         <span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span>
-                                        <span class="quest-xp">${xpDisplay}</span>
+<span class="quest-xp">${xpDisplay}</span>
+<button class="quest-delete-btn" onclick="event.stopPropagation(); deleteQuest('${q.id}')">✕</button>
                                     </div>
-                                    <div class="quest-extra">
-                                        ${q.hoursTarget !== undefined ? `<div class="study-controls"><button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button><span>${q.hoursDone || 0}h</span><button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button></div>` : ''}
-                                        ${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}
-                                        ${q.streak > 0 ? `<span class="quest-streak">🔥${q.streak}</span>` : ''}
-                                    </div>
+                                </div>
+    <button class="quest-add-btn" onclick="addQuest()">➕ افزودن کوئست جدید</button>
+</div>
                                 </div>
                             </div>
                         `;
