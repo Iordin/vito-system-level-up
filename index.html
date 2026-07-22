@@ -859,11 +859,18 @@ body.night-mode .hex-value {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;  /* جلوگیری از overflow */
 }
+
 .quest-name {
   font-size: 14px;
-}
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+ }
 .quest-extra {
   display: flex;
   align-items: center;
@@ -1290,6 +1297,59 @@ body.night-mode .skills-header {
     cursor: pointer;
     font-size: 11px;
     transition: all 0.3s;
+}
+.quest-add-btn:hover {
+    border-color: var(--neon);
+    background: rgba(0, 200, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+}
+
+/* شب */
+body.night-mode .quest-delete-btn {
+    border-color: rgba(255, 82, 82, 0.3);
+}
+body.night-mode .quest-add-btn {
+    border-color: rgba(179, 136, 255, 0.3);
+    color: #b388ff;
+}
+body.night-mode .quest-add-btn:hover {
+    border-color: #b388ff;
+    background: rgba(179, 136, 255, 0.05);
+}
+/* دکمه حذف کوئست */
+.quest-delete-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 50, 80, 0.3);
+    color: var(--danger);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+.quest-delete-btn:hover {
+    background: var(--danger);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 50, 80, 0.5);
+}
+
+/* دکمه افزودن کوئست */
+.quest-add-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px dashed rgba(0, 200, 255, 0.3);
+    color: var(--neon);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
 }
 .quest-add-btn:hover {
     border-color: var(--neon);
@@ -1736,14 +1796,14 @@ function renderTabContent() {
                                 <div class="timeline-node ${q.completed ? 'completed' : ''}"></div>
                                 <div class="timeline-card">
                                     <div class="quest-main">
-                                        <input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}>
-                                        <span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span>
-<span class="quest-xp">${xpDisplay}</span>
-<button class="quest-delete-btn" onclick="event.stopPropagation(); deleteQuest('${q.id}')">✕</button>
-                                    </div>
-                                </div>
-    <button class="quest-add-btn" onclick="addQuest()">➕ افزودن کوئست جدید</button>
+    <input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}>
+    <span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span>
+    <span class="quest-xp">${xpDisplay}</span>
+    <button class="quest-delete-btn" onclick="event.stopPropagation(); deleteQuest('${q.id}')">✕</button>
 </div>
+                <button class="quest-add-btn" onclick="addQuest()">➕ افزودن کوئست جدید</button>
+                               </div>
+                                </div>
                                 </div>
                             </div>
                         `;
