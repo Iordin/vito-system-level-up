@@ -190,7 +190,6 @@
 /* --- ۲. پس‌زمینه و فضای اصلی --- */
 body {
     background: var(--void-bg);
-    background-image: var(--void-gradient);
     min-height: 100dvh;
     display: flex;
     justify-content: center;
@@ -199,7 +198,15 @@ body {
     overflow-x: hidden;
     position: relative;
 }
- 
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-image: var(--void-gradient);
+    z-index: -1;
+    pointer-events: none;
+}
 /* ذرات شناور پس‌زمینه (تمام صفحه) */
 body::before {
     content: '';
