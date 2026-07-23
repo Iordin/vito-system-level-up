@@ -1004,6 +1004,21 @@ body.night-mode .vito-big {
   color: #b388ff;
   text-shadow: 0 0 15px rgba(179,136,255,0.5);
 }
+/* رفع بریده شدن پایین پنل ویتو */
+#vito-panel {
+    padding-bottom: 24px;
+    overflow: visible;
+}
+#vito-panel::before,
+#vito-panel::after {
+    pointer-events: none;
+}
+
+/* اطمینان از اینکه شبه‌عنصرها همچنان محدود بمانند */
+#vito-panel::before,
+#vito-panel::after {
+    pointer-events: none;
+}
  #status-panel {
   background: transparent;
   backdrop-filter: none;
@@ -1237,22 +1252,36 @@ body.night-mode .tab-btn:hover {
     letter-spacing: 1px;
 }
 
-/* رفع بریدگی پایین پنل ویتو */
-#vito-panel {
-    padding-bottom: 32px;
-    margin-bottom: 20px;
-    overflow: visible !important;
-}
-
-/* شب */
-body.night-mode .skills-section {
-    border-top-color: rgba(179, 136, 255, 0.2);
 /* رفع بریدگی پایین پنل ویتو - فید واقعی به‌جای کات */
 #vito-panel {
     padding-bottom: 40px;
     margin-bottom: 20px;
     -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
+}
+
+/* شب */
+body.night-mode .skills-section {
+    border-top-color: rgba(179, 136, 255, 0.2);
+}
+body.night-mode .skills-header {
+    color: #b388ff;
+}
+/* دکمه حذف کوئست */
+.quest-delete-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 50, 80, 0.3);
+    color: var(--danger);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
 }
 .quest-delete-btn:hover {
     background: var(--danger);
@@ -1350,7 +1379,7 @@ body.night-mode .quest-add-btn:hover {
     -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
 }
- </style>
+  </style>
  </head>
  <body>
   <div class="app-container" id="app"></div>
@@ -1799,6 +1828,7 @@ function renderTabContent() {
             <div class="panel gold" id="vito-panel">
                 <div class="panel-header">⚖️ نسخه ویتو</div>
                 <div class="vito-grid">${['💰 مالی', '🧘 سلامت ذهن', '🏋️ سلامت فیزیکی', '🧠 ذهنیت', '🔬 علم'].map((label, i) => { const keys = ['finance', 'mentalHealth', 'physicalHealth', 'mindset', 'science']; const val = state.vito[keys[i]]; return `<div class="vito-card"><div class="vito-label">${label}</div><div class="vito-bar"><div class="vito-fill" style="width:${val}%"></div></div><div class="vito-value">${val}%</div></div>`; }).join('')}</div>
+                <div class="panel" id="achievements-panel">
                 <div class="vito-overall"><span class="vito-big">${vitoOverall}%</span><span class="vito-sub">نزدیکی به نسخه ویتو</span></div>
             </div>
         `;
@@ -1841,7 +1871,6 @@ function showReport(){ document.getElementById('main-screen').style.display='non
 function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
 function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
 function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-<div class="panel" id="achievements-panel">
   </script>
  </body>
-</html>
+ </html>
