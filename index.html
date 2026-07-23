@@ -686,17 +686,56 @@ body.night-mode .xp-text .current {
     text-shadow: 0 0 6px rgba(179, 136, 255, 0.6);
 }  
    /* ========== فاز ۴-A : Stats Radar ========== */
-.stats-radar {
-  position: relative;
-  width: 220px;
-  height: 220px;
-  margin: 20px auto 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  box-shadow: none;
+/* کانتینر نمودار راداری */
+.stats-radar-chart {
+    width: 240px;
+    height: 240px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-radar-chart svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.4));
+}
+
+/* نقاط روی نمودار */
+.radar-dot {
+    fill: #fff;
+    stroke: var(--neon);
+    stroke-width: 2;
+    transition: all 0.5s ease;
+}
+
+/* برچسب‌ها */
+.radar-label {
+    fill: var(--text-dim);
+    font-family: var(--font-text);
+    font-size: 11px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* پنهان کردن رادار قدیمی */
+.stats-radar { display: none; }
+.radar-core { display: none; }
+.stat-hexagon { display: none; }
+.hex-value { display: none; }
+.hex-label { display: none; }
+
+/* شب */
+body.night-mode .stats-radar-chart svg {
+    filter: drop-shadow(0 0 8px rgba(179, 136, 255, 0.4));
+}
+body.night-mode #radar-polygon {
+    fill: rgba(179, 136, 255, 0.15);
+    stroke: #b388ff;
+}
+body.night-mode .radar-dot {
+    stroke: #b388ff;
 }
  
 .radar-core {
@@ -1741,9 +1780,9 @@ function renderTabContent() {
     const monthlyMax = getMonthlyRestDays(state.user.level);
     const activeTab = state.activeTab || 'status';
     let html = '';
-   
-    if (activeTab === 'status') {
-    html = `
+
+if (activeTab === 'status') {
+    html =`
         <div class="panel" id="status-panel">
             <div class="status-info-card">
                 <div class="status-header">
@@ -1766,14 +1805,27 @@ function renderTabContent() {
                 </div>
             </div>
  
-            <div class="stats-radar">
-                <div class="radar-core">STATS</div>
-                <div class="stat-hexagon" style="--angle:0deg;"><span class="hex-value">${state.stats.power}</span><span class="hex-label">قدرت</span></div>
-                <div class="stat-hexagon" style="--angle:72deg;"><span class="hex-value">${state.stats.speed}</span><span class="hex-label">سرعت</span></div>
-                <div class="stat-hexagon" style="--angle:144deg;"><span class="hex-value">${state.stats.endurance}</span><span class="hex-label">استقامت</span></div>
-                <div class="stat-hexagon" style="--angle:216deg;"><span class="hex-value">${state.stats.knowledge}</span><span class="hex-label">دانش</span></div>
-                <div class="stat-hexagon" style="--angle:288deg;"><span class="hex-value">${state.stats.spirit}</span><span class="hex-label">روحیه</span></div>
-            </div>
+            <div class="stats-radar-chart">
+    <svg id="radar-svg" viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg">
+        <!-- حلقه‌های شبکه -->
+        <circle cx="0" cy="0" r="100" fill="none" stroke="var(--glass-border)" stroke-width="1" opacity="0.3"/>
+        <circle cx="0" cy="0" r="75" fill="none" stroke="var(--glass-border)" stroke-width="0.5" opacity="0.2"/>
+        <circle cx="0" cy="0" r="50" fill="none" stroke="var(--glass-border)" stroke-width="0.5" opacity="0.2"/>
+        <circle cx="0" cy="0" r="25" fill="none" stroke="var(--glass-border)" stroke-width="0.5" opacity="0.2"/>
+
+        <!-- محورها (۵ ضلع) -->
+        <g id="radar-axes"></g>
+
+        <!-- چندضلعی داده -->
+        <polygon id="radar-polygon" fill="rgba(0, 200, 255, 0.15)" stroke="var(--neon)" stroke-width="2" stroke-linejoin="round"/>
+
+        <!-- نقاط داده -->
+        <g id="radar-points"></g>
+
+        <!-- برچسب‌ها -->
+        <g id="radar-labels"></g>
+    </svg>
+</div>
  
             <!-- مهارت‌ها درست زیر رادار -->
             <div class="skills-section">
@@ -1847,6 +1899,9 @@ function renderTabContent() {
         `;
     }
     container.innerHTML = html;
+    if (activeTab === 'status') {
+        setTimeout(drawRadarChart, 10);
+    }
 }
 function init() {
     loadState();
@@ -1877,6 +1932,53 @@ function showReport(){ document.getElementById('main-screen').style.display='non
 function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
 function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
 function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-</script>
+function drawRadarChart() {
+    const svg = document.getElementById('radar-svg');
+    if (!svg) return;
+
+    const stats = state.stats;
+    const labels = ['قدرت', 'سرعت', 'استقامت', 'دانش', 'روحیه'];
+    const values = [stats.power, stats.speed, stats.endurance, stats.knowledge, stats.spirit];
+    const maxVal = 100; // حداکثر هر استیت
+    const center = { x: 0, y: 0 };
+    const radius = 100;
+    const angleStep = (2 * Math.PI) / 5;
+
+    // محورها
+    let axesHTML = '';
+    for (let i = 0; i < 5; i++) {
+        const angle = -Math.PI / 2 + i * angleStep; // از بالا شروع
+        const x = center.x + radius * Math.cos(angle);
+        const y = center.y + radius * Math.sin(angle);
+        axesHTML += `<line x1="${center.x}" y1="${center.y}" x2="${x}" y2="${y}" stroke="var(--glass-border)" stroke-width="1" opacity="0.3"/>`;
+    }
+    document.getElementById('radar-axes').innerHTML = axesHTML;
+
+    // نقاط داده و چندضلعی
+    let pointsStr = '';
+    let pointsHTML = '';
+    for (let i = 0; i < 5; i++) {
+        const angle = -Math.PI / 2 + i * angleStep;
+        const val = Math.min(values[i], maxVal);
+        const r = (val / maxVal) * radius;
+        const x = center.x + r * Math.cos(angle);
+        const y = center.y + r * Math.sin(angle);
+        pointsStr += `${x},${y} `;
+        pointsHTML += `<circle cx="${x}" cy="${y}" r="4" class="radar-dot"/>`;
+    }
+    document.getElementById('radar-polygon').setAttribute('points', pointsStr.trim());
+    document.getElementById('radar-points').innerHTML = pointsHTML;
+
+    // برچسب‌ها
+    let labelsHTML = '';
+    for (let i = 0; i < 5; i++) {
+        const angle = -Math.PI / 2 + i * angleStep;
+        const x = center.x + (radius + 20) * Math.cos(angle);
+        const y = center.y + (radius + 20) * Math.sin(angle);
+        labelsHTML += `<text x="${x}" y="${y}" class="radar-label">${labels[i]}</text>`;
+    }
+    document.getElementById('radar-labels').innerHTML = labelsHTML;
+}
+  </script>
  </body>
 </html>
