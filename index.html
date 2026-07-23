@@ -171,7 +171,7 @@
     box-shadow: 0 0 25px rgba(212, 175, 55, 0.25), 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 /* ========== فاز ۱: Core Glass & Atmosphere ========== */
-
+ 
 /* --- ۱. متغیرهای پایه‌ای جدید --- */
 :root {
     --void-bg: #050510;
@@ -186,7 +186,7 @@
     --particle-color: rgba(0, 200, 255, 0.7);
     --scanline-opacity: 0.03;
 }
-
+ 
 /* --- ۲. پس‌زمینه و فضای اصلی --- */
 body {
     background: var(--void-bg);
@@ -199,7 +199,7 @@ body {
     overflow-x: hidden;
     position: relative;
 }
-
+ 
 /* ذرات شناور پس‌زمینه (تمام صفحه) */
 body::before {
     content: '';
@@ -219,13 +219,13 @@ body::before {
     background-size: 200% 200%;
     animation: floatParticles 20s linear infinite;
 }
-
+ 
 @keyframes floatParticles {
     0% { background-position: 0% 0%; opacity: 0.8; }
     50% { background-position: 100% 100%; opacity: 1; }
     100% { background-position: 0% 0%; opacity: 0.8; }
 }
-
+ 
 /* اسکن‌لاین عمودی (شبیه بوت سیستم) – فقط زمانی که پنجره لود می‌شود */
 body::after {
     content: '';
@@ -244,14 +244,14 @@ body::after {
     animation: scanLine 8s linear;
     opacity: 0;
 }
-
+ 
 @keyframes scanLine {
     0% { opacity: 0.6; transform: translateY(-100%); }
     20% { opacity: 0.3; }
     40% { opacity: 0.6; transform: translateY(100%); }
     100% { opacity: 0; }
 }
-
+ 
 /* --- ۳. پنل‌های شیشه‌ای اصلی (ارتقاء یافته) --- */
 .panel {
     background: var(--glass-bg);
@@ -265,7 +265,7 @@ body::after {
     z-index: 2;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
-
+ 
 /* حذف استایل‌های قدیمی شبه‌عنصر و جایگزینی با عمق جدید */
 .panel::before {
     content: '';
@@ -280,7 +280,7 @@ body::after {
     pointer-events: none;
     z-index: 0;
 }
-
+ 
 .panel::after {
     content: '';
     position: absolute;
@@ -295,7 +295,7 @@ body::after {
     pointer-events: none;
     z-index: 1;
 }
-
+ 
 /* --- ۴. تنظیم پنل طلایی (بدون تغییر در منطق) --- */
 .panel.gold {
     border-color: rgba(212, 175, 55, 0.45);
@@ -308,7 +308,7 @@ body::after {
         transparent 60%
     );
 }
-
+ 
 /* --- ۵. پایه‌ریزی حالت شب (برای فازهای بعدی) --- */
 body.night-mode {
     --void-bg: #04030f;
@@ -318,12 +318,12 @@ body.night-mode {
     --glass-glow: 0 0 40px rgba(180, 130, 255, 0.12), 0 0 100px rgba(180, 130, 255, 0.05);
     --particle-color: rgba(180, 130, 255, 0.7);
 }
-
+ 
 body.night-mode .panel {
     border-color: var(--glass-border);
     box-shadow: var(--glass-glow), var(--glass-shadow);
 }
-
+ 
 body.night-mode .panel::before {
     background: radial-gradient(
         ellipse at 30% 20%,
@@ -331,12 +331,12 @@ body.night-mode .panel::before {
         transparent 60%
     );
 }
-
+ 
 body.night-mode .panel.gold {
     border-color: rgba(212, 175, 55, 0.4);
     box-shadow: 0 0 30px rgba(212, 175, 55, 0.12), var(--glass-shadow);
 }
-
+ 
 /* تنظیم اسکن‌لاین برای شب */
 body.night-mode::after {
     background: repeating-linear-gradient(
@@ -347,7 +347,7 @@ body.night-mode::after {
         rgba(180, 130, 255, 0.02) 4px
     );
 }
-
+ 
 /* ذرات شب */
 body.night-mode::before {
     background-image: 
@@ -360,7 +360,7 @@ body.night-mode::before {
         radial-gradient(2px 2px at 60% 25%, rgba(180, 130, 255, 0.5), transparent);
 }    
 /* ========== فاز ۲: Header & Identity ========== */
-
+ 
 /* --- ۱. کانتینر اصلی هدر --- */
 .status-header {
     display: flex;
@@ -371,7 +371,7 @@ body.night-mode::before {
 .status-header-left {
     flex: 1;
 }
-
+ 
 /* --- ۲. رتبه (Rank Badge) — هگزاگون شیشه‌ای --- */
 .rank-badge {
     width: 46px; height: 46px;
@@ -390,7 +390,7 @@ body.night-mode::before {
     flex-shrink: 0;
     transition: all 0.3s;
 }
-
+ 
 /* رنگ‌بندی رتبه‌ها */
 .rank-badge.S-rank {
     border-color: #ff3355;
@@ -427,7 +427,7 @@ body.night-mode::before {
     text-shadow: none;
     box-shadow: none;
 }
-
+ 
 /* --- ۳. نام کاربر --- */
 .name-title {
     font-family: var(--font-headings);
@@ -438,7 +438,7 @@ body.night-mode::before {
     letter-spacing: 1px;
     line-height: 1.3;
 }
-
+ 
 /* --- ۴. برچسب حرفه --- */
 .profession-tag {
     font-size: 9px;
@@ -451,7 +451,7 @@ body.night-mode::before {
     display: inline-block;
     margin-top: 2px;
 }
-
+ 
 /* --- ۵. عنوان اساطیری --- */
 .myth-title {
     font-family: var(--font-headings);
@@ -468,7 +468,7 @@ body.night-mode::before {
     0%, 100% { filter: brightness(1); }
     50% { filter: brightness(1.4); }
 }
-
+ 
 /* --- ۶. شمارهٔ سطح --- */
 .level-display {
     font-family: var(--font-numbers);
@@ -484,7 +484,7 @@ body.night-mode::before {
     0%, 100% { text-shadow: 0 0 20px rgba(0, 200, 255, 0.8), 0 0 50px rgba(0, 200, 255, 0.4); }
     50% { text-shadow: 0 0 35px rgba(0, 200, 255, 1), 0 0 80px rgba(0, 200, 255, 0.7); }
 }
-
+ 
 /* ========== حالت شب (Night Mode) برای فاز ۲ ========== */
 body.night-mode .rank-badge {
     border-color: #b388ff;
@@ -562,7 +562,7 @@ body.night-mode .level-display {
     font-weight: 400;
     color: #ccc;
 }
-
+ 
 body.night-mode .profession-tag {
     background: rgba(179, 136, 255, 0.08);
     border-color: rgba(179, 136, 255, 0.25);
@@ -597,19 +597,19 @@ body.night-mode .profession-name {
     border-radius: 4px;
     font-size: 9px;
 }
-
+ 
 .profession-level {
     font-family: var(--font-headings);
     font-weight: 600;
     color: var(--neon);                 /* آبی نئونی برای سطح */
     letter-spacing: 0.5px;
 }
-
+ 
 .profession-sep {
     color: rgba(255, 255, 255, 0.25);
     margin: 0 1px;
 }
-
+ 
 .profession-name {
     font-weight: 400;
     color: #c0d8f0;                     /* آبی بسیار ملایم، هماهنگ با پالت */
@@ -626,7 +626,7 @@ body.night-mode .profession-name {
     box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6);
     direction: rtl;
 }
-
+ 
 .xp-fill {
     height: 100%;
     background: linear-gradient(270deg,
@@ -642,14 +642,14 @@ body.night-mode .profession-name {
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
     animation: energyFlowRTL 2.5s linear infinite;
 }
-
+ 
 @keyframes energyFlowRTL {
     0%   { background-position: 100% 0; }
     100% { background-position: -100% 0; }
 }
-
+ 
 .xp-fill::after { display: none; }
-
+ 
 /* شب */
 body.night-mode .xp-bar {
     border-color: rgba(179, 136, 255, 0.25);
@@ -681,7 +681,7 @@ body.night-mode .xp-text .current {
   border: none;
   box-shadow: none;
 }
-
+ 
 .radar-core {
   position: absolute;
   width: 50px; height: 50px;
@@ -701,7 +701,7 @@ body.night-mode .xp-text .current {
   box-shadow: 0 0 20px rgba(0,200,255,0.5), inset 0 0 10px rgba(0,200,255,0.1);
   z-index: 2;
 }
-
+ 
 .hex-value {
   font-family: var(--font-numbers);
   font-size: 22px;
@@ -710,14 +710,14 @@ body.night-mode .xp-text .current {
   text-shadow: 0 0 12px var(--neon);
   line-height: 1;
 }
-
+ 
 .hex-label {
   font-size: 9px;
   color: var(--text-dim);
   margin-top: 2px;
   letter-spacing: 1px;
 }
-
+ 
 /* ========== حالت شب ========== */
 body.night-mode .radar-core {
   border-color: #b388ff;
@@ -725,22 +725,22 @@ body.night-mode .radar-core {
   text-shadow: 0 0 10px #b388ff;
   box-shadow: 0 0 20px rgba(179,136,255,0.5), inset 0 0 10px rgba(179,136,255,0.1);
 }
-
+ 
 body.night-mode .stat-hexagon {
   border-color: rgba(179,136,255,0.4);
   box-shadow: 0 0 15px rgba(179,136,255,0.3), inset 0 0 10px rgba(179,136,255,0.1);
 }
-
+ 
 body.night-mode .stat-hexagon:hover {
   border-color: #b388ff;
   box-shadow: 0 0 30px rgba(179,136,255,0.6), inset 0 0 20px rgba(179,136,255,0.2);
 }
-
+ 
 body.night-mode .hex-value {
   color: #b388ff;
   text-shadow: 0 0 12px #b388ff;
 }
-
+ 
 /* حالت شب */
 body.night-mode .radar-core {
   border-color: #b388ff;
@@ -771,14 +771,14 @@ body.night-mode .hex-value {
   filter: drop-shadow(0 0 25px rgba(0,200,255,0.8));
   transform: rotate(var(--angle)) translateY(-85px) rotate(calc(-1 * var(--angle))) scale(1.05);
 }
-
+ 
   /* ========== فاز ۵: Quests Timeline & Ripple ========== */
 .quest-timeline {
   position: relative;
   padding-right: 24px;
   margin: 8px 0;
 }
-
+ 
 /* خط عمودی */
 .quest-timeline::before {
   content: '';
@@ -791,14 +791,14 @@ body.night-mode .hex-value {
   opacity: 0.4;
   border-radius: 1px;
 }
-
+ 
 .timeline-entry {
   position: relative;
   display: flex;
   align-items: flex-start;
   margin-bottom: 14px;
 }
-
+ 
 /* نود (دایره) */
 .timeline-node {
   position: absolute;
@@ -817,7 +817,7 @@ body.night-mode .hex-value {
   background: var(--neon);
   box-shadow: 0 0 14px var(--neon);
 }
-
+ 
 /* کارت شیشه‌ای */
 .timeline-card {
   flex: 1;
@@ -831,7 +831,7 @@ body.night-mode .hex-value {
   position: relative;
   overflow: hidden;
 }
-
+ 
 /* ripple on hover */
 .timeline-card::after {
   content: '';
@@ -854,7 +854,7 @@ body.night-mode .hex-value {
   box-shadow: 0 0 20px rgba(0,200,255,0.3);
   transform: translateX(-4px);
 }
-
+ 
 .quest-main {
   display: flex;
   align-items: center;
@@ -862,7 +862,7 @@ body.night-mode .hex-value {
   flex: 1;
   min-width: 0;  /* جلوگیری از overflow */
 }
-
+ 
 .quest-name {
   font-size: 14px;
   flex: 1;
@@ -887,7 +887,7 @@ body.night-mode .hex-value {
   font-size: 11px;
   color: var(--gold);
 }
-
+ 
 /* Toast notifications شیشه‌ای */
 .toast {
   background: var(--glass-bg);
@@ -896,7 +896,7 @@ body.night-mode .hex-value {
   border: 1px solid var(--neon);
   box-shadow: 0 0 25px rgba(0,200,255,0.3);
 }
-
+ 
 /* Night mode */
 body.night-mode .quest-timeline::before {
   background: linear-gradient(to bottom, #5c3d99, #b388ff, #5c3d99);
@@ -985,7 +985,7 @@ body.night-mode .toast {
   font-size: 11px;
   color: var(--text-dim);
 }
-
+ 
 /* شب */
 body.night-mode .vito-card {
   border-color: rgba(179,136,255,0.2);
@@ -1004,16 +1004,12 @@ body.night-mode .vito-big {
   color: #b388ff;
   text-shadow: 0 0 15px rgba(179,136,255,0.5);
 }
-/* رفع بریده شدن پایین پنل ویتو */
+  /* رفع بریده شدن پایین پنل ویتو */
 #vito-panel {
-    padding-bottom: 24px;
-    overflow: visible;
+    padding-bottom: 24px;   /* فضای اضافی پایین */
+    overflow: visible;      /* اجازه نمایش کامل محتوا */
 }
-#vito-panel::before,
-#vito-panel::after {
-    pointer-events: none;
-}
-
+ 
 /* اطمینان از اینکه شبه‌عنصرها همچنان محدود بمانند */
 #vito-panel::before,
 #vito-panel::after {
@@ -1027,7 +1023,7 @@ body.night-mode .vito-big {
   box-shadow: none;
  }
 /* ========== فاز ۷-A: Status Panel شناور ========== */
-
+ 
 /* پس‌زمینه گرادیان محو */
 #status-panel {
   background: linear-gradient(to bottom, 
@@ -1042,7 +1038,7 @@ body.night-mode .vito-big {
   margin-bottom: 20px !important;
   position: relative;
 }
-
+ 
 /* اضافه شدن fade-out پایین پنل */
 #status-panel::after {
   content: '';
@@ -1062,7 +1058,7 @@ body.night-mode .vito-big {
   display: none !important;
   content: none !important;
 }
-
+ 
 /* کادر شیشه‌ای اطلاعات بالا */
 .status-info-card {
   background: var(--glass-bg);
@@ -1111,7 +1107,7 @@ body.night-mode .vito-big {
   z-index: 3;
   overflow: visible;
 }
-
+ 
 .settings-btn {
   position: absolute;
   left: 0;
@@ -1132,7 +1128,7 @@ body.night-mode .vito-big {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
+ 
 .settings-btn:hover {
   border-color: var(--neon);
   color: #fff;
@@ -1140,18 +1136,18 @@ body.night-mode .vito-big {
   box-shadow: 0 0 25px rgba(0, 200, 255, 0.7);
   transform: scale(1.08);
 }
-
+ 
 .logo-text {
   font-size: 20px;
   margin: 0;
   text-align: center;
 }
-
+ 
 /* حذف spacer */
 .header-spacer {
   display: none;
 }
-
+ 
 /* شب */
 body.night-mode .settings-btn {
   border-color: rgba(179, 136, 255, 0.5);
@@ -1183,13 +1179,13 @@ body.night-mode .settings-btn:hover {
   color: var(--text-dim);
   border-bottom: 1px solid rgba(0,200,255,0.1);
 }
-
+ 
 .tab-bar {
   display: flex;
   gap: 4px;
   margin-bottom: 12px;
 }
-
+ 
 .tab-btn {
   flex: 1;
   padding: 10px 4px;
@@ -1204,7 +1200,7 @@ body.night-mode .settings-btn:hover {
   cursor: pointer;
   transition: all 0.3s;
 }
-
+ 
 .tab-btn.active {
   border-color: var(--neon);
   color: var(--neon);
@@ -1212,12 +1208,12 @@ body.night-mode .settings-btn:hover {
   box-shadow: 0 0 15px rgba(0,200,255,0.3);
   background: rgba(0,200,255,0.08);
 }
-
+ 
 .tab-btn:hover {
   border-color: var(--neon);
   color: #fff;
 }
-
+ 
 /* شب */
 body.night-mode .tab-btn {
   border-color: rgba(179,136,255,0.2);
@@ -1236,14 +1232,14 @@ body.night-mode .tab-btn:hover {
 #status-panel {
     margin-top: 12px;
 }
-
+ 
 /* استایل بخش مهارت‌ها در وضعیت */
 .skills-section {
     margin-top: 20px;
     padding-top: 16px;
     border-top: 1px solid rgba(0, 200, 255, 0.15);
 }
-
+ 
 .skills-header {
     font-family: var(--font-headings);
     font-size: 13px;
@@ -1251,15 +1247,14 @@ body.night-mode .tab-btn:hover {
     margin-bottom: 10px;
     letter-spacing: 1px;
 }
-
-/* رفع بریدگی پایین پنل ویتو - فید واقعی به‌جای کات */
+ 
+/* رفع بریدگی پایین پنل ویتو */
 #vito-panel {
-    padding-bottom: 40px;
+    padding-bottom: 32px;
     margin-bottom: 20px;
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
+    overflow: visible !important;
 }
-
+ 
 /* شب */
 body.night-mode .skills-section {
     border-top-color: rgba(179, 136, 255, 0.2);
@@ -1289,7 +1284,7 @@ body.night-mode .skills-header {
     border-color: var(--danger);
     box-shadow: 0 0 10px rgba(255, 50, 80, 0.5);
 }
-
+ 
 /* دکمه افزودن کوئست جدید */
 .quest-add-btn {
     margin-top: 10px;
@@ -1308,7 +1303,7 @@ body.night-mode .skills-header {
     background: rgba(0, 200, 255, 0.05);
     box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
 }
-
+ 
 /* شب */
 body.night-mode .quest-delete-btn {
     border-color: rgba(255, 82, 82, 0.3);
@@ -1342,7 +1337,7 @@ body.night-mode .quest-add-btn:hover {
     color: #fff;
     box-shadow: 0 0 10px rgba(255, 50, 80, 0.5);
 }
-
+ 
 /* دکمه افزودن کوئست */
 .quest-add-btn {
     margin-top: 10px;
@@ -1361,7 +1356,7 @@ body.night-mode .quest-add-btn:hover {
     background: rgba(0, 200, 255, 0.05);
     box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
 }
-
+ 
 /* شب */
 body.night-mode .quest-delete-btn {
     border-color: rgba(255, 82, 82, 0.3);
@@ -1373,11 +1368,6 @@ body.night-mode .quest-add-btn {
 body.night-mode .quest-add-btn:hover {
     border-color: #b388ff;
     background: rgba(179, 136, 255, 0.05);
-}
-#achievements-panel {
-    padding-bottom: 40px;
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
 }
   </style>
  </head>
@@ -1577,7 +1567,7 @@ function completeQuest(qid){
     }
     checkAchievements(); saveState(); detectProfession(); updateTitle(); checkSystemBreak(); renderTabContent();
 }
-
+ 
 function deleteQuest(qid) {
     if (!confirm('این کوئست برای همیشه حذف شود؟')) return;
     state.quests = state.quests.filter(q => q.id !== qid);
@@ -1586,7 +1576,7 @@ function deleteQuest(qid) {
     updateTitle();
     renderTabContent();
 }
-
+ 
 function addQuest() {
     const name = prompt('نام کوئست جدید:');
     if (!name) return;
@@ -1758,7 +1748,7 @@ function renderTabContent() {
                     <span>${nextXP} XP ${state.user.awakeningLevel > 0 ? `(+${state.user.awakeningLevel * 5}%)` : ''}</span>
                 </div>
             </div>
-
+ 
             <div class="stats-radar">
                 <div class="radar-core">STATS</div>
                 <div class="stat-hexagon" style="--angle:0deg;"><span class="hex-value">${state.stats.power}</span><span class="hex-label">قدرت</span></div>
@@ -1767,7 +1757,7 @@ function renderTabContent() {
                 <div class="stat-hexagon" style="--angle:216deg;"><span class="hex-value">${state.stats.knowledge}</span><span class="hex-label">دانش</span></div>
                 <div class="stat-hexagon" style="--angle:288deg;"><span class="hex-value">${state.stats.spirit}</span><span class="hex-label">روحیه</span></div>
             </div>
-
+ 
             <!-- مهارت‌ها درست زیر رادار -->
             <div class="skills-section">
                 <div class="skills-header">🎓 مهارت‌ها</div>
@@ -1828,7 +1818,6 @@ function renderTabContent() {
             <div class="panel gold" id="vito-panel">
                 <div class="panel-header">⚖️ نسخه ویتو</div>
                 <div class="vito-grid">${['💰 مالی', '🧘 سلامت ذهن', '🏋️ سلامت فیزیکی', '🧠 ذهنیت', '🔬 علم'].map((label, i) => { const keys = ['finance', 'mentalHealth', 'physicalHealth', 'mindset', 'science']; const val = state.vito[keys[i]]; return `<div class="vito-card"><div class="vito-label">${label}</div><div class="vito-bar"><div class="vito-fill" style="width:${val}%"></div></div><div class="vito-value">${val}%</div></div>`; }).join('')}</div>
-                <div class="panel" id="achievements-panel">
                 <div class="vito-overall"><span class="vito-big">${vitoOverall}%</span><span class="vito-sub">نزدیکی به نسخه ویتو</span></div>
             </div>
         `;
@@ -1871,6 +1860,6 @@ function showReport(){ document.getElementById('main-screen').style.display='non
 function goHome(){ document.getElementById('main-screen').style.display='block'; document.getElementById('settings-screen').style.display='none'; document.getElementById('creator-screen').style.display='none'; document.getElementById('report-screen').style.display='none'; render(); }
 function saveName(){ const inp=document.getElementById('name-input'); if(inp&&inp.value.trim()){ state.user.name=inp.value.trim(); detectProfession(); updateTitle(); saveState(); render(); } }
 function exportData(){ const json=JSON.stringify(state,null,2); const blob=new Blob([json],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vito-backup-'+getTodayJalali()+'.json'; a.click(); URL.revokeObjectURL(url); }
-  </script>
+</script>
  </body>
- </html>
+</html>
