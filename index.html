@@ -198,25 +198,6 @@ body {
     overflow-x: hidden;
     position: relative;
 }
-body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    background-image: 
-        var(--void-gradient),   /* ← فقط این خط اضافه می‌شه */
-        radial-gradient(1px 1px at 10% 20%, var(--particle-color), transparent),
-        radial-gradient(1px 1px at 30% 70%, var(--particle-color), transparent),
-        radial-gradient(2px 2px at 70% 40%, var(--particle-color), transparent),
-        radial-gradient(1px 1px at 85% 15%, var(--particle-color), transparent),
-        radial-gradient(1.5px 1.5px at 50% 80%, var(--particle-color), transparent),
-        radial-gradient(1px 1px at 15% 85%, rgba(0, 200, 255, 0.4), transparent),
-        radial-gradient(2px 2px at 60% 25%, rgba(0, 200, 255, 0.5), transparent);
-    background-size: 200% 200%;
-    animation: floatParticles 20s linear infinite;
-}
 /* ذرات شناور پس‌زمینه (تمام صفحه) */
 body::before {
     content: '';
@@ -688,8 +669,8 @@ body.night-mode .xp-text .current {
    /* ========== فاز ۴-A : Stats Radar ========== */
 /* کانتینر نمودار راداری */
 .stats-radar-chart {
-    width: 240px;
-    height: 240px;
+    width: 280px;
+    height: 280px;
     margin: 0 auto 10px;
     display: flex;
     align-items: center;
@@ -1317,49 +1298,7 @@ body.night-mode .skills-section {
 }
 body.night-mode .skills-header {
     color: #b388ff;
-}
-/* دکمه حذف کوئست */
-.quest-delete-btn {
-    background: transparent;
-    border: 1px solid rgba(255, 50, 80, 0.3);
-    color: var(--danger);
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    font-size: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-    flex-shrink: 0;
-}
-.quest-delete-btn:hover {
-    background: var(--danger);
-    color: #fff;
-    border-color: var(--danger);
-    box-shadow: 0 0 10px rgba(255, 50, 80, 0.5);
-}
- 
-/* دکمه افزودن کوئست جدید */
-.quest-add-btn {
-    margin-top: 10px;
-    width: 100%;
-    padding: 8px;
-    background: transparent;
-    border: 1px dashed rgba(0, 200, 255, 0.3);
-    color: var(--neon);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.3s;
-}
-.quest-add-btn:hover {
-    border-color: var(--neon);
-    background: rgba(0, 200, 255, 0.05);
-    box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
-}
- 
+} 
 /* شب */
 body.night-mode .quest-delete-btn {
     border-color: rgba(255, 82, 82, 0.3);
@@ -1806,23 +1745,14 @@ if (activeTab === 'status') {
             </div>
  
             <div class="stats-radar-chart">
-    <svg id="radar-svg" viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg">
-        <!-- حلقه‌های شبکه -->
+    <svg id="radar-svg" viewBox="-140 -140 280 280" xmlns="http://www.w3.org/2000/svg">
         <circle cx="0" cy="0" r="100" fill="none" stroke="var(--glass-border)" stroke-width="1" opacity="0.3"/>
         <circle cx="0" cy="0" r="75" fill="none" stroke="var(--glass-border)" stroke-width="0.5" opacity="0.2"/>
         <circle cx="0" cy="0" r="50" fill="none" stroke="var(--glass-border)" stroke-width="0.5" opacity="0.2"/>
         <circle cx="0" cy="0" r="25" fill="none" stroke="var(--glass-border)" stroke-width="0.5" opacity="0.2"/>
-
-        <!-- محورها (۵ ضلع) -->
         <g id="radar-axes"></g>
-
-        <!-- چندضلعی داده -->
         <polygon id="radar-polygon" fill="rgba(0, 200, 255, 0.15)" stroke="var(--neon)" stroke-width="2" stroke-linejoin="round"/>
-
-        <!-- نقاط داده -->
         <g id="radar-points"></g>
-
-        <!-- برچسب‌ها -->
         <g id="radar-labels"></g>
     </svg>
 </div>
@@ -1845,7 +1775,7 @@ if (activeTab === 'status') {
             </div>
         </div>
     `;
-    } else if (activeTab === 'quests') {
+    }} else if (activeTab === 'quests') {
     html = `
         <div class="panel">
             <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
@@ -1861,27 +1791,30 @@ if (activeTab === 'status') {
                     ${state.quests.filter(q => q.days === 'all' || q.days === dayType || dayType === 'friday').map(q => {
                         let xpDisplay = q.hoursTarget !== undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`;
                         return `
-                            <div class="timeline-entry">
-                                <div class="timeline-node ${q.completed ? 'completed' : ''}"></div>
-                                <div class="timeline-card">
-                                    <div class="quest-main">
-    <input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}>
-    <span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span>
-    <span class="quest-xp">${xpDisplay}</span>
-    <button class="quest-delete-btn" onclick="event.stopPropagation(); deleteQuest('${q.id}')">✕</button>
-</div>
-                <button class="quest-add-btn" onclick="addQuest()">➕ افزودن کوئست جدید</button>
-                               </div>
+                        <div class="timeline-entry">
+                            <div class="timeline-node ${q.completed ? 'completed' : ''}"></div>
+                            <div class="timeline-card">
+                                <div class="quest-main">
+                                    <input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}>
+                                    <span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span>
+                                    <span class="quest-xp">${xpDisplay}</span>
+                                    <button class="quest-delete-btn" onclick="event.stopPropagation(); deleteQuest('${q.id}')">✕</button>
                                 </div>
+                                <div class="quest-extra">
+                                    ${q.hoursTarget !== undefined ? `<div class="study-controls"><button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button><span>${q.hoursDone || 0}h</span><button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button></div>` : ''}
+                                    ${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}
+                                    ${q.streak > 0 ? `<span class="quest-streak">🔥${q.streak}</span>` : ''}
                                 </div>
                             </div>
+                        </div>
                         `;
                     }).join('')}
                 </div>
+                <button class="quest-add-btn" onclick="addQuest()">➕ افزودن کوئست جدید</button>
             </div>
         </div>
     `;
-    }
+   }
     else if (activeTab === 'vito') {
         html = `
             <div class="panel gold" id="vito-panel">
@@ -1890,38 +1823,19 @@ if (activeTab === 'status') {
                 <div class="vito-overall"><span class="vito-big">${vitoOverall}%</span><span class="vito-sub">نزدیکی به نسخه ویتو</span></div>
             </div>
         `;
-    } else if (activeTab === 'achievements') {
-        html = `
+    } } else if (activeTab === 'achievements') {
+    html = `
         <div class="panel">
-            <div class="collapsible-header open" data-target="#quests-content"><span>📋 کوئست‌های روزانه</span><span class="arrow">▼</span></div>
-            <div class="collapsible-body open" id="quests-content">
-                ${state.quests.filter(q => q.days === 'all' || q.days === dayType || dayType === 'friday').map(q => {
-                    let xpDisplay = q.hoursTarget !== undefined ? `${q.xp} XP/ساعت` : `${q.xp} XP`;
-                    return `
-                    <div class="timeline-entry">
-                        <div class="timeline-node ${q.completed ? 'completed' : ''}"></div>
-                        <div class="timeline-card">
-                            <div class="quest-main">
-                                <input type="checkbox" class="quest-check" ${q.completed ? 'checked' : ''} onchange="completeQuest('${q.id}')" ${dayType === 'friday' || state.sickLeaveActive ? 'disabled' : ''}>
-                                <span class="quest-name ${q.completed ? 'quest-done' : ''}">${q.name}</span>
-                                <span class="quest-xp">${xpDisplay}</span>
-                                <button class="quest-delete-btn" onclick="event.stopPropagation(); deleteQuest('${q.id}')">✕</button>
-                            </div>
-                            <div class="quest-extra">
-                                ${q.hoursTarget !== undefined ? `<div class="study-controls"><button class="small-btn" onclick="addStudyHour('${q.id}',1)">+</button><span>${q.hoursDone || 0}h</span><button class="small-btn" onclick="addStudyHour('${q.id}',-1)">-</button></div>` : ''}
-                                ${q.notifyTime ? `<span class="quest-time">🔔 ${q.notifyTime}</span>` : ''}
-                                ${q.streak > 0 ? `<span class="quest-streak">🔥${q.streak}</span>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                    `;
+            <div class="collapsible-header open" data-target="#achievements-content"><span>🏆 Achievements (${state.achievements.length})</span><span class="arrow">▼</span></div>
+            <div class="collapsible-body open" id="achievements-content">
+                ${state.achievements.length === 0 ? '<div style="color:var(--text-dim);">هنوز Achievementای کشف نشده.</div>' : state.achievements.slice(-20).map(id => {
+                    const ach = ACHIEVEMENTS.find(a => a.id === id);
+                    return ach ? `<div style="padding:4px 0;font-size:12px;">🏆 ${ach.name}</div>` : '';
                 }).join('')}
-                <button class="quest-add-btn" onclick="addQuest()">➕ افزودن کوئست جدید</button>
             </div>
         </div>
-    </div>
-`;
-    }
+    `;
+                                                                                                                                           }
     container.innerHTML = html;
     if (activeTab === 'status') {
         setTimeout(drawRadarChart, 10);
