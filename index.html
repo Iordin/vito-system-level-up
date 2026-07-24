@@ -1637,15 +1637,35 @@ function checkNotifications() {
                 setTimeout(() => playSound(880, 'sine', 0.2), 150);
             }
             if (Notification && Notification.permission === 'granted' && navigator.serviceWorker) {
-                navigator.serviceWorker.ready.then(reg => {
-                    reg.showNotification('🔔 یادآوری کوئست', {
-                        body: `${q.name} — همین الان!`,
-                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
-                    });
-                });
-            }
-        }
+    navigator.serviceWorker.ready.then(reg => {
+        const title = '🔔 یادآوری کوئست';
+        const body = `${q.name} — همین الان!`;
+
+        // حذف کاراکترهای ناخواسته احتمالی (guh, URL)
+        const cleanBody = body.replace(/guh|https?:\/\/\S+/gi, '').trim();
+
+        reg.showNotification(title, {
+            body: cleanBody,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>',
+            lang: 'fa',           // زبان فارسی
+            dir: 'rtl',           // راست‌چین
+            tag: `quest-${q.id}`, // جلوگیری از تکرار
+            renotify: false,
+            requireInteraction: false,
+            vibrate: [200, 100, 200],
+            actions: [
+                {
+                    action: 'done',
+                    title: '✅ انجام شد'
+                },
+                {
+                    action: 'later',
+                    title: '⏳ بعداً'
+                }
+            ]
+        });
     });
+   }
 
     if (h === '08' && m === '00' && settings.morningNotification) showToast('✨ صبح بخیر قهرمان!', '');
     if (h === '22' && m === '00' && state.streak > 0 && settings.eveningNotification)
