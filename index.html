@@ -1618,19 +1618,38 @@ function sfxLevelUp(){ initAudio(); playSound(523,'triangle',0.2); setTimeout(()
 function sfxPenalty(){ initAudio(); playSound(80,'sawtooth',0.4,0.08); }
 function sfxAchievement(){ initAudio(); playSound(1047,'sine',0.3); setTimeout(()=>playSound(1319,'sine',0.3),200); setTimeout(()=>playSound(1568,'sine',0.4),400); }
 function sfxAwakening(){ initAudio(); playSound(40,'sine',3,0.15); setTimeout(()=>playSound(60,'sine',2,0.1),500); }
-function checkNotifications(){
-    const n=new Date(); const tt=new Date(n.toLocaleString('en-US',{timeZone:'Asia/Tehran'})); const h=String(tt.getHours()).padStart(2,'0'); const m=String(tt.getMinutes()).padStart(2,'0'); const ct=`${h}:${m}`; const dt=getDayType(getTodayJalali());
-    state.quests.forEach(q=>{ if(q.notifyTime&&q.notifyTime===ct&&!q.completed&&(q.days==='all'||q.days===dt)&&q._notified!==ct){ q._notified=ct; if(settings.notificationSound) showToast(`🔔 ${q.name} — همین الان!`,''); if(settings.sound){ initAudio(); playSound(660,'sine',0.15); setTimeout(()=>playSound(880,'sine',0.2),150); }
-if(Notification && Notification.permission==='granted' && navigator.serviceWorker){
-    navigator.serviceWorker.ready.then(reg => {
-        reg.showNotification('🔔 یادآوری کوئست', {
-            body: `${q.name} — همین الان!`,
-            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
-        });
+function checkNotifications() {
+    const n = new Date();
+    const tt = new Date(n.toLocaleString('en-US', { timeZone: 'Asia/Tehran' }));
+    const h = String(tt.getHours()).padStart(2, '0');
+    const m = String(tt.getMinutes()).padStart(2, '0');
+    const ct = `${h}:${m}`;
+    const dt = getDayType(getTodayJalali());
+
+    state.quests.forEach(q => {
+        if (q.notifyTime && q.notifyTime === ct && !q.completed &&
+            (q.days === 'all' || q.days === dt) && q._notified !== ct) {
+            q._notified = ct;
+            if (settings.notificationSound) showToast(`🔔 ${q.name} — همین الان!`, '');
+            if (settings.sound) {
+                initAudio();
+                playSound(660, 'sine', 0.15);
+                setTimeout(() => playSound(880, 'sine', 0.2), 150);
+            }
+            if (Notification && Notification.permission === 'granted' && navigator.serviceWorker) {
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification('🔔 یادآوری کوئست', {
+                        body: `${q.name} — همین الان!`,
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
+                    });
+                });
+            }
+        }
     });
-}
-    if(h==='08'&&m==='00'&&settings.morningNotification) showToast('✨ صبح بخیر قهرمان!','');
-    if(h==='22'&&m==='00'&&state.streak>0&&settings.eveningNotification) showToast(`🔥 استریک ${state.streak} روزه‌ات رو حفظ کن!`,'');
+
+    if (h === '08' && m === '00' && settings.morningNotification) showToast('✨ صبح بخیر قهرمان!', '');
+    if (h === '22' && m === '00' && state.streak > 0 && settings.eveningNotification)
+        showToast(`🔥 استریک ${state.streak} روزه‌ات رو حفظ کن!`, '');
    }
 function showToast(msg,type){ const c=document.getElementById('toasts'); const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg; c.appendChild(t); setTimeout(()=>t.remove(),3500); }
 function resetAllData(){
