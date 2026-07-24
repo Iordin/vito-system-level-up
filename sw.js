@@ -26,7 +26,6 @@ self.addEventListener('notificationclick', function(event) {
     const questId = event.notification.data.questId;
 
     if (action === 'done' && questId) {
-        // ارسال پیام به پنجرهٔ اصلی برای تیک زدن کوئست
         event.waitUntil(
             clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
                 clientList.forEach(client => {
@@ -35,7 +34,6 @@ self.addEventListener('notificationclick', function(event) {
             })
         );
     } else {
-        // فقط پنجرهٔ اصلی را باز کن
-        event.waitUntil(clients.openWindow('/'));
+        event.waitUntil(clients.openWindow('/vito-system-level-up'));
     }
 });
