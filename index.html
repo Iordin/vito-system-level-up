@@ -1621,11 +1621,17 @@ function sfxAwakening(){ initAudio(); playSound(40,'sine',3,0.15); setTimeout(()
 function checkNotifications(){
     const n=new Date(); const tt=new Date(n.toLocaleString('en-US',{timeZone:'Asia/Tehran'})); const h=String(tt.getHours()).padStart(2,'0'); const m=String(tt.getMinutes()).padStart(2,'0'); const ct=`${h}:${m}`; const dt=getDayType(getTodayJalali());
     state.quests.forEach(q=>{ if(q.notifyTime&&q.notifyTime===ct&&!q.completed&&(q.days==='all'||q.days===dt)&&q._notified!==ct){ q._notified=ct; if(settings.notificationSound) showToast(`🔔 ${q.name} — همین الان!`,''); if(settings.sound){ initAudio(); playSound(660,'sine',0.15); setTimeout(()=>playSound(880,'sine',0.2),150); }
-if(Notification && Notification.permission==='granted'){
-    new Notification('🔔 یادآوری کوئست', { body: `${q.name} — همین الان!`, icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>' });
-   } if(Notification.permission==='granted'){ new Notification('🔔 کوئست',{body:`${q.name} — همین الان!`}); } } });    if(h==='08'&&m==='00'&&settings.morningNotification) showToast('✨ صبح بخیر قهرمان!','');
-    if(h==='22'&&m==='00'&&state.streak>0&&settings.eveningNotification) showToast(`🔥 استریک ${state.streak} روزه‌ات رو حفظ کن!`,'');
+if(Notification && Notification.permission==='granted' && navigator.serviceWorker){
+    navigator.serviceWorker.ready.then(reg => {
+        reg.showNotification('🔔 یادآوری کوئست', {
+            body: `${q.name} — همین الان!`,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
+        });
+    });
 }
+    if(h==='08'&&m==='00'&&settings.morningNotification) showToast('✨ صبح بخیر قهرمان!','');
+    if(h==='22'&&m==='00'&&state.streak>0&&settings.eveningNotification) showToast(`🔥 استریک ${state.streak} روزه‌ات رو حفظ کن!`,'');
+   }
 function showToast(msg,type){ const c=document.getElementById('toasts'); const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg; c.appendChild(t); setTimeout(()=>t.remove(),3500); }
 function resetAllData(){
     if(confirm('⚠️ همهٔ داده‌ها پاک می‌شه و سیستم مثل روز اول می‌شه. ادامه می‌دی؟')){
@@ -1827,6 +1833,9 @@ if (activeTab === 'status') {
 function init() {
     loadState();
     loadSettings();
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(reg => console.log('SW ready')).catch(err => console.log('SW fail', err));
+ }
     checkDailyRollover();
     updateTitle();
     render();
