@@ -1637,23 +1637,30 @@ function checkNotifications() {
                 setTimeout(() => playSound(880, 'sine', 0.2), 150);
             }
             if (Notification && Notification.permission === 'granted' && navigator.serviceWorker) {
-                navigator.serviceWorker.ready.then(reg => {
-                    const cleanBody = `${q.name} — همین الان!`.replace(/guh|https?:\/\/\S+/gi, '').trim();
-                    reg.showNotification('🔔 یادآوری کوئست', {
-                        body: cleanBody,
-                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>',
-                        lang: 'fa',
-                        dir: 'rtl',
-                        tag: `quest-${q.id}`,
-                        renotify: false,
-                        vibrate: [200, 100, 200],
-                        actions: [
-                            { action: 'done', title: '✅ انجام شد' },
-                            { action: 'later', title: '⏳ بعداً' }
-                        ]
-                    });
-                });
+    navigator.serviceWorker.ready.then(reg => {
+        const title = '🔔 یادآوری کوئست';
+        const rawBody = `${q.name} — همین الان!`;
+        // حذف "guh" یا URLهای احتمالی
+        const cleanBody = rawBody.replace(/guh|https?:\/\/\S+/gi, '').trim();
+
+        reg.showNotification(title, {
+            body: cleanBody,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>',
+            lang: 'fa',
+            dir: 'rtl',
+            tag: `quest-${q.id}`,
+            renotify: false,
+            vibrate: [200, 100, 200],
+            actions: [
+                { action: 'done', title: '✅ انجام شد' },
+                { action: 'later', title: '⏳ بعداً' }
+            ],
+            data: {
+                questId: q.id
             }
+        });
+    });
+             }
         }
     });
 
@@ -1937,6 +1944,13 @@ function drawRadarChart() {
         labelsHTML += `<text x="${x}" y="${y}" class="radar-label">${labels[i]}</text>`;
     }
     document.getElementById('radar-labels').innerHTML = labelsHTML;
+}
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', function(event) {
+        if (event.data && event.data.action === 'completeQuest' && event.data.questId) {
+            completeQuest(event.data.questId);
+        }
+    });
 }
   </script>
  </body>
